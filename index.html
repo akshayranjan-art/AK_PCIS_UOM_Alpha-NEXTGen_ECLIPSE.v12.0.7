@@ -1,0 +1,770 @@
+<meta charset="utf-8">
+<title>Alpha NextGen Eclipse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+/* Layout: console app — navy header, capsule process rail, tool bar, Excel-style frozen grid */
+:root{
+  --navy:#0f2a4a; --navy-2:#173a63; --teal:#0e8f8a; --teal-soft:#d9f1ef; --amber:#e9a23b; --amber-soft:#fbedd5;
+  --bg:#eef2f6; --panel:#ffffff; --line:#d5dde7; --ink:#14243a; --muted:#5d6e84; --cellin:#f6fbfb; --danger:#c2413a;
+  --f-disp:"Sora",system-ui,sans-serif; --f-body:"IBM Plex Sans",system-ui,sans-serif; --f-num:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --navy:#0a1d35; --navy-2:#13345a; --teal:#2bb5ae; --teal-soft:#123a3c; --amber:#f0b45a; --amber-soft:#3a2d17;
+  --bg:#0b1522; --panel:#122033; --line:#26384f; --ink:#e4ecf5; --muted:#8fa2ba; --cellin:#0f1c2d; --danger:#e26a62; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --navy:#0a1d35; --navy-2:#13345a; --teal:#2bb5ae; --teal-soft:#123a3c; --amber:#f0b45a; --amber-soft:#3a2d17;
+  --bg:#0b1522; --panel:#122033; --line:#26384f; --ink:#e4ecf5; --muted:#8fa2ba; --cellin:#0f1c2d; --danger:#e26a62; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.hl{width:100%;min-width:72px;background:transparent;border:1px dashed currentColor;border-radius:6px;color:inherit;font:inherit;text-align:center;padding:3px 4px;opacity:.95}
+.hl:focus{background:#ffffff26;border-style:solid;outline:none}
+.h-task .hl{min-width:0;font-size:10px}
+.hl.ht2{display:block;resize:none;height:30px;line-height:1.15;white-space:normal;overflow-wrap:anywhere;overflow:hidden;padding:2px 3px;text-align:center;font-size:9.5px;min-width:44px}
+.hl.ht{display:block;resize:none;height:38px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden;padding:3px 5px;text-align:center}
+td.name .nmw{display:flex;align-items:center;gap:6px}
+td.name input{background:transparent;text-align:left;padding:0 4px;height:auto;width:100%;min-width:0}
+td.name input.nm{font-family:var(--f-body);font-weight:600;font-size:12px;height:17px}
+td.name input.tm{font-family:var(--f-body);font-size:9px;color:var(--muted);height:12px}
+td.name input:focus,td.proc input:focus{background:var(--amber-soft)}
+td.proc input{width:100%;background:transparent;text-align:center;font-family:var(--f-body);font-weight:600;color:var(--teal);padding:0 4px}
+td.name{height:32px}
+.rm{flex:none;border:0;cursor:pointer;width:22px;height:22px;border-radius:999px;background:#c2413a1f;color:var(--danger);font-size:11px;line-height:1}
+.rm:active{transform:translateY(1px);box-shadow:inset 0 2px 4px #00000030}
+.till,.xtag{flex:none;font-size:9px;font-family:var(--f-num);padding:1px 6px;border-radius:999px;background:var(--teal-soft);color:var(--teal)}
+.xtag{background:#c2413a1f;color:var(--danger);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+tr.xr td{opacity:.55}
+tr.xr input{pointer-events:none}
+@media (max-width:600px){
+  .sticky1{position:static}
+  .sticky2{left:0}
+  td.name{min-width:150px}
+  td.proc{width:56px;min-width:56px}
+  .top{position:static}
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+/* capsule buttons — pressed state sinks in */
+.cap{border:0;cursor:pointer;border-radius:999px;padding:9px 18px;font-weight:600;font-size:13px;letter-spacing:.02em;
+  background:linear-gradient(180deg,#ffffff22,#00000010),var(--panel);color:var(--ink);
+  box-shadow:0 3px 0 var(--line),0 6px 14px #0f2a4a1f,inset 0 1px 0 #ffffff60;transition:transform .08s,box-shadow .08s;white-space:nowrap}
+.cap:active,.cap.on{transform:translateY(3px);box-shadow:0 0 0 var(--line),inset 0 3px 8px #00000038,inset 0 -1px 0 #ffffff30}
+.cap:disabled{opacity:.45;cursor:default}
+.cap.teal{background:linear-gradient(180deg,#ffffff2a,#00000018),var(--teal);color:#fff;box-shadow:0 3px 0 #0a5f5b,0 6px 14px #0e8f8a40,inset 0 1px 0 #ffffff50}
+.cap.teal:active,.cap.teal.on{box-shadow:0 0 0 #0a5f5b,inset 0 3px 8px #00000050}
+.cap.amber{background:linear-gradient(180deg,#ffffff30,#00000012),var(--amber);color:#2a1a02;box-shadow:0 3px 0 #a86f1c,0 6px 14px #e9a23b40,inset 0 1px 0 #ffffff70}
+.cap.amber:active,.cap.amber.on{box-shadow:0 0 0 #a86f1c,inset 0 3px 8px #00000040}
+.cap.ghost{background:transparent;color:#cfe0f2;box-shadow:inset 0 0 0 1px #ffffff35}
+.cap.ghost:active,.cap.ghost.on{box-shadow:inset 0 2px 6px #00000060;background:#ffffff14}
+.cap.sm{padding:6px 13px;font-size:12px}
+
+.brand{font-family:var(--f-disp);font-weight:800;letter-spacing:.01em;line-height:1.1;font-size:19px}
+.brand span{color:var(--amber)}
+.ver{display:inline-block;font-family:var(--f-num);font-size:11px;padding:3px 9px;border-radius:999px;background:#ffffff18;letter-spacing:.06em;color:#dbe7f4}
+
+#app{min-height:100%;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:#fff;
+  padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 16px #00000030}
+.who{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.chip.mgr{background:var(--amber);color:#2a1a02}.chip.view{background:#ffffff1c;color:#cfe0f2}
+.exp{font-family:var(--f-num);font-size:11px;color:#a9c0d8}
+.rail{background:var(--navy-2);padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:12px;overflow-x:auto}
+.rail .cap.soon{opacity:.62}
+.rail .cap .tag{font-size:9px;font-weight:700;letter-spacing:.08em;margin-left:8px;padding:2px 6px;border-radius:999px;background:#0000001f}
+.rail .cap.teal .tag{background:#ffffff30}
+.wrap{flex:1;padding-block:16px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld span{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.fld select,.fld input{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);min-width:130px}
+.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding-bottom:8px;cursor:pointer}
+.bar .grow{flex:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.stat b{display:block;font-family:var(--f-num);font-size:17px;margin-top:2px;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat.hi b{color:var(--teal)}
+
+.dump{border:2px dashed var(--teal);border-radius:16px;background:var(--teal-soft);padding:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.dump p{margin:0;flex:1;min-width:220px;line-height:1.55}
+.dump textarea{width:100%;min-height:90px;border-radius:12px;border:1px solid var(--line);background:var(--panel);padding:10px;font-family:var(--f-num);font-size:12px}
+.dump.drag{background:var(--amber-soft);border-color:var(--amber)}
+
+.gridbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:auto;max-height:70vh;min-width:0}
+table{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;height:26px;white-space:nowrap}
+thead th{position:sticky;z-index:3;font-size:10px;font-weight:600;text-align:center;padding:3px 4px}
+thead tr:nth-child(1) th{top:0;height:46px}
+thead tr:nth-child(2) th{top:46px;height:30px}
+thead tr:nth-child(3) th{top:76px}
+.h-task{background:var(--navy);color:#fff;font-family:var(--f-disp);font-size:10px;width:100px;max-width:100px;min-width:96px;white-space:normal;line-height:1.2;padding:4px 5px}
+.h-task small{display:block;font-family:var(--f-body);font-weight:500;font-size:9px;color:#9fb5cc;margin-bottom:2px}
+.h-sub{background:var(--navy-2);color:#cfe0f2;font-family:var(--f-num)}
+.h-sub input.ovr{border-color:var(--amber);color:var(--amber)}
+.h-sub{padding:3px 4px}
+.h-sub input{width:44px;text-align:center;background:#ffffff18;border:1px solid #ffffff35;border-radius:6px;color:#fff;padding:2px;font-family:var(--f-num);font-size:11px}
+.h-sub input:disabled{background:transparent;border-color:transparent;color:#cfe0f2;-webkit-text-fill-color:#cfe0f2;opacity:1}
+.h-cnt{background:var(--navy-2);color:#9fb5cc;font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.h-amb{background:var(--amber);color:#2a1a02}
+.h-amb2{background:var(--amber-soft);color:var(--ink);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.h-fix{background:var(--navy);color:#fff}
+.sticky1{position:sticky;left:0;z-index:2}
+.sticky2{position:sticky;left:58px;z-index:2;box-shadow:3px 0 6px #0f2a4a18}
+thead .sticky1,thead .sticky2{z-index:5}
+td.proc{width:58px;min-width:58px;text-align:center;font-weight:600;font-size:12px;background:var(--teal-soft);color:var(--teal)}
+td.name{min-width:170px;padding:0 6px;font-weight:600;background:var(--panel)}
+td.name small{display:block;font-weight:400;font-size:10px;color:var(--muted);line-height:1}
+td input{width:48px;height:25px;border:0;background:var(--cellin);text-align:right;padding:0 5px;font-family:var(--f-num);font-size:11px}
+td input:focus{background:var(--amber-soft);outline:2px solid var(--amber);outline-offset:-2px}
+td.calc{min-width:48px;text-align:right;padding:0 5px;font-family:var(--f-num);font-size:11px;color:var(--muted)}
+td.calc.nz{color:var(--ink);font-weight:600}
+td.tot{background:var(--teal-soft);font-weight:600;color:var(--ink)}
+td.pct{min-width:68px;font-size:11px!important;text-align:center;font-weight:700;font-family:var(--f-num);font-size:12px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px}
+.p-lo{background:#c2413a22;color:var(--danger)}.p-md{background:var(--amber-soft);color:#a86f1c}.p-hi{background:#0e8f8a26;color:var(--teal)}
+td input.cm{width:110px;text-align:left}
+.lockbadge{font-size:11px;padding:6px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted);margin-bottom:4px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+
+.soonbox{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:56px 20px;text-align:center}
+.soonbox h2{font-family:var(--f-disp);font-size:30px;margin:12px 0 8px;text-wrap:balance}
+.soonbox p{color:var(--muted);margin:0}
+
+.modal{position:fixed;inset:0;background:#06101ccc;z-index:50;display:grid;place-items:center;padding:16px}
+.mcard{background:var(--panel);border-radius:18px;width:100%;max-width:580px;max-height:86vh;overflow:auto;padding:20px;border:1px solid var(--line)}
+.mcard h3{font-family:var(--f-disp);margin:0 0 10px}
+.mcard h4{margin:16px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.mrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:flex-end}
+.mrow input,.mrow select{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);flex:1;min-width:110px}
+.mrow label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:110px;font-size:11px;color:var(--muted)}
+.fx{font-family:var(--f-num);font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;line-height:1.8}
+.err{color:var(--danger);font-size:13px;min-height:18px;margin-top:8px}
+.rep li{margin:4px 0;line-height:1.5}
+.ok{color:var(--teal);font-weight:600}.bad{color:var(--danger);font-weight:600}
+
+.gate{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;color:#eaf2fb;
+  background:radial-gradient(1100px 600px at 10% 0%,var(--navy-2),transparent 60%),radial-gradient(800px 500px at 100% 100%,#0e8f8a55,transparent 60%),#0b1f38}
+.gate .lcard{max-width:420px;box-shadow:0 30px 60px #00000055;backdrop-filter:blur(14px)}
+.pcbox{margin:22px 0 4px;padding:14px;border-radius:14px;background:#00000030;border:1px solid #ffffff22}
+.pcbox small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#a9c0d8}
+.pcbox b{display:block;font-family:var(--f-num);font-size:19px;margin-top:6px;letter-spacing:.04em}
+.denied{color:#ffb3ad}.denied b{color:#ffd2ce}
+.gate .cap{width:100%;margin-top:16px;padding:13px}
+.gate .lnk{background:none;border:0;color:#a9c0d8;font-size:12px;margin-top:14px;cursor:pointer;text-decoration:underline}
+#lock{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:radial-gradient(900px 500px at 15% 0%,var(--navy-2),transparent 60%),var(--navy);color:#eaf2fb}
+.lcard{width:100%;max-width:400px;background:#ffffff10;border:1px solid #ffffff22;border-radius:22px;padding:28px 24px;text-align:center}
+.lcard input{width:100%;margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #ffffff2a;background:#00000030;color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:999px;z-index:90;font-size:13px;box-shadow:0 10px 24px #00000040;max-width:90vw;text-align:center}
+@media (max-width:600px){.brand{font-size:16px}.fld select,.fld input{min-width:105px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.datebar{align-items:center}
+.dinfo{font-size:12px;color:var(--muted);line-height:1.4;min-width:0}
+.dinfo b{color:var(--ink)}
+.cap.danger{color:var(--danger)}
+.dhead{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;width:100%}
+.dhead p{flex:1;min-width:220px}
+.empty{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px 20px;text-align:center}
+.empty h2{font-family:var(--f-disp);margin:0 0 8px;font-size:24px;text-wrap:balance}
+.empty p{color:var(--muted);margin:0 auto;max-width:56ch;line-height:1.55}
+.stat.lo b{color:var(--danger)}
+.pclist{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow:auto}
+.pcchip{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-num);font-size:11px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 4px 3px 10px}
+.pcchip small{color:var(--muted)}
+.pcchip button{border:0;background:#c2413a1f;color:var(--danger);border-radius:999px;width:18px;height:18px;font-size:10px;cursor:pointer}
+optgroup{font-weight:700}
+</style>
+
+<section id="app" hidden>
+  <header class="top">
+    <div class="brand">Alpha NextGen <span>Eclipse</span></div>
+    <span class="ver">v16.1 · build 12</span>
+    <div class="who">
+      <span id="pcChip" class="chip view"></span>
+      <span id="expTxt" class="exp"></span>
+      <button class="cap ghost sm" id="btnAdmin">Admin</button>
+      <button class="cap ghost sm" id="btnOut">Log out</button>
+    </div>
+  </header>
+  <nav class="rail" id="rail"></nav>
+  <main class="wrap" id="main"></main>
+</section>
+
+<div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
+
+<div id="gate" class="gate" hidden><div class="lcard">
+  <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
+  <span class="ver" style="margin-top:8px">v16.1 · DBM PRODUCTION CONSOLE</span>
+  <div id="gateBody"></div>
+</div></div>
+
+<div id="lock" hidden><div class="lcard">
+  <div class="brand" style="font-size:22px">Alpha NextGen <span>Eclipse</span></div>
+  <p id="lockMsg" style="color:#a9c0d8;margin:14px 0 0;line-height:1.5"></p>
+  <input id="lockPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+  <input id="lockDate" type="date">
+  <button class="cap amber" id="lockGo" style="width:100%;margin-top:16px">Extend access</button>
+  <div class="err" id="lockErr" style="color:#ffb3ad"></div>
+</div></div>
+
+<script>
+/* ======================= ADMIN SETTINGS (edit here) ======================= */
+const APP_EXPIRY  = "2026-12-31";            // tool stops after this date; master password can extend it per PC
+const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
+  "LHTU05CG2122RJJ",
+];
+const PW_MASTER   = 5662684247018612;        // hash of master password (caps and spaces ignored)
+const LOCK_ON     = true;                    // false = skip PC login while testing
+/* ========================================================================= */
+
+/* ---------- light protection: right-click, F12, view-source, save, print, drag ---------- */
+(function(){
+  const stop=e=>{e.preventDefault();e.stopPropagation();return false};
+  document.addEventListener("contextmenu",stop);
+  document.addEventListener("dragstart",e=>{if(!e.target.closest||!e.target.closest(".dump"))stop(e)});
+  document.addEventListener("keydown",e=>{
+    const k=(e.key||"").toLowerCase(),c=e.ctrlKey||e.metaKey;
+    if(e.key==="F12"||(c&&e.shiftKey&&["i","j","c","k","u"].includes(k))||(c&&["u","s","p"].includes(k))) return stop(e);
+  },true);
+  document.addEventListener("selectstart",e=>{if(!/INPUT|TEXTAREA/.test(e.target.tagName))e.preventDefault()});
+})();
+const H=(str,seed=161)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)};
+const isMaster=p=>H(String(p||"").replace(/\s+/g,"").toLowerCase())===PW_MASTER;
+
+/* ---------- constants ---------- */
+const PROCESSES=[{k:"DBM",live:true},{k:"CPA"},{k:"CPQ"},{k:"Outreach"},{k:"Pend52"},{k:"PCRL"},{k:"Onbase"},{k:"NonPar"}];
+const DT=[["cab","Cab Delay"],["app","Application Issues"],["lap","Laptop Replacement"],["eea","EEA"],["ramp","RAMP"],["trn","Training"],["ll","LL"]];
+const DTA={cab:["cabdelay","cab"],app:["applicationissues","applicationissue","appissues","application"],lap:["laptopreplacement","laptop"],eea:["eea"],ramp:["ramp"],trn:["training","traning","trainning","trainig"],ll:["ll"]};
+const LAB0={proc:"Process",emp:"User Name",total:"Total",dt:"Downtime",prod:"Production Hours",pct:"Productivity %",cm:"Comments",hrs:"Hours",tdt:"Total Downtime",full:"100%",lv:"Leaves",noh:"No. of Hours",cnt:"Count",time:"Time",
+  dt_cab:"Cab Delay",dt_app:"Application Issues",dt_lap:"Laptop Replacement",dt_eea:"EEA",dt_ramp:"RAMP",dt_trn:"Training",dt_ll:"LL"};
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const f2=n=>(Math.round((n||0)*100)/100).toFixed(2);
+const norm=s=>String(s??"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const clean=s=>String(s??"").replace(/^['’\s]+|['’\s]+$/g,"").trim();
+const bk=name=>"b_"+norm(name);
+const shortName=n=>n.replace(/^EWD_PRV_PICK_DBM_/i,"").replace(/^DBM_/i,"");
+const isNum=v=>/^-?[\d,]*\.?\d+$/.test(String(v).trim());
+function numVal(v){const s=clean(v).replace(/,/g,"");if(s===""||s==="-"||s==="–")return 0;const n=parseFloat(s);return isNaN(n)?null:n}
+const toast=t=>{const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2800)};
+const daysLeft=d=>Math.ceil((new Date(d+"T23:59:59")-new Date())/864e5);
+const todayISO=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const fmtDate=iso=>{const d=new Date(iso+"T12:00:00");return `${String(d.getDate()).padStart(2,"0")} ${MONS[d.getMonth()]} ${d.getFullYear()} · ${DAYS[d.getDay()]}`};
+const fmtMonth=ym=>{const [y,m]=ym.split("-");return MONS[+m-1]+" "+y};
+
+/* ---------- storage: IndexedDB on this PC (falls back to memory) ---------- */
+const MEM={};
+const IDB={db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open("alpha_nextgen_eclipse",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>{this.db=r.result;res(true)};r.onerror=()=>res(false);setTimeout(()=>res(false),3000)}catch(e){res(false)}})},
+  get(k){return new Promise(res=>{if(!this.db)return res(MEM[k]);try{const q=this.db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(MEM[k])}catch(e){res(MEM[k])}})},
+  put(k,v){MEM[k]=v;if(!this.db)return Promise.resolve(false);return new Promise(res=>{try{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false)}catch(e){res(false)}})}
+};
+let S=null,saveT=null,storeOK=false;
+const fresh=()=>({v:5,cfg:{hpd:8,wd:21,dtUnit:"min",g:85,a:60,exp:null,lab:{},pcsAdd:[],pcsDel:[]},days:{}});
+function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Export your data to Excel.")});if(now)return go();saveT=setTimeout(go,350)}
+const dev={get(){try{return localStorage.getItem("eclipse_pc")||""}catch(e){return ""}},set(v){try{v?localStorage.setItem("eclipse_pc",v):localStorage.removeItem("eclipse_pc")}catch(e){}}};
+
+const lab=k=>(S.cfg.lab&&S.cfg.lab[k])||LAB0[k]||k;
+const LH=k=>`<textarea class="hl ht2" data-lab="${k}" rows="2" spellcheck="false" aria-label="${esc(LAB0[k]||k)}">${esc(lab(k))}</textarea>`;
+const expiry=()=>S.cfg.exp||APP_EXPIRY;
+const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
+const defFull=()=>S.cfg.hpd*S.cfg.wd;
+
+/* ---------- view state ---------- */
+let view={proc:"DBM",date:null,team:"All",emp:"All",q:"",active:true,dumpOpen:false};
+const cur=()=>S.days[view.date]||null;
+const dates=()=>Object.keys(S.days).sort().reverse();
+
+/* ---------- formulas (same as the Excel sheet) ---------- */
+function calc(r,T){
+  let total=0;const times={};
+  T.forEach(t=>{const n=+r.c[t.k]||0;const tm=n/perHr(t);times[t.k]=tm;total+=tm});        // Time = Count / Per hour (Per hour = 60/AHT unless typed)
+  const dtSum=DT.reduce((a,[k])=>a+(+r.dt[k]||0),0);
+  const dtHr=S.cfg.dtUnit==="min"?dtSum/60:dtSum;                                         // Total Downtime = SUM/60
+  const hours=(+r.full||0)-(+r.lv||0);                                                     // No. of Hours = 100% − Leaves
+  const prod=hours-dtHr;                                                                   // Production Hours = No. of Hours − Downtime
+  return{times,total,dtHr,hours,prod,pct:prod>0?total/prod*100:0};                        // Productivity = Total / Production Hours
+}
+const perHr=t=>t.ph>0?t.ph:60/t.aht;
+const band=p=>p>=S.cfg.g?"p-hi":p>=S.cfg.a?"p-md":"p-lo";
+
+/* ---------- modal ---------- */
+function modal(html){$("#mcard").innerHTML=html;$("#modal").hidden=false;$("#mcard").querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModal)}
+function closeModal(){$("#modal").hidden=true}
+$("#modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
+
+/* ---------- expiry lock ---------- */
+function expired(){
+  if(daysLeft(expiry())>=0)return false;
+  $("#lock").hidden=false;$("#app").hidden=true;$("#gate").hidden=true;
+  $("#lockMsg").textContent="This tool expired on "+expiry()+". Contact Administration.";
+  $("#lockDate").value=new Date(Date.now()+60*864e5).toISOString().slice(0,10);
+  return true;
+}
+$("#lockGo").onclick=()=>{if(!isMaster($("#lockPw").value)){$("#lockErr").textContent="Master password is wrong.";return}
+  if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
+  S.cfg.exp=$("#lockDate").value;save(true);$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
+
+/* ---------- PC login ---------- */
+function gate(){
+  const pc=dev.get(),known=pc&&allowedPCs().includes(pc);
+  $("#gate").hidden=false;$("#app").hidden=true;
+  $("#gateBody").innerHTML=known?`
+    <div class="pcbox"><small>This PC</small><b>${esc(pc)}</b></div>
+    <div style="font-size:12px;color:#8fe0d9">✓ Registered device</div>
+    <button class="cap amber" id="gLogin">Login</button>
+    <button class="lnk" id="gOther">Not this PC? Log in with another PC name</button>`:`
+    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Enter this PC's device name (Settings → System → About). Password is the last 4 characters of the device name.</p>
+    <input id="gPc" placeholder="Device name, e.g. LHTU05CG2122RJJ" value="${esc(pc)}" style="text-transform:uppercase" autocapitalize="characters" autocomplete="off" spellcheck="false">
+    <input id="gPw" type="password" placeholder="Password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+    <button class="cap amber" id="gGo">Login</button>
+    <div class="err" id="gErr" style="color:#ffb3ad"></div>`;
+  if(known){$("#gLogin").onclick=enter;$("#gOther").onclick=()=>{dev.set("");gate()};$("#gLogin").focus();return}
+  const go=()=>{
+    const p=$("#gPc").value.trim().toUpperCase().replace(/\..*$/,""),pw=$("#gPw").value.trim();
+    if(p.length<4){$("#gErr").textContent="Enter the device name.";return}
+    if(!allowedPCs().includes(p)&&!isMaster(pw)){$("#gErr").innerHTML="<b>Access Denied.</b> PC "+esc(p)+" is not registered. Please contact Administration.";return}
+    if(pw.toUpperCase()!==p.slice(-4)&&!isMaster(pw)){$("#gErr").textContent="Password is wrong. Use the last 4 characters of the device name.";return}
+    dev.set(p);enter();
+  };
+  $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};$("#gPc").focus();
+}
+function enter(){$("#gate").hidden=true;$("#app").hidden=false;boot()}
+$("#btnOut").onclick=()=>{if(!LOCK_ON){toast("Login is switched off in testing mode");return}$("#app").hidden=true;gate()};
+
+/* ---------- rail ---------- */
+function renderRail(){
+  $("#rail").innerHTML=PROCESSES.map(p=>`<button class="cap ${p.live?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${p.k}">${p.k}<span class="tag">${p.live?"LIVE":"SOON"}</span></button>`).join("");
+  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>{view.proc=b.dataset.p;renderRail();renderMain()});
+}
+
+/* ---------- main ---------- */
+function dateOptions(){
+  const ds=dates();if(!ds.length)return `<option value="">No saved dates</option>`;
+  const by={};ds.forEach(d=>(by[d.slice(0,7)]=by[d.slice(0,7)]||[]).push(d));
+  return Object.keys(by).sort().reverse().map(m=>`<optgroup label="${fmtMonth(m)} · ${by[m].length} day${by[m].length>1?"s":""}">${by[m].map(d=>`<option value="${d}" ${d===view.date?"selected":""}>${fmtDate(d)}</option>`).join("")}</optgroup>`).join("");
+}
+function renderMain(){
+  const p=PROCESSES.find(x=>x.k===view.proc);
+  if(!p.live){$("#main").innerHTML=`<div class="soonbox"><span class="ver" style="background:var(--amber-soft);color:#a86f1c">MODULE ${PROCESSES.indexOf(p)+1} OF 8</span><h2>${p.k} is coming soon</h2><p>This process opens here once its work baskets and formulas are set. DBM is live now.</p><div style="margin-top:20px"><button class="cap teal" id="goDbm">Go to DBM</button></div></div>`;
+    $("#goDbm").onclick=()=>{view.proc="DBM";renderRail();renderMain()};return}
+  if(view.date&&!S.days[view.date])view.date=dates()[0]||null;
+  const D=cur(),rows=D?D.rows:[];
+  const teams=[...new Set(rows.map(r=>r.team||r.proc).filter(Boolean))];
+  $("#main").innerHTML=`
+  <div class="bar datebar">
+    <label class="fld"><span>Saved date</span><select id="fDate" ${dates().length?"":"disabled"}>${dateOptions()}</select></label>
+    <div class="dinfo" id="dInfo">${D?`<b>${dates().length}</b> saved date${dates().length>1?"s":""} · this one: ${esc(D.src||"manual")} · ${D.rows.length} employees · ${D.tasks.length} baskets`:"Nothing saved yet"}</div>
+    <div class="grow"></div>
+    <button class="cap teal sm ${view.dumpOpen?"on":""}" id="bDump">Dump / Paste</button>
+    <button class="cap sm" id="bExp" ${D?"":"disabled"}>Export Excel</button>
+    <button class="cap sm" id="bShare" ${D?"":"disabled"}>Share</button>
+    <button class="cap sm" id="bAdd" ${D?"":"disabled"}>Add employee</button>
+    <button class="cap sm danger" id="bErase" ${D?"":"disabled"}>Erase date</button>
+  </div>
+  <div class="dump" id="dz" ${view.dumpOpen||!D?"":"hidden"}>
+    <div class="dhead">
+      <label class="fld"><span>Save into date</span><input type="date" id="dDate" value="${view.dumpDate||todayISO()}"></label>
+      <p><b>Drop an Excel file here</b> or paste rows below. The whole date is replaced, headings included. Works with the <b>Original Doc</b> report (First Name / Work Basket, shifted rows fixed) and the <b>productivity sheet</b> (Process / User Name).</p>
+    </div>
+    <label class="cap teal sm" style="cursor:pointer">Choose Excel file<input type="file" id="dFile" accept=".xlsx,.xls,.xlsm,.xlsb,.csv" hidden></label>
+    <textarea id="dTxt" placeholder="Or copy from Excel and paste here (Ctrl+V), including the heading rows"></textarea>
+    <button class="cap amber sm" id="dGo">Save pasted data</button>
+  </div>
+  ${D?`
+  <div class="bar">
+    <label class="fld"><span>Process / Team</span><select id="fTeam"><option>All</option>${teams.map(t=>`<option ${t===view.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
+    <label class="fld"><span>Employee</span><select id="fEmp"><option>All</option>${rows.map(r=>`<option ${r.name===view.emp?"selected":""}>${esc(r.name)}</option>`).join("")}</select></label>
+    <label class="fld"><span>Search</span><input id="fQ" placeholder="Type a name" value="${esc(view.q)}"></label>
+    <label class="chk"><input type="checkbox" id="fAct" ${view.active?"checked":""}> Only baskets with data</label>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="gridbox" id="gb"></div>
+  <div class="pager" id="pg"></div>`:`
+  <div class="empty"><h2>No data saved yet</h2><p>Pick a date above, then drop the Original Doc or productivity Excel file, or paste the rows. Each date is saved separately on this PC, so older dates never change.</p></div>`}`;
+  $("#fDate").onchange=e=>{view.date=e.target.value;view.emp="All";view.team="All";renderMain()};
+  $("#bDump").onclick=()=>{view.dumpOpen=!view.dumpOpen;renderMain()};
+  $("#dDate").onchange=e=>{view.dumpDate=e.target.value};
+  wireDump();
+  if(!D)return;
+  $("#bExp").onclick=()=>styledExport(view.date,false);
+  $("#bShare").onclick=()=>styledExport(view.date,true);
+  $("#bAdd").onclick=addEmp;$("#bErase").onclick=eraseDate;
+  $("#fTeam").onchange=e=>{view.team=e.target.value;renderGrid()};
+  $("#fEmp").onchange=e=>{view.emp=e.target.value;renderGrid()};
+  $("#fQ").oninput=e=>{view.q=e.target.value;renderGrid()};
+  $("#fAct").onchange=e=>{view.active=e.target.checked;renderGrid()};
+  renderGrid();
+}
+function rowsFiltered(){
+  const D=cur();if(!D)return[];
+  return D.rows.map((r,i)=>({r,i})).filter(({r})=>(view.team==="All"||(r.team||r.proc)===view.team)&&(view.emp==="All"||r.name===view.emp)&&(!view.q||norm(r.name).includes(norm(view.q))));
+}
+function visTasks(){const D=cur();if(!D)return[];if(!view.active)return D.tasks;const on=D.tasks.filter(t=>D.rows.some(r=>+r.c[t.k]>0));return on.length?on:D.tasks}
+function renderStats(list){
+  const T=cur().tasks;let tot=0,prod=0,dt=0,low=0;list.forEach(({r})=>{const c=calc(r,T);tot+=c.total;prod+=c.prod;dt+=c.dtHr;if(c.pct<S.cfg.a)low++});
+  $("#stats").innerHTML=`<div class="stat"><span>Employees</span><b>${list.length}</b></div>
+   <div class="stat"><span>Production time (hrs)</span><b>${f2(tot)}</b></div>
+   <div class="stat"><span>Downtime (hrs)</span><b>${f2(dt)}</b></div>
+   <div class="stat hi"><span>Team productivity</span><b>${f2(prod>0?tot/prod*100:0)}%</b></div>
+   <div class="stat ${low?"lo":""}"><span>Below ${S.cfg.a}%</span><b>${low}</b></div>`;
+}
+function renderGrid(){
+  const D=cur(),list=rowsFiltered();renderStats(list);
+  const T=visTasks(),du=S.cfg.dtUnit==="min"?"minutes":"hours";
+  let h=`<table><thead><tr>
+    <th class="h-fix sticky1" rowspan="3">${LH("proc")}</th><th class="h-fix sticky2" rowspan="3">${LH("emp")}</th>
+    ${T.map(t=>`<th class="h-task" colspan="2" title="${esc(t.name)}"><textarea class="hl ht" data-tn="${t.k}" rows="3" spellcheck="false" aria-label="Work basket name">${esc(t.name)}</textarea></th>`).join("")}
+    <th class="h-amb" rowspan="3">${LH("total")}</th><th class="h-amb" colspan="8">${LH("dt")} (${du})</th>
+    <th class="h-amb" rowspan="3">${LH("prod")}</th><th class="h-amb" rowspan="3">${LH("pct")}</th><th class="h-amb" rowspan="3">${LH("cm")}</th>
+    <th class="h-amb" colspan="3">${LH("hrs")}</th></tr><tr>
+    ${T.map(t=>`<th class="h-sub"><input data-aht="${t.k}" value="${t.aht}" aria-label="AHT ${esc(t.name)}"></th><th class="h-sub"><input data-ph="${t.k}" value="${f2(perHr(t))}" title="Per hour. Default is 60 ÷ AHT; type to override" aria-label="Per hour ${esc(t.name)}" class="${t.ph>0?"ovr":""}"></th>`).join("")}
+    ${DT.map(d=>`<th class="h-amb2" rowspan="2">${LH("dt_"+d[0])}</th>`).join("")}<th class="h-amb2" rowspan="2">${LH("tdt")}</th>
+    <th class="h-amb2" rowspan="2">${LH("full")}</th><th class="h-amb2" rowspan="2">${LH("lv")}</th><th class="h-amb2" rowspan="2">${LH("noh")}</th></tr><tr>
+    ${T.map(()=>`<th class="h-cnt">${LH("cnt")}</th><th class="h-cnt">${LH("time")}</th>`).join("")}</tr></thead><tbody>`;
+  list.forEach(({r,i})=>{
+    const c=calc(r,D.tasks);
+    h+=`<tr data-i="${i}"><td class="proc sticky1"><input class="pc" data-nm="proc" value="${esc(r.proc)}" aria-label="Process"></td>
+    <td class="name sticky2"><div class="nmw"><input class="nm" data-nm="name" value="${esc(r.name)}" aria-label="Employee name"><button class="rm" data-rm="${i}" title="Remove employee" aria-label="Remove ${esc(r.name)}">✕</button></div>
+    <div class="nmw"><input class="tm" data-nm="team" value="${esc(r.team)}" placeholder="team" aria-label="Team"></div></td>
+    ${T.map(t=>`<td><input data-c="${t.k}" inputmode="decimal" value="${r.c[t.k]??""}"></td><td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`).join("")}
+    <td class="calc tot" data-o="total">${f2(c.total)}</td>
+    ${DT.map(([k])=>`<td><input data-d="${k}" inputmode="decimal" value="${r.dt[k]??""}"></td>`).join("")}
+    <td class="calc" data-o="dt">${f2(c.dtHr)}</td><td class="calc" data-o="prod">${f2(c.prod)}</td>
+    <td class="pct" data-o="pct"><span class="pill ${band(c.pct)}">${f2(c.pct)}%</span></td>
+    <td><input class="cm" data-cm="1" value="${esc(r.cm)}" placeholder="—"></td>
+    <td><input data-f="full" value="${r.full??""}"></td><td><input data-f="lv" value="${r.lv??""}"></td>
+    <td class="calc" data-o="hrs">${f2(c.hours)}</td></tr>`;
+  });
+  if(!list.length)h+=`<tr><td colspan="99" style="padding:24px;text-align:center;color:var(--muted)">No employees match these filters.</td></tr>`;
+  $("#gb").innerHTML=h+"</tbody></table>";
+  $("#pg").innerHTML=`<span>${fmtDate(view.date)} · ${list.length} employees · ${T.length} of ${D.tasks.length} work baskets shown · saved ${D.at?new Date(D.at).toLocaleString():""}${D.pc?" from "+esc(D.pc):""}</span>`;
+  $("#gb").oninput=onCell;
+  $("#gb").onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph){renderGrid();toast("Heading saved")}};
+  $("#gb").onclick=e=>{const b=e.target.closest("[data-rm]");if(b)removeEmp(+b.dataset.rm)};
+}
+function onCell(e){
+  const el=e.target,D=cur();if(!D)return;
+  if(el.dataset.aht){const t=D.tasks.find(x=>x.k===el.dataset.aht);const v=parseFloat(el.value);if(t&&v>0){t.aht=v;delete t.ph;save()}return}
+  if(el.dataset.ph){const t=D.tasks.find(x=>x.k===el.dataset.ph);const v=parseFloat(el.value);if(t){if(v>0&&Math.abs(v-60/t.aht)>0.004)t.ph=v;else delete t.ph;save()}return}
+  if(el.dataset.lab){S.cfg.lab=S.cfg.lab||{};const v=el.value.trim();if(v)S.cfg.lab[el.dataset.lab]=v;else delete S.cfg.lab[el.dataset.lab];save();return}
+  if(el.dataset.tn){const t=D.tasks.find(x=>x.k===el.dataset.tn);const v=el.value.trim();if(t&&v){t.name=v;save()}return}
+  const tr=el.closest("tr");if(!tr)return;const r=D.rows[+tr.dataset.i];if(!r)return;
+  if(el.dataset.nm){const v=el.value.trim();if(v||el.dataset.nm==="team"){r[el.dataset.nm]=v;save()}return}
+  const num=v=>v===""||isNaN(+v)?undefined:+v;
+  if(el.dataset.c)r.c[el.dataset.c]=num(el.value);else if(el.dataset.d)r.dt[el.dataset.d]=num(el.value);
+  else if(el.dataset.f)r[el.dataset.f]=num(el.value);else if(el.dataset.cm)r.cm=el.value;
+  save();const c=calc(r,D.tasks);
+  if(el.dataset.c){const td=tr.querySelector(`[data-tm="${el.dataset.c}"]`);td.textContent=f2(c.times[el.dataset.c]);td.classList.toggle("nz",!!c.times[el.dataset.c])}
+  tr.querySelector('[data-o="total"]').textContent=f2(c.total);tr.querySelector('[data-o="dt"]').textContent=f2(c.dtHr);
+  tr.querySelector('[data-o="prod"]').textContent=f2(c.prod);tr.querySelector('[data-o="hrs"]').textContent=f2(c.hours);
+  tr.querySelector('[data-o="pct"]').innerHTML=`<span class="pill ${band(c.pct)}">${f2(c.pct)}%</span>`;
+  renderStats(rowsFiltered());
+}
+
+/* ---------- employees ---------- */
+function addEmp(){
+  const D=cur();if(!D)return;
+  modal(`<h3>Add employee · ${fmtDate(view.date)}</h3>
+   <div class="mrow"><label>Name<input id="aN" placeholder="e.g. RAHUL SHARMA"></label></div>
+   <div class="mrow"><label>Process<input id="aP" value="DBM"></label><label>Team<input id="aT" value="${esc((D.rows[0]||{}).team||"")}"></label><label>100% hours<input id="aH" type="number" value="${defFull()}"></label></div>
+   <div class="err" id="aErr"></div>
+   <div class="mrow"><button class="cap amber" id="aGo">Add employee</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#aN").focus();
+  $("#aGo").onclick=()=>{const n=$("#aN").value.trim();if(!n){$("#aErr").textContent="Enter a name.";return}
+    if(D.rows.some(r=>r.key===norm(n))){$("#aErr").textContent="This employee is already on this date.";return}
+    D.rows.push({key:norm(n),name:n,team:$("#aT").value.trim(),proc:$("#aP").value.trim()||"DBM",c:{},dt:{},full:+$("#aH").value||defFull(),lv:0,cm:""});
+    save();closeModal();renderMain();toast(n+" added")};
+}
+function removeEmp(i){
+  const D=cur(),r=D&&D.rows[i];if(!r)return;
+  modal(`<h3>Remove ${esc(r.name)}?</h3><p style="margin:0;line-height:1.5">Their row is removed from ${fmtDate(view.date)} only. Other dates stay as they are.</p>
+   <div class="mrow"><button class="cap amber" id="rGo">Remove</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#rGo").onclick=()=>{D.rows.splice(i,1);save();closeModal();if(view.emp===r.name)view.emp="All";renderMain();toast(r.name+" removed")};
+}
+function eraseDate(){
+  const d=view.date;if(!d)return;
+  modal(`<h3>Erase ${fmtDate(d)}?</h3><p style="margin:0;line-height:1.5">Everything saved for this date is deleted, headings included. Other dates are not touched. Export it first if you may need it.</p>
+   <div class="mrow"><button class="cap amber" id="eGo">Erase this date</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#eGo").onclick=()=>{delete S.days[d];save(true);closeModal();view.date=dates()[0]||null;view.emp="All";view.team="All";renderMain();toast(fmtDate(d)+" erased")};
+}
+
+/* ---------- DUMP ---------- */
+function wireDump(){
+  const dz=$("#dz");if(!dz)return;
+  ["dragover","dragenter"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag")}));
+  ["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag")}));
+  dz.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)readFile(f)});
+  $("#dFile").onchange=e=>{const f=e.target.files[0];if(f)readFile(f);e.target.value=""};
+  $("#dGo").onclick=()=>{const t=$("#dTxt").value;if(!t.trim()){toast("Paste the rows from Excel first");return}
+    dumpRows(t.split(/\r?\n/).map(l=>l.split("\t")),"Pasted data")};
+}
+const targetDate=()=>($("#dDate")&&$("#dDate").value)||view.dumpDate||todayISO();
+function findRow(rows,re,max=40){for(let r=0;r<Math.min(rows.length,max);r++){const c=(rows[r]||[]).findIndex(v=>re.test(clean(v)));if(c>=0)return{r,c}}return null}
+function sheetKind(rows){
+  if(findRow(rows,/^first\s*name$/i)&&findRow(rows,/^work\s*basket$/i,60))return "original";
+  if(findRow(rows,/^user\s*name$/i,10))return "summary";
+  return null;
+}
+function readFile(f){
+  if(typeof XLSX==="undefined"){toast("Excel reader didn't load (no internet?). Copy the rows from Excel and paste them instead.");return}
+  const rd=new FileReader();
+  rd.onload=e=>{
+    let wb;try{wb=XLSX.read(e.target.result,{type:"array"})}catch(err){toast("This file couldn't be read. Save it as .xlsx and try again.");return}
+    const sheets=wb.SheetNames.map(n=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:"",raw:false});return{n,rows,k:sheetKind(rows)}}).filter(s=>s.k);
+    if(!sheets.length){toast("No Original Doc or Process / User Name sheet found in this file.");return}
+    if(sheets.length===1)return dumpRows(sheets[0].rows,f.name+" · "+sheets[0].n);
+    const td=targetDate();
+    modal(`<h3>Which sheet to save?</h3><p style="color:var(--muted);margin:0">It goes into ${fmtDate(td)}.</p>
+      <div class="mrow" style="flex-direction:column;align-items:stretch">${sheets.map((s,i)=>`<button class="cap" data-sh="${i}" style="text-align:left">${esc(s.n)} <span style="color:var(--muted);font-weight:500">· ${s.k==="original"?"Original Doc report":"Process / User Name sheet"}</span></button>`).join("")}</div>
+      <div class="mrow"><button class="cap" data-close>Cancel</button></div>`);
+    $("#mcard").querySelectorAll("[data-sh]").forEach(b=>b.onclick=()=>{closeModal();const s=sheets[+b.dataset.sh];dumpRows(s.rows,f.name+" · "+s.n,td)});
+  };
+  rd.readAsArrayBuffer(f);
+}
+function dumpRows(rows,src,dt){
+  const k=sheetKind(rows);
+  const P=k==="original"?parseOriginal(rows):k==="summary"?parseSummary(rows):{err:"Format not recognised. Use the Original Doc report (First Name / Work Basket) or the productivity sheet (Process / User Name)."};
+  if(P.err){toast(P.err);return}
+  const d=dt||targetDate();
+  const commit=()=>{
+    S.days[d]={tasks:P.tasks,rows:P.rows,src,at:Date.now(),pc:dev.get()};save(true);
+    view.date=d;view.emp="All";view.team="All";view.q="";view.dumpOpen=false;renderMain();
+    modal(`<h3>Saved · ${fmtDate(d)}</h3><ul class="rep">${P.rep.join("")}</ul><div class="mrow"><button class="cap teal" data-close>Done</button></div>`);
+  };
+  if(S.days[d]){
+    modal(`<h3>Replace ${fmtDate(d)}?</h3><p style="margin:0;line-height:1.5">This date already has ${S.days[d].rows.length} employees saved. The new data replaces all of it, headings included.</p>
+     <div class="mrow"><button class="cap amber" id="rpGo">Replace</button><button class="cap" data-close>Cancel</button></div>`);
+    $("#rpGo").onclick=()=>{closeModal();commit()};
+  }else commit();
+}
+
+/* Original Doc "Below Me (UOM)" report: baskets down, employees across */
+function parseOriginal(rows){
+  const fn=findRow(rows,/^first\s*name$/i),wb=findRow(rows,/^work\s*basket$/i,60);
+  const ln=findRow(rows,/^last\s*name$/i),tm=findRow(rows,/^team/i);
+  const hdr=[fn.r,ln?.r,tm?.r].filter(x=>x!=null);
+  let totalCol=null;const people=[];
+  const width=Math.max(...rows.slice(0,wb.r+3).map(r=>r.length));
+  for(let c=fn.c+1;c<width;c++){
+    if(hdr.some(r=>/^total$/i.test(clean(rows[r][c])))){totalCol=c;continue}
+    const first=clean(rows[fn.r][c]);if(!first)continue;
+    people.push({c,first,last:ln?clean(rows[ln.r][c]):"",team:tm?clean(rows[tm.r][c]):""});
+  }
+  if(!people.length)return{err:"No employee names found next to “First Name”."};
+  const lastP=people[people.length-1].c;
+  let shifted=0,totalsRow=null;const data=[];
+  for(let r=wb.r+1;r<rows.length;r++){
+    const row=rows[r]||[];const name=clean(row[wb.c]);
+    if(!name){if(row.slice(fn.c+1).some(v=>numVal(v)>0)&&!totalsRow)totalsRow=row;continue}
+    if(/^totals?$/i.test(name)){totalsRow=row;continue}
+    let shift=0,found=false;
+    if(totalCol!=null){for(const s of [0,1,-1,2,3]){const tv=numVal(row[totalCol+s]);if(tv==null||clean(row[totalCol+s])==="")continue;
+      const sum=people.reduce((a,p)=>a+(numVal(row[p.c+s])||0),0);if(Math.abs(sum-tv)<0.01&&(s===0||tv>0)){shift=s;found=true;break}}}
+    if(!found){let li=-1;row.forEach((v,i)=>{if(i>fn.c&&clean(v)!=="")li=i});const ex=totalCol!=null?totalCol:lastP;if(li>ex&&li-ex<=3)shift=li-ex}
+    if(shift)shifted++;
+    data.push({name,stm:numVal(row[fn.c]),vals:people.map(p=>numVal(row[p.c+shift])||0)});
+  }
+  if(!data.length)return{err:"No work basket rows found under “Work Basket”."};
+  const tasks=[];data.forEach(d=>{if(!tasks.some(t=>t.k===bk(d.name)))tasks.push({k:bk(d.name),name:d.name,aht:d.stm>0?d.stm:5})});
+  const out=people.map((p,pi)=>{const r={key:norm(p.first+p.last),name:(p.first+" "+p.last).trim(),team:p.team,proc:"DBM",c:{},dt:{},full:defFull(),lv:0,cm:""};
+    data.forEach(d=>{if(d.vals[pi])r.c[bk(d.name)]=(r.c[bk(d.name)]||0)+d.vals[pi]});return r});
+  const rep=[`<li>Original Doc report: ${tasks.length} work baskets, ${out.length} employees</li>`,
+    shifted?`<li class="ok">${shifted} shifted rows moved back under the right employee</li>`:`<li>No shifted rows found</li>`,
+    `<li>AHT taken from the STM column. 100% hours set to ${defFull()} (change in Admin or in the row)</li>`];
+  if(totalsRow){const bad=[];people.forEach((p,pi)=>{const want=numVal(totalsRow[p.c]);const got=data.reduce((a,d)=>a+d.vals[pi],0);if(want!=null&&clean(totalsRow[p.c])!==""&&Math.abs(want-got)>0.01)bad.push(`${p.first}: report ${want}, loaded ${got}`)});
+    rep.push(bad.length?`<li class="bad">Totals mismatch for ${bad.length}: ${esc(bad.slice(0,5).join(" · "))}</li>`:`<li class="ok">Every employee total matches the report's Totals row ✓</li>`)}
+  return{tasks,rows:out,rep};
+}
+
+/* Productivity sheet: Process | User Name | Count/Time pairs | Total | Downtime | … | 100% | Leaves */
+function parseSummary(rows){
+  const un=findRow(rows,/^user\s*name$/i,10);
+  let fd=-1;for(let r=un.r+1;r<rows.length;r++){const v=clean((rows[r]||[])[un.c]);if(v&&!isNum(v)){fd=r;break}}
+  if(fd<0)return{err:"No employee rows found under “User Name”."};
+  const width=Math.max(...rows.slice(0,fd+1).map(r=>r.length));
+  const SKIP=/^(time|total|total\s*downtime|production\s*hours?|productivity.*|no\.?\s*of\s*hours|downtime|hours)$/i;
+  const map={},tasks=[];
+  for(let c=0;c<width;c++){
+    if(c===un.c)continue;
+    const labels=rows.slice(0,fd).map(r=>clean((r||[])[c]));
+    const texts=labels.filter(v=>v&&!isNum(v));if(!texts.length)continue;
+    const has=re=>texts.find(v=>re.test(v.replace(/\s+/g," ")));
+    if(has(/^process$/i)){map[c]={t:"proc"};continue}
+    if(has(/^comments?$/i)){map[c]={t:"cm"};continue}
+    if(has(/^100\s*%?$/)){map[c]={t:"f",k:"full"};continue}
+    if(has(/^leaves?$/i)){map[c]={t:"f",k:"lv"};continue}
+    const d=DT.find(x=>texts.some(v=>{const L=norm(v);if(/^(total)?downtime/.test(L))return false;return L===norm(lab("dt_"+x[0]))||DTA[x[0]].some(a=>L===a||(a.length>=4&&L.startsWith(a)))}));
+    if(d){map[c]={t:"d",k:d[0]};continue}
+    const text=texts[0];if(SKIP.test(text)||/^time/i.test(text))continue;
+    const ti=labels.indexOf(text);const aht=labels.slice(ti+1).map(numVal).find(v=>v>0);if(!aht)continue;
+    let t=tasks.find(x=>x.k===bk(text));if(!t){t={k:bk(text),name:text,aht};tasks.push(t)}
+    map[c]={t:"c",k:t.k};
+  }
+  if(!tasks.length)return{err:"No task columns (name with AHT below it) found in this sheet."};
+  const out=[];
+  for(let r=fd;r<rows.length;r++){
+    const row=rows[r]||[];const nm=clean(row[un.c]);if(!nm||isNum(nm))continue;
+    const e={key:norm(nm),name:nm,team:"",proc:"DBM",c:{},dt:{},full:defFull(),lv:0,cm:""};
+    for(const c in map){const m=map[c],raw=clean(row[c]),v=numVal(raw);
+      if(m.t==="proc"){if(raw){e.proc=raw;e.team=raw}}
+      else if(m.t==="cm")e.cm=raw;
+      else if(m.t==="c"){if(v>0)e.c[m.k]=v}
+      else if(m.t==="d"){if(v>0)e.dt[m.k]=v}
+      else if(m.t==="f"){if(raw!==""&&v!==null)e[m.k]=v}}
+    out.push(e);
+  }
+  const hasFull=Object.values(map).some(m=>m.k==="full");
+  return{tasks,rows:out,rep:[`<li>Productivity sheet: ${tasks.length} task columns with their AHT, ${out.length} employees</li>`,
+    `<li>Downtime, ${hasFull?"100% hours, ":""}leaves and comments taken from the sheet</li>`,
+    `<li class="ok">Time, Total, Production Hours and Productivity worked out with the sheet's formulas</li>`]};
+}
+
+/* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
+async function buildStyled(d){
+  const D=S.days[d],T=visTasksFor(d),X=window.ExcelJS;
+  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v16.1";
+  const name=fmtDate(d).slice(0,11);
+  const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
+  const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
+  const F=c=>({type:"pattern",pattern:"solid",fgColor:{argb:"FF"+c}});
+  const AL={horizontal:"center",vertical:"middle",wrapText:true};
+  const W={bold:true,color:{argb:"FFFFFFFF"},size:10,name:"Calibri"},K={bold:true,color:{argb:"FF14243A"},size:10,name:"Calibri"};
+  const box=(r1,c1,r2,c2,v,fill,font)=>{for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){const x=ws.getCell(r,c);x.border=BOX;x.fill=F(fill);x.font=font;x.alignment=AL}
+    if(r1!==r2||c1!==c2)ws.mergeCells(r1,c1,r2,c2);ws.getCell(r1,c1).value=v};
+  const L=c=>ws.getColumn(c).letter;
+  box(1,1,3,1,lab("proc"),"9DC3E6",K);box(1,2,3,2,lab("emp"),"F47B20",W);
+  let c=3;const cols=[];
+  T.forEach(t=>{box(1,c,1,c,t.name,"1F4E79",W);box(1,c+1,3,c+1,lab("time"),"1F4E79",W);
+    box(2,c,2,c,t.aht,"1F4E79",W);box(3,c,3,c,t.ph>0?t.ph:{formula:`60/${L(c)}2`,result:60/t.aht},"1F4E79",W);ws.getCell(3,c).numFmt="0.00";
+    cols.push({t,cc:c,tc:c+1});c+=2});
+  const totC=c++;box(1,totC,3,totC,lab("total"),"F47B20",W);
+  const dt0=c;box(1,dt0,1,dt0+DT.length,lab("dt"),"F47B20",W);
+  DT.forEach(([k])=>{box(2,c,3,c,lab("dt_"+k),"F47B20",W);c++});
+  const tdtC=c++;box(2,tdtC,3,tdtC,lab("tdt"),"F47B20",W);
+  const prodC=c++,pctC=c++,cmC=c++,fullC=c++,lvC=c++,nohC=c++;
+  [[prodC,"prod"],[pctC,"pct"],[cmC,"cm"],[fullC,"full"],[lvC,"lv"],[nohC,"noh"]].forEach(([cc,k])=>box(1,cc,3,cc,lab(k),cc>=fullC?"C55A11":"F47B20",W));
+  const div=S.cfg.dtUnit==="min"?"/60":"";
+  D.rows.forEach((r,i)=>{const R=4+i,x=calc(r,D.tasks);
+    const cell=(cc,v,fill,fmt,font)=>{const e=ws.getCell(R,cc);e.value=v;e.border=BOX;if(fill)e.fill=F(fill);if(fmt)e.numFmt=fmt;e.font=font||{size:10,name:"Calibri"};e.alignment={horizontal:cc<=2?"left":"center",vertical:"middle"};return e};
+    cell(1,r.proc,"D9E5F2",null,K);cell(2,r.name,"2F55A4",null,W);
+    cols.forEach(({t,cc,tc})=>{const n=r.c[t.k];cell(cc,n>0?n:null,"C6EFCE");cell(tc,{formula:`IFERROR(${L(cc)}${R}/${L(cc)}$3,0)`,result:+(x.times[t.k]||0).toFixed(4)},"C6EFCE","0.00")});
+    cell(totC,{formula:cols.length?`SUM(${cols.map(o=>L(o.tc)+R).join(",")})`:"0",result:+x.total.toFixed(4)},"FCE4D6","0.00",K);
+    DT.forEach(([k],j)=>cell(dt0+j,r.dt[k]>0?r.dt[k]:null,"E6B8F0"));
+    cell(tdtC,{formula:`SUM(${L(dt0)}${R}:${L(dt0+DT.length-1)}${R})${div}`,result:+x.dtHr.toFixed(4)},"FFFFFF","0.00");
+    cell(fullC,r.full??null,"FFFFFF");cell(lvC,r.lv||null,"FFFFFF");
+    cell(nohC,{formula:`${L(fullC)}${R}-${L(lvC)}${R}`,result:x.hours},"FFFFFF","0.00");
+    cell(prodC,{formula:`${L(nohC)}${R}-${L(tdtC)}${R}`,result:+x.prod.toFixed(4)},"FFFFFF","0.00",K);
+    cell(pctC,{formula:`IFERROR(${L(totC)}${R}/${L(prodC)}${R},0)`,result:+(x.pct/100).toFixed(6)},x.pct>=S.cfg.g?"C6EFCE":x.pct>=S.cfg.a?"FFEB9C":"FFC7CE","0.00%",K);
+    cell(cmC,r.cm||null,"FFFFFF");
+  });
+  ws.getColumn(1).width=11;ws.getColumn(2).width=28;
+  for(let k=3;k<c;k++)ws.getColumn(k).width=k>=dt0?11:10;ws.getColumn(cmC).width=22;
+  ws.getRow(1).height=44;ws.getRow(2).height=30;ws.getRow(3).height=18;
+  ws.autoFilter={from:{row:3,column:1},to:{row:3+D.rows.length,column:c-1}};
+  return{buf:await wb.xlsx.writeBuffer(),fname:"Eclipse_DBM_"+d+".xlsx"};
+}
+function visTasksFor(d){const D=S.days[d];const on=D.tasks.filter(t=>D.rows.some(r=>+r.c[t.k]>0));return view.active&&on.length?on:D.tasks}
+function saveBlob(blob,fname){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+async function styledExport(d,share){
+  if(!d)return;
+  if(!window.ExcelJS){exportDates([d]);return}
+  try{
+    toast(share?"Preparing file to share…":"Preparing Excel…");
+    const {buf,fname}=await buildStyled(d);
+    const type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",blob=new Blob([buf],{type});
+    if(share){
+      const file=new File([blob],fname,{type});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){
+        try{await navigator.share({files:[file],title:"Alpha NextGen Eclipse · "+fmtDate(d)});toast("Shared");return}catch(e){if(e&&e.name==="AbortError")return}
+      }
+      saveBlob(blob,fname);toast("Downloaded "+fname+". Attach it in Outlook or Teams to share.");return;
+    }
+    saveBlob(blob,fname);toast("Exported "+fname);
+  }catch(e){exportDates([d])}
+}
+
+/* ---------- plain export fallback (.xlsx via SheetJS, else .csv) ---------- */
+function sheetRows(d){
+  const D=S.days[d],T=D.tasks;
+  const head=[lab("proc"),lab("emp"),"Team",...T.flatMap(t=>[t.name+" (AHT "+t.aht+")",lab("time")]),lab("total"),...DT.map(x=>lab("dt_"+x[0])),lab("tdt"),lab("prod"),lab("pct"),lab("cm"),lab("full"),lab("lv"),lab("noh")];
+  const n=v=>+f2(v);const out=[head];
+  D.rows.forEach(r=>{const c=calc(r,T);out.push([r.proc,r.name,r.team,...T.flatMap(t=>[r.c[t.k]??"",n(c.times[t.k])]),n(c.total),...DT.map(([k])=>r.dt[k]??""),n(c.dtHr),n(c.prod),+(c.pct/100).toFixed(4),r.cm||"",r.full??"",r.lv??"",n(c.hours)])});
+  return{head,out};
+}
+function exportDates(ds){
+  if(!ds.length)return;
+  const fname="Eclipse_DBM_"+(ds.length===1?ds[0]:ds[0].slice(0,7)+"_month");
+  try{
+    if(typeof XLSX==="undefined")throw 0;
+    const wb=XLSX.utils.book_new();
+    ds.forEach(d=>{const {head,out}=sheetRows(d);const ws=XLSX.utils.aoa_to_sheet(out);
+      ws["!cols"]=head.map((h,i)=>({wch:i<3?26:Math.max(9,Math.min(34,String(h).length+2))}));
+      const pc=head.indexOf(lab("pct"));for(let r=1;r<out.length;r++){const a=XLSX.utils.encode_cell({r,c:pc});if(ws[a])ws[a].z="0.00%"}
+      ws["!autofilter"]={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:out.length-1,c:head.length-1}})};
+      XLSX.utils.book_append_sheet(wb,ws,fmtDate(d).slice(0,11))});
+    XLSX.writeFile(wb,fname+".xlsx");
+  }catch(e){
+    const csv=ds.map(d=>{const {out}=sheetRows(d);return [[fmtDate(d)],...out].map(r=>r.map(v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\r\n")}).join("\r\n\r\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download=fname+".csv";document.body.appendChild(a);a.click();a.remove();
+  }
+  toast(ds.length===1?"Exported "+fmtDate(ds[0]):"Exported "+ds.length+" dates of "+fmtMonth(ds[0].slice(0,7))+", one sheet per date");
+}
+
+/* ---------- admin (master password): expiry, PC list, defaults ---------- */
+$("#btnAdmin").onclick=()=>{
+  modal(`<h3>Admin</h3><p style="color:var(--muted);margin:0">Enter the master password.</p>
+   <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div><div class="err" id="adErr"></div>
+   <div class="mrow"><button class="cap amber" id="adGo">Open</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#adPw").focus();const go=()=>{if(!isMaster($("#adPw").value)){$("#adErr").textContent="Master password is wrong.";return}openAdmin()};
+  $("#adGo").onclick=go;$("#adPw").onkeydown=e=>{if(e.key==="Enter")go()};
+};
+function openAdmin(){
+  const pcs=allowedPCs();
+  modal(`<h3>Admin settings</h3>
+  <h4>Formulas used</h4>
+  <div class="fx">Per hour = 60 ÷ AHT (can be typed over in the heading)<br>Time = Count ÷ Per hour<br>Total = SUM of all Time<br>Total Downtime = SUM(downtime) ÷ ${S.cfg.dtUnit==="min"?"60":"1"}<br>No. of Hours = 100% − Leaves<br>Production Hours = No. of Hours − Total Downtime<br>Productivity % = Total ÷ Production Hours</div>
+  <h4>Default 100% hours for new dumps</h4>
+  <div class="mrow"><label>Hours per day<input id="sH" type="number" value="${S.cfg.hpd}"></label><label>Working days<input id="sW" type="number" value="${S.cfg.wd}"></label></div>
+  <div class="mrow"><label>Downtime entered in<select id="sDU"><option value="min" ${S.cfg.dtUnit==="min"?"selected":""}>Minutes (÷ 60)</option><option value="hr" ${S.cfg.dtUnit==="hr"?"selected":""}>Hours</option></select></label>
+    <label>Green from %<input id="sG" type="number" value="${S.cfg.g}"></label><label>Amber from %<input id="sA" type="number" value="${S.cfg.a}"></label></div>
+  <h4>Tool expiry</h4>
+  <div class="mrow"><label>Expires on<input id="sE" type="date" value="${expiry()}"></label></div>
+  <h4>Registered PCs · ${pcs.length}</h4>
+  <div class="pclist">${pcs.map(p=>`<span class="pcchip">${esc(p)} <small>pw ${esc(p.slice(-4))}</small><button data-pcdel="${esc(p)}" aria-label="Remove ${esc(p)}">✕</button></span>`).join("")}</div>
+  <div class="mrow"><textarea id="sPcNew" placeholder="Add PC names, one per line or comma separated" style="flex:1;min-height:60px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:8px"></textarea><button class="cap sm" id="sPcAdd">Add PCs</button></div>
+  <p style="font-size:12px;color:var(--muted);margin:6px 0 0">PCs added here are saved on this PC only. For all PCs, the list goes in the file (ALLOWED_PCS) — send it and it gets built in.</p>
+  <div class="err" id="sErr"></div>
+  <div class="mrow"><button class="cap amber" id="sSave">Save settings</button><button class="cap" data-close>Close</button></div>`);
+  $("#mcard").querySelectorAll("[data-pcdel]").forEach(b=>b.onclick=()=>{const p=b.dataset.pcdel;S.cfg.pcsAdd=(S.cfg.pcsAdd||[]).filter(x=>x!==p);if(!S.cfg.pcsDel.includes(p))S.cfg.pcsDel.push(p);save();openAdmin();toast(p+" removed")});
+  $("#sPcAdd").onclick=()=>{const list=$("#sPcNew").value.split(/[\s,;]+/).map(x=>x.trim().toUpperCase().replace(/\..*$/,"")).filter(x=>x.length>=4);
+    if(!list.length){$("#sErr").textContent="Enter at least one PC name.";return}
+    list.forEach(p=>{S.cfg.pcsDel=S.cfg.pcsDel.filter(x=>x!==p);if(!S.cfg.pcsAdd.includes(p))S.cfg.pcsAdd.push(p)});save();openAdmin();toast(list.length+" PC"+(list.length>1?"s":"")+" added")};
+  $("#sSave").onclick=()=>{const e=$("#sE").value;if(!e){$("#sErr").textContent="Pick an expiry date.";return}
+    Object.assign(S.cfg,{hpd:+$("#sH").value||8,wd:+$("#sW").value||21,dtUnit:$("#sDU").value,g:+$("#sG").value||85,a:+$("#sA").value||60,exp:e});
+    save(true);closeModal();setTop();renderMain();toast("Settings saved")};
+}
+
+/* ---------- start ---------- */
+function setTop(){$("#pcChip").textContent=dev.get()||(LOCK_ON?"":"TESTING");$("#expTxt").textContent="Valid till "+expiry()}
+function boot(){setTop();if(!view.date)view.date=dates()[0]||null;renderRail();renderMain()}
+function start(){if(expired())return;if(LOCK_ON)gate();else enter()}
+(async()=>{
+  storeOK=await IDB.open();
+  S=(await IDB.get("state"))||fresh();
+  if(!S.cfg)S=fresh();
+  S.cfg=Object.assign(fresh().cfg,S.cfg);S.days=S.days||{};
+  start();
+})();
+</script>
