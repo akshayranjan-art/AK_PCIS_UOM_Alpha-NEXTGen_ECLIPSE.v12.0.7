@@ -389,7 +389,7 @@ td.name{min-width:215px}
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v16.1 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v12.0.7 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -412,7 +412,7 @@ td.name{min-width:215px}
 
 <div id="gate" class="gate" hidden><div class="lcard">
   <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
-  <span class="ver" style="margin-top:8px">v16.1 · PRODUCTION CONSOLE</span>
+  <span class="ver" style="margin-top:8px">v12.0.7 · PRODUCTION CONSOLE</span>
   <div id="gateBody"></div>
 </div></div>
 
@@ -427,12 +427,12 @@ td.name{min-width:215px}
 
 <script>
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
-const APP_EXPIRY  = "2026-12-31";            // tool stops after this date; master password can extend it per PC
+const APP_EXPIRY  = "2027-03-31";            // tool stops after this date; master password can extend it per PC
 const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
   "LHTU05CG2122RJJ",
 ];
 const PW_MASTER   = 5662684247018612;        // hash of master password (caps and spaces ignored)
-const LOCK_ON     = false;                   // TESTING: login off. Set to true to switch PC login back on
+const LOCK_ON     = true;                    // PC login is ON. Set to false only for testing
 /* ========================================================================= */
 
 /* ---------- light protection: right-click, F12, view-source, save, print, drag ---------- */
@@ -1593,7 +1593,7 @@ const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
   const D=view.work,rowsX=rowsFiltered().map(x=>x.r),T=visTasks(),X=window.ExcelJS;
-  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v16.1";
+  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.0.7";
   const name=fmtD(d).slice(0,11);
   const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
   const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
@@ -1964,6 +1964,7 @@ function fixCfg(){
   if(c.ui){Object.entries(c.ui).forEach(([k,v])=>{if(v===false)c.fon[k]=false});delete c.ui}
   if(!Array.isArray(c.procs)||!c.procs.length)c.procs=clone(PROC0);
   c.procs.forEach(p=>{p.roles=Object.assign({entry:1,manager:1,employee:1},p.roles||{});p.label=p.label||p.k;p.status=p.status||"soon"});
+  if(c.exp&&c.exp<"2027-03-31")c.exp=null;
   c.notice=c.notice||{on:false,text:"",type:"info",speed:25};c.tgt=c.tgt||{};c.aht=c.aht||{};
   (c.pcsAdd||[]).forEach(p=>{if(!c.users.some(u=>u.pc===p)&&!isBuiltInAdmin(p))c.users.push({pc:p,role:"employee",name:"",team:""})});c.pcsAdd=[];
 }
