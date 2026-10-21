@@ -23,7 +23,7 @@
 .hl:focus{background:#ffffff26;border-style:solid;outline:none}
 .h-task .hl{min-width:0;font-size:10px}
 .hl.ht2{display:block;resize:none;height:30px;line-height:1.15;white-space:normal;overflow-wrap:anywhere;overflow:hidden;padding:2px 3px;text-align:center;font-size:9.5px;min-width:44px}
-.hl.ht{display:block;resize:none;height:38px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden;padding:3px 5px;text-align:center}
+.hl.ht{display:block;resize:none;height:44px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden;padding:3px 5px;text-align:center}
 td.name .nmw{display:flex;align-items:center;gap:6px}
 td.name input{background:transparent;text-align:left;padding:0 4px;height:auto;width:100%;min-width:0}
 td.name input.nm{font-family:var(--f-body);font-weight:600;font-size:12px;height:17px}
@@ -103,9 +103,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 table{border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
 th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;height:26px;white-space:nowrap}
 thead th{position:sticky;z-index:3;font-size:10px;font-weight:600;text-align:center;padding:3px 4px}
-thead tr:nth-child(1) th{top:0;height:46px}
-thead tr:nth-child(2) th{top:46px;height:30px}
-thead tr:nth-child(3) th{top:76px}
+thead tr:nth-child(1) th{top:0;height:52px}
+thead tr:nth-child(2) th{top:52px;height:30px}
+thead tr:nth-child(3) th{top:82px}
 .h-task{background:var(--navy);color:#fff;font-family:var(--f-disp);font-size:10px;width:100px;max-width:100px;min-width:96px;white-space:normal;line-height:1.2;padding:4px 5px}
 .h-task small{display:block;font-family:var(--f-body);font-weight:500;font-size:9px;color:#9fb5cc;margin-bottom:2px}
 .h-sub{background:var(--navy-2);color:#cfe0f2;font-family:var(--f-num)}
@@ -181,28 +181,238 @@ td input.cm{width:110px;text-align:left}
 .pcchip small{color:var(--muted)}
 .pcchip button{border:0;background:#c2413a1f;color:var(--danger);border-radius:999px;width:18px;height:18px;font-size:10px;cursor:pointer}
 optgroup{font-weight:700}
+.banner{background:var(--amber-soft);border:1px solid var(--amber);border-radius:14px;padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-weight:600}
+.dirty{margin-left:10px;color:#a86f1c;font-weight:700;font-size:12px}
+.cap.pulse{animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 4px #e9a23b55,0 3px 0 #a86f1c}}
+.hlt{display:block;white-space:normal;line-height:1.2;font-size:10px;overflow-wrap:break-word;word-break:normal}
+.h-cnt .hlt{white-space:nowrap}
+.h-task .hlt{overflow-wrap:anywhere}
+.acard.wide{grid-column:1/-1}
+.ro{display:block;min-width:44px;padding:0 5px;text-align:right;font-family:var(--f-num);font-size:11px;line-height:25px}
+.ro.cm{text-align:left;min-width:100px;font-family:var(--f-body)}
+.nmt{font-weight:600;font-size:12px;padding:0 4px}.tmt{font-size:9px;color:var(--muted);padding:0 4px}
+.adminpg{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;padding-block:env(safe-area-inset-top,0px) 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.apin{max-width:1100px;margin:0 auto}
+.ahead{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 0 12px;border-bottom:1px solid var(--line)}
+.atabs{display:flex;gap:8px;flex-wrap:wrap}
+.abody{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:14px;padding-top:14px}
+.acard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;min-width:0}
+.acard h4{margin:0 0 6px;font-family:var(--f-disp);font-size:14px}
+.acard.danger{border-color:#c2413a55}
+.ahelp{margin:4px 0 8px;color:var(--muted);font-size:13px;line-height:1.5}
+.ahelp code,.mrow code{font-family:var(--f-num);font-size:11px;background:var(--bg);padding:1px 5px;border-radius:5px}
+.utable{overflow:auto;max-height:340px;border:1px solid var(--line);border-radius:12px}
+.utable table{width:100%}
+.utable th{position:sticky;top:0;background:var(--navy);color:#fff;font-size:11px;padding:6px 8px;height:auto;z-index:1}
+.utable td{padding:4px 8px;font-size:12px;height:auto}
+.utable td input,.utable td select{width:100%;min-width:90px;height:28px;text-align:left;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 6px;font-family:var(--f-body)}
+.utable tr.lock td{color:var(--muted)}
+.perm td{text-align:center}.perm td:first-child{text-align:left}
+.perm input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal)}
+.perm tr.scope td{background:var(--teal-soft)}
+.toggles{display:flex;flex-wrap:wrap;gap:10px 18px}
+.tg{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.tg input{position:absolute;opacity:0;pointer-events:none}
+.tg span{width:38px;height:22px;border-radius:999px;background:var(--line);position:relative;transition:background .15s;flex:none}
+.tg span::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 3px #0003}
+.tg input:checked+span{background:var(--teal)}.tg input:checked+span::after{left:19px}
+.tg input:focus-visible+span{outline:2px solid var(--amber);outline-offset:2px}
+.fstat{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px}
+.mrow textarea{flex:1;min-width:200px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:8px;font-family:var(--f-num);font-size:12px}
+.confirm{border:1px solid var(--danger);border-radius:12px;padding:10px 12px;margin-top:10px}
+
+.pvw{overflow:auto;max-height:42vh;border:1px solid var(--line);border-radius:12px;margin:10px 0}
+.pvw table{width:100%}
+.pvw th{position:sticky;top:0;background:var(--navy);color:#fff;font-size:11px;padding:6px 8px;height:auto}
+.pvw td{padding:4px 8px;font-size:12px;font-family:var(--f-num);height:auto;text-align:center}
+.pvw td:first-child{text-align:left;font-family:var(--f-body);font-weight:600}
+.pvnote{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.tagm,.tagn{font-size:9px;padding:1px 6px;border-radius:999px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.tagm{background:var(--teal-soft);color:var(--teal)}.tagn{background:var(--amber-soft);color:#a86f1c}
+.mcard{max-width:760px!important}
+/* ===== build 17: compact look ===== */
+body{font-size:13px}
+.top{padding-block:6px;gap:10px}
+.brand{font-size:16px}
+.ver{font-size:10px;padding:2px 8px}
+.cap{padding:7px 14px;font-size:12.5px;box-shadow:0 2px 0 var(--line),0 4px 10px #0f2a4a18,inset 0 1px 0 #ffffff60}
+.cap.sm{padding:4px 10px;font-size:11.5px}
+.cap.ico{padding:4px 9px;min-width:28px}
+.cap.teal{box-shadow:0 2px 0 #0a5f5b,0 4px 10px #0e8f8a33,inset 0 1px 0 #ffffff50}
+.cap.amber{box-shadow:0 2px 0 #a86f1c,0 4px 10px #e9a23b33,inset 0 1px 0 #ffffff70}
+.cap:active,.cap.on{transform:translateY(2px)}
+.rail{padding-block:6px;gap:8px}
+.rail .cap{padding:5px 12px;font-size:12px}
+.rail .cap .tag{font-size:8px;margin-left:6px}
+.wrap{padding-block:10px 20px;gap:8px}
+.bar{padding:7px 10px;gap:8px;border-radius:12px}
+.fld{gap:2px}.fld span{font-size:9px}
+.fld select,.fld input{padding:5px 9px;border-radius:8px;min-width:120px}
+.chk{padding-bottom:5px;font-size:11.5px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:6px}
+.stat{padding:5px 10px;border-radius:10px}.stat b{font-size:15px}.stat span{font-size:9.5px}
+.stat em{font-style:normal;font-size:11px;margin-left:4px}.stat.wa b{color:#a86f1c}
+.up{color:var(--teal)}.dn{color:var(--danger)}
+.dump{padding:10px;border-radius:12px;gap:8px}
+.dump textarea{min-height:64px}
+.gridbox{border-radius:12px;max-height:72vh}
+.banner{padding:6px 12px;border-radius:10px;font-size:12.5px;gap:10px}
+.banner.trial{background:var(--teal-soft);border-color:var(--teal)}
+.okb{color:var(--teal);font-weight:700}.lkb{color:var(--danger);font-weight:700}
+.dinfo{font-size:11.5px}
+.muted{color:var(--muted);font-size:11.5px;font-weight:400}
+.mcard{padding:16px;border-radius:14px}
+.acard{padding:12px 14px;border-radius:12px}
+.abody{gap:10px;padding-top:10px}
+
+/* notice strip: moves left to right */
+.notice{display:flex;align-items:center;gap:10px;height:24px;overflow:hidden;background:var(--navy-2);color:#e7f0fa;font-size:12px;font-weight:600;padding:0 12px;border-bottom:1px solid #ffffff1a}
+.notice.urgent{background:#8f2a24}
+.ntag{flex:none;font-size:9px;font-weight:700;letter-spacing:.1em;padding:2px 8px;border-radius:999px;background:#ffffff26}
+.ntrack{flex:1;overflow:hidden;white-space:nowrap;position:relative;height:100%}
+.nmove{position:absolute;top:50%;white-space:nowrap;animation:nmove 25s linear infinite}
+@keyframes nmove{from{left:0;transform:translate(-100%,-50%)}to{left:100%;transform:translate(0,-50%)}}
+.notice:hover .nmove{animation-play-state:paused}
+
+.sdot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px #ffffff22}
+.sdot.green{background:#34c77b}.sdot.amber{background:var(--amber)}.sdot.red{background:#ef5a50}.sdot.grey{background:#8fa2ba}
+
+.shiftbar{align-items:center;font-size:12.5px}
+.shiftbar input{width:62px;padding:4px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);text-align:center;font-family:var(--f-num)}
+.sbl{font-family:var(--f-disp);font-size:12px}
+.mycard{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.mycard small{display:block;color:var(--muted);font-size:11px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.mk span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.mk b{font:600 15px var(--f-num)}
+.badge{background:var(--amber-soft);color:#a86f1c;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;display:inline-block;margin-top:6px}
+b.p-hi,b.p-md,b.p-lo{background:none!important;padding:0}b.p-md{color:#a86f1c}b.p-hi{color:var(--teal)}b.p-lo{color:var(--danger)}
+
+td.pct em{display:block;font-size:9px;font-style:normal;line-height:1}
+i.fl{font-style:normal;color:#a86f1c;margin-left:3px;cursor:help}
+tr.flag td.name{box-shadow:inset 3px 0 0 var(--amber),3px 0 6px #0f2a4a18}
+.pin,.hi{flex:none;border:0;background:transparent;color:var(--muted);cursor:pointer;width:16px;padding:0;font-size:12px;line-height:1}
+.pin.on{color:var(--amber)}.hi:hover,.pin:hover{color:var(--teal)}
+.lvb{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:5px;font-size:9px;padding:0 5px;height:14px;line-height:12px;cursor:pointer;color:var(--muted);font-weight:700}
+.lvb.on{background:var(--amber);color:#2a1a02;border-color:var(--amber)}
+.lvt{font-size:9px;color:#a86f1c;font-weight:700;flex:none}
+td.name .nmt{cursor:pointer}
+
+.cards{display:grid;gap:8px;padding:8px}
+.ecard{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--panel)}
+.eh{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.ecard small{color:var(--muted)}
+.eg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.eg span{font-size:9px;color:var(--muted);text-transform:uppercase}.eg b{display:block;font:600 13px var(--f-num);color:var(--ink)}
+
+#hcard{position:fixed;z-index:45;width:260px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 12px 30px #0003;pointer-events:none}
+.hh{display:flex;gap:10px;align-items:center;margin-bottom:8px}.hh small{display:block;color:var(--muted);font-size:11px}
+.hk{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}
+.hk span{font-size:9px;text-transform:uppercase;color:var(--muted);letter-spacing:.05em}.hk b{display:block;font:600 13px var(--f-num);color:var(--ink)}
+.spark .sl{fill:none;stroke:var(--teal);stroke-width:2}.spark .sg{stroke:var(--amber);stroke-dasharray:3 3}.spark .sp{fill:var(--teal)}
+
+.tray{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.ttabs{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:8px}
+.tt{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:3px 11px;font-size:11.5px;cursor:pointer;font-weight:600;color:var(--muted)}
+.tt.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tpanel{max-height:470px;overflow:auto}
+.cal{display:flex;gap:4px;flex-wrap:wrap}
+.cd{width:36px;height:38px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font:600 12px var(--f-num);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);padding:0}
+.cd small{font-size:8px;font-family:var(--f-body);line-height:1}
+.cd.has{background:var(--teal-soft);color:var(--teal);border-color:var(--teal);cursor:pointer}
+.cd.miss{background:#c2413a14;color:var(--danger);border-color:#c2413a55}
+.cd.fut{opacity:.4}.cd.cur{outline:2px solid var(--amber);outline-offset:1px}
+.cd em{position:absolute;top:1px;right:3px;font-size:9px;font-style:normal}
+.calh{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px;justify-content:space-between;font-size:12.5px}
+table.mt{border-collapse:collapse;font-size:12px}table.mt.wide{width:100%}
+table.mt td,table.mt th{border:0;border-bottom:1px solid var(--line);padding:4px 8px;height:auto;text-align:center;white-space:nowrap}
+table.mt th{font-size:9.5px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;position:static}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+h5{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.hb{height:8px;background:var(--bg);border-radius:999px;overflow:hidden;min-width:60px}.hb i{display:block;height:100%;border-radius:999px;background:var(--teal)}
+.hb i.p-md{background:var(--amber)}.hb i.p-lo{background:var(--danger)}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-bottom:8px}
+.kp span{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.kp b{display:block;font:600 15px var(--f-num);color:var(--ink);text-transform:none;letter-spacing:0;margin-top:2px}
+.gbar{position:relative;height:22px;background:var(--bg);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.gbar i{display:block;height:100%;background:var(--amber)}.gbar i.p-hi{background:var(--teal)}
+.gbar span{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:700}
+.heat td{width:20px;min-width:20px;height:18px;padding:0!important}.heat td:first-child{width:auto;padding:0 8px!important;text-align:left}
+.heat th{padding:3px 2px!important;min-width:20px}
+.heat td.p-hi{background:#0e8f8a99}.heat td.p-md{background:#e9a23baa}.heat td.p-lo{background:#c2413a88}.heat td.hL{font-size:9px;color:var(--muted);text-align:center}
+
+/* admin access table */
+.x{border:0;background:#c2413a1f;color:var(--danger);border-radius:999px;width:22px;height:22px;cursor:pointer;font-size:11px;margin:0 1px}.x:disabled{opacity:.3;cursor:default}
+.perm tr.grp td{background:var(--bg);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left}
+.utable.big{max-height:600px}.utable.big table{width:auto;border-collapse:separate}
+.utable.big td,.utable.big th{padding:3px 4px;font-size:11px;text-align:center;background:var(--panel)}
+.utable.big thead th{background:var(--navy);color:#fff}
+.utable.big thead tr:first-child th{top:0;height:26px}.utable.big thead tr:nth-child(2) th{top:26px}
+.utable.big th.gh{background:var(--navy-2)}
+.utable.big th.fh{font-size:9.5px;font-weight:600;white-space:normal;line-height:1.1;min-width:40px;max-width:52px;cursor:help}
+.utable.big .s0{position:sticky;left:0;min-width:30px;width:30px;z-index:2}
+.utable.big .s1{position:sticky;left:30px;min-width:150px;text-align:left;z-index:2}
+.utable.big .s2{position:sticky;left:180px;min-width:130px;z-index:2;box-shadow:3px 0 6px #0f2a4a18}
+.utable.big thead .s0,.utable.big thead .s1,.utable.big thead .s2{z-index:4}
+.utable.big td input,.utable.big td select{min-width:80px;height:24px;font-size:11px}
+.utable.big td input[type=checkbox]{min-width:0;width:15px;height:15px}
+.utable.big tr.sel td{background:var(--amber-soft)}
+.utable.big tr.lock td{color:var(--muted)}
+.mono{font-family:var(--f-num);font-size:11px}
+.pp{border:0;width:26px;height:21px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;padding:0}
+.pp.y{background:#0e8f8a2e;color:var(--teal)}.pp.n{background:#c2413a2b;color:var(--danger)}
+.pp.inh{background:transparent;color:var(--teal);opacity:.45;border:1px dashed var(--line)}.pp.inh.x{color:var(--danger)}
+.pp.lk{cursor:default;display:inline-block;line-height:21px}
+.pc2{border:1px solid var(--line);background:var(--bg);border-radius:999px;font-size:10px;padding:1px 7px;margin:1px;cursor:pointer;color:var(--muted)}
+.pc2.on{background:var(--teal-soft);color:var(--teal);border-color:var(--teal)}.pc2.inh{opacity:.55;border-style:dashed}.pc2.rst{color:var(--amber)}
+td.pcs{white-space:normal;min-width:230px;text-align:left!important}
+.ubar{align-items:center}.ubar input,.ubar select{flex:0 1 auto}
+
+#pwm{display:none}
+@media print{
+  .top,.rail,.bar,.tray,.dump,.stats,.notice,#updBar,.banner,.pager,.mycard,#hcard{display:none!important}
+  body{background:#fff;color:#000}.wrap{padding:0}.gridbox{max-height:none;overflow:visible;border:0}
+  #pwm{display:block!important;position:fixed;bottom:3mm;right:5mm;font-size:9px;color:#555}
+  th,td{font-size:8px!important}td input{background:transparent!important}
+  .sticky1,.sticky2{position:static!important}
+}
+@media (max-width:700px){.top .exp{display:none}.cap{padding:6px 11px}.fld select,.fld input{min-width:96px}}
+td.name{min-width:215px}
+.stat b{white-space:nowrap}.stat em{font-size:10.5px}
+.moon{display:inline-block;width:11px;height:11px;border-radius:50%;border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%);vertical-align:-1px}
+
+.stag{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--teal-soft);color:var(--teal);vertical-align:1px}
+
 </style>
 
 <section id="app" hidden>
+  <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v16.1 · build 12</span>
+    <span class="ver">v16.1 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
+      <button class="cap ghost sm" id="btnFolder" hidden>📁 Connect data</button>
+      <button class="cap amber sm" id="btnBack" hidden>Back to Admin</button>
+      <button class="cap ghost sm ico" id="btnHelp" title="Help" aria-label="Help">?</button>
+      <button class="cap ghost sm ico" id="btnTheme" title="Light / dark" aria-label="Light or dark theme"><span class="moon"></span></button>
       <button class="cap ghost sm" id="btnAdmin">Admin</button>
       <button class="cap ghost sm" id="btnOut">Log out</button>
     </div>
   </header>
   <nav class="rail" id="rail"></nav>
+  <div id="updBar" class="banner" style="margin:8px 16px 0" hidden></div>
   <main class="wrap" id="main"></main>
 </section>
 
+<div class="adminpg" id="adminPg" hidden></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
+<div id="hcard" hidden></div><div id="pwm"></div>
 
 <div id="gate" class="gate" hidden><div class="lcard">
   <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
-  <span class="ver" style="margin-top:8px">v16.1 · DBM PRODUCTION CONSOLE</span>
+  <span class="ver" style="margin-top:8px">v16.1 · PRODUCTION CONSOLE</span>
   <div id="gateBody"></div>
 </div></div>
 
@@ -222,7 +432,7 @@ const ALLOWED_PCS = [                        // add up to 100+ PC names, one per
   "LHTU05CG2122RJJ",
 ];
 const PW_MASTER   = 5662684247018612;        // hash of master password (caps and spaces ignored)
-const LOCK_ON     = true;                    // false = skip PC login while testing
+const LOCK_ON     = false;                   // TESTING: login off. Set to true to switch PC login back on
 /* ========================================================================= */
 
 /* ---------- light protection: right-click, F12, view-source, save, print, drag ---------- */
@@ -240,7 +450,6 @@ const H=(str,seed=161)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,c
 const isMaster=p=>H(String(p||"").replace(/\s+/g,"").toLowerCase())===PW_MASTER;
 
 /* ---------- constants ---------- */
-const PROCESSES=[{k:"DBM",live:true},{k:"CPA"},{k:"CPQ"},{k:"Outreach"},{k:"Pend52"},{k:"PCRL"},{k:"Onbase"},{k:"NonPar"}];
 const DT=[["cab","Cab Delay"],["app","Application Issues"],["lap","Laptop Replacement"],["eea","EEA"],["ramp","RAMP"],["trn","Training"],["ll","LL"]];
 const DTA={cab:["cabdelay","cab"],app:["applicationissues","applicationissue","appissues","application"],lap:["laptopreplacement","laptop"],eea:["eea"],ramp:["ramp"],trn:["training","traning","trainning","trainig"],ll:["ll"]};
 const LAB0={proc:"Process",emp:"User Name",total:"Total",dt:"Downtime",prod:"Production Hours",pct:"Productivity %",cm:"Comments",hrs:"Hours",tdt:"Total Downtime",full:"100%",lv:"Leaves",noh:"No. of Hours",cnt:"Count",time:"Time",
@@ -271,8 +480,8 @@ const IDB={db:null,
   put(k,v){MEM[k]=v;if(!this.db)return Promise.resolve(false);return new Promise(res=>{try{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false)}catch(e){res(false)}})}
 };
 let S=null,saveT=null,storeOK=false;
-const fresh=()=>({v:5,cfg:{hpd:8,wd:21,dtUnit:"min",g:85,a:60,exp:null,lab:{},pcsAdd:[],pcsDel:[]},days:{}});
-function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Export your data to Excel.")});if(now)return go();saveT=setTimeout(go,350)}
+const fresh=()=>({v:5,cfg:{hpd:8,wd:21,dtUnit:"min",g:85,a:60,exp:null,lab:{},pcsAdd:[],pcsDel:[],users:[],perms:{},scope:{},msg:{},ui:{}},days:{}});
+function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Use Share / Excel or a backup.")});if(now)return go();saveT=setTimeout(go,350);return Promise.resolve()}
 const dev={get(){try{return localStorage.getItem("eclipse_pc")||""}catch(e){return ""}},set(v){try{v?localStorage.setItem("eclipse_pc",v):localStorage.removeItem("eclipse_pc")}catch(e){}}};
 
 const lab=k=>(S.cfg.lab&&S.cfg.lab[k])||LAB0[k]||k;
@@ -280,11 +489,256 @@ const LH=k=>`<textarea class="hl ht2" data-lab="${k}" rows="2" spellcheck="false
 const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
+/* ---------- build ---------- */
+const BUILD="17";
 
-/* ---------- view state ---------- */
-let view={proc:"DBM",date:null,team:"All",emp:"All",q:"",active:true,dumpOpen:false};
-const cur=()=>S.days[view.date]||null;
-const dates=()=>Object.keys(S.days).sort().reverse();
+/* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
+const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
+const ROLE3=["entry","manager","employee"];
+const FEAT=[
+ ["dump","Dump / paste a new date","Dump","Actions",[1,0,0]],
+ ["replace","Replace a saved date","Replace","Actions",[1,0,0]],
+ ["edit","Edit cells (counts, downtime, names)","Edit","Actions",[1,0,0]],
+ ["save","Save changes","Save","Actions",[1,0,0]],
+ ["reset","Reset (clear the screen)","Reset","Actions",[1,1,1]],
+ ["remove","Remove a person (✕)","Remove","Actions",[1,0,0]],
+ ["heads","Edit headings and AHT","Heads","Actions",[0,0,0]],
+ ["del","Delete a date","Delete","Actions",[0,0,0]],
+ ["share","Share / Excel","Share","Actions",[1,1,1]],
+ ["refresh","Refresh from data folder","Refresh","Actions",[1,1,1]],
+ ["shift","Change shift hours (100%)","Shift","Actions",[0,1,0]],
+ ["trial","Trial dump (nothing saved)","Trial","Actions",[1,1,1]],
+ ["leave","Quick leave buttons (L, ½)","Leave","Actions",[1,0,0]],
+ ["dayclose","Mark day complete","Day ✓","Actions",[1,0,0]],
+ ["unlock","Change locked or old dates","Unlock","Actions",[0,0,0]],
+ ["undo","Recycle bin (undo)","Bin","Actions",[1,0,0]],
+ ["rail","Process buttons (DBM, CPA…)","Procs","Screen",[1,1,1]],
+ ["stats","Summary cards","Cards","Screen",[1,1,1]],
+ ["search","Search box","Search","Screen",[1,1,1]],
+ ["active","“Only baskets with data” switch","Active","Screen",[1,1,1]],
+ ["notice","Notice strip","Notice","Screen",[1,1,1]],
+ ["cmp","Compare with last date (▲ ▼)","▲▼","Screen",[1,1,1]],
+ ["flag","Suspicious data flags","Flags","Screen",[1,1,0]],
+ ["hover","Hover card on names","Hover","Screen",[1,1,1]],
+ ["hist","Employee history popup","History","Screen",[1,1,1]],
+ ["pin","Pin employees","Pin","Screen",[1,1,0]],
+ ["datejump","Date jump ‹ › and Today","Jump","Screen",[1,1,1]],
+ ["sync","Sync status light","Sync","Screen",[1,1,1]],
+ ["folder","📁 Connect / folder button","Folder","Screen",[1,1,1]],
+ ["update","New version notice","Update","Screen",[1,1,1]],
+ ["theme","Light / dark button","Theme","Screen",[1,1,1]],
+ ["help","Help button (?)","Help","Screen",[1,1,1]],
+ ["kbd","Keyboard shortcuts","Keys","Screen",[1,1,1]],
+ ["mobile","Phone card view","Phone","Screen",[1,1,1]],
+ ["mydash","My dashboard card","My card","Screen",[0,0,1]],
+ ["badge","Streak badges","Badges","Screen",[1,1,1]],
+ ["tray","Tools tray (▼)","Tray","Tools",[1,1,1]],
+ ["cal","Calendar strip","Calendar","Tools",[1,1,1]],
+ ["month","Month summary + consistency","Month","Tools",[1,1,0]],
+ ["week","Week view","Week","Tools",[1,1,0]],
+ ["top5","Top / bottom 5","Top 5","Tools",[1,1,0]],
+ ["teams","Team summary","Teams","Tools",[1,1,0]],
+ ["heat","Heatmap","Heatmap","Tools",[1,1,0]],
+ ["basket","Basket-wise view","Baskets","Tools",[1,1,0]],
+ ["attend","Attendance summary","Attend.","Tools",[1,1,0]],
+ ["goal","Goal tracker","Goal","Tools",[1,1,1]],
+ ["dtchart","Downtime breakdown","Downtime","Tools",[1,1,0]],
+ ["selfcalc","Self-check calculator","Calc","Tools",[1,1,1]],
+ ["log","History log","Log","Tools",[0,0,0]],
+ ["missing","Missing employee alert (dump)","Missing","Tools",[1,0,0]],
+];
+const FK=Object.fromEntries(FEAT.map(f=>[f[0],f]));
+const DEFPERM=Object.fromEntries(ROLE3.map((r,i)=>[r,Object.fromEntries(FEAT.map(f=>[f[0],f[4][i]]))]));
+const DEFSCOPE={entry:"all",manager:"all",employee:"own"};
+const MSGS=[["save","Save"],["reset","Reset"],["replace","Replace"],["del","Delete date"],["remove","Remove a person"],["shift","Shift hours"],["dayclose","Day complete"],["restore","Restore from bin"]];
+const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["Pend52","soon"],["PCRL","soon"],["Onbase","soon"],["NonPar","soon"]].map(([k,s])=>({k,label:k,status:s,roles:{entry:1,manager:1,employee:1}}));
+
+let me={pc:"",role:"admin",name:"",team:""};
+const role=()=>view.as?view.as.role:me.role;
+const ident=()=>view.as||me;
+const userOf=pc=>(S.cfg.users||[]).find(u=>u.pc===pc);
+const identUser=()=>{const id=ident();return id.pc?userOf(id.pc):null};
+const featOn=f=>(S.cfg.fon||{})[f]!==false;
+function can(f){
+  if(!featOn(f))return false;
+  if(role()==="admin")return true;
+  const u=identUser();if(u&&u.ov&&u.ov[f]!=null)return !!u.ov[f];
+  return !!((S.cfg.perms[role()]||{})[f]);
+}
+const uiOn=can;
+function scope(){if(role()==="admin")return "all";const u=identUser();if(u&&u.scope)return u.scope;return S.cfg.scope[role()]||"all"}
+const msgOn=k=>S.cfg.msg[k]!==false;
+const isBuiltInAdmin=pc=>ALLOWED_PCS.map(p=>p.toUpperCase()).includes(pc);
+const isRegistered=pc=>isBuiltInAdmin(pc)||!!userOf(pc);
+function resolveMe(){
+  if(!LOCK_ON){me={pc:"TESTING",role:"admin",name:"",team:""};return}
+  const pc=dev.get(),u=userOf(pc);
+  me=isBuiltInAdmin(pc)?{pc,role:"admin",name:"",team:""}:u?{pc,role:u.role,name:u.name||"",team:u.team||""}:{pc,role:"employee",name:"",team:""};
+  if(view.masterLogin)me.role="admin";
+}
+
+/* ---------- processes (controlled from Admin) ---------- */
+const procs=()=>S.cfg.procs&&S.cfg.procs.length?S.cfg.procs:PROC0;
+const procOf=k=>procs().find(p=>p.k===k);
+function procVisible(p){
+  if(role()==="admin")return true;
+  if(p.status==="hidden")return false;
+  const u=identUser();if(u&&Array.isArray(u.procs))return u.procs.includes(p.k);
+  return (p.roles||{})[role()]!==0;
+}
+/* every process keeps its own dates: DBM at the folder root, others in a sub folder */
+const dkey=(d,p=view.proc)=>p==="DBM"?d:p+"@"+d;
+const unkey=k=>{const i=k.indexOf("@");return i<0?{p:"DBM",d:k}:{p:k.slice(0,i),d:k.slice(i+1)}};
+
+/* ---------- lock rules: old dates and completed days ---------- */
+const ageDays=d=>Math.floor((new Date(todayISO()+"T12:00:00")-new Date(d+"T12:00:00"))/864e5);
+function isLocked(d,obj){
+  if(!d||role()==="admin"||can("unlock"))return false;
+  if(obj&&obj.closed)return true;
+  const L=+S.cfg.lockDays||0;return L>0&&ageDays(d)>L;
+}
+const LOCKF=["edit","save","replace","remove","heads","leave","shift","del","dayclose"];
+const canD=f=>can(f)&&!(view.trial&&["save","replace","del","dayclose","shift","remove"].includes(f))&&!(LOCKF.includes(f)&&isLocked(view.date,view.saved));
+
+/* ---------- confirm helper (messages can be switched off in Admin) ---------- */
+function ask(key,title,body,okText,fn,danger){
+  if(key&&!msgOn(key))return fn();
+  modal(`<h3>${title}</h3><p style="margin:0;line-height:1.55">${body}</p>
+   <div class="mrow"><button class="cap ${danger?"amber":"teal"}" id="askGo">${okText}</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#askGo").onclick=()=>{closeModal();fn()};
+}
+
+/* ---------- data folder (OneDrive / SharePoint synced folder) ---------- */
+const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
+const fsSupported=()=>"showDirectoryPicker" in window;
+const fsMode=()=>(["save","dump","shift","dayclose","undo","replace","del"].some(can)||role()==="admin")?"readwrite":"read";
+const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
+async function fsInit(){
+  if(!fsSupported())return;
+  try{FS.handle=await IDB.get("dirHandle")}catch(e){FS.handle=null}
+  if(!FS.handle)return;
+  try{if(await FS.handle.queryPermission({mode:fsMode()})==="granted"){FS.dir=FS.handle;await fsScan()}}catch(e){}
+}
+async function fsAllow(){
+  if(!FS.handle)return fsConnect();
+  try{if(await FS.handle.requestPermission({mode:fsMode()})==="granted"){FS.dir=FS.handle;await fsSyncUp();await fsScan();toast("Data folder connected");await openDate(view.date||dates()[0]||null)}else toast("Permission not given. Data stays on this PC only.")}catch(e){toast("Couldn't open the data folder")}
+}
+async function fsConnect(){
+  if(!fsSupported()){toast("This browser can't connect a folder. Use Chrome or Edge.");return}
+  try{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);
+    await fsReadConfig();await fsSyncUp();await fsScan();toast("Connected to folder “"+h.name+"”");await openDate(view.date||dates()[0]||null)}
+  catch(e){if(e&&e.name!=="AbortError")toast("Couldn't connect the folder")}
+}
+async function fsDisconnect(){FS.handle=null;FS.dir=null;FS.index={};await IDB.put("dirHandle",null);toast("Folder disconnected. Data stays on this PC.");renderAll()}
+async function scanYears(dir,prefix,idx){
+  for await(const [yn,yh] of dir.entries()){
+    if(yh.kind!=="directory"||!/^\d{4}$/.test(yn))continue;
+    for await(const [mn,mh] of yh.entries()){if(mh.kind!=="directory")continue;
+      for await(const [fn,fh] of mh.entries()){const m=fn.match(/^(\d{4}-\d{2}-\d{2})\.json$/);if(fh.kind==="file"&&m)idx[prefix+m[1]]={h:fh}}}
+  }
+}
+async function fsScan(){
+  if(!FS.dir)return;const idx={};
+  try{
+    await scanYears(FS.dir,"",idx);
+    for(const p of procs()){if(p.k==="DBM")continue;try{const ph=await FS.dir.getDirectoryHandle(p.k);await scanYears(ph,p.k+"@",idx)}catch(e){}}
+    FS.index=idx;FS.err=false;await fsReadConfig();
+  }catch(e){FS.err=true;toast("Couldn't read the data folder")}
+}
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine"];
+async function fsReadConfig(){
+  if(!FS.dir)return;
+  try{const fh=await FS.dir.getFileHandle("config.json");const f=await fh.getFile();if(f.lastModified===FS.cfgLM)return;FS.cfgLM=f.lastModified;
+    const c=JSON.parse(await f.text());SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe()}catch(e){}
+}
+async function fsWriteConfig(){
+  if(!FS.dir)return;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.pc;
+  try{const fh=await FS.dir.getFileHandle("config.json",{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(c,null,1));await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Settings saved on this PC, but not in the data folder")}
+  paintSync();
+}
+async function procRoot(p,create){return p==="DBM"?FS.dir:FS.dir.getDirectoryHandle(p,{create})}
+async function fsWriteKey(k,obj){
+  if(!FS.dir)return;const {p,d}=unkey(k);
+  try{const r=await procRoot(p,true);const y=await r.getDirectoryHandle(d.slice(0,4),{create:true});const m=await y.getDirectoryHandle(monthDir(d),{create:true});
+    const fh=await m.getFileHandle(d+".json",{create:true});const w=await fh.createWritable();const o={...obj};delete o._lm;await w.write(JSON.stringify(o));await w.close();
+    FS.index[k]={h:fh};obj._lm=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Saved on this PC, but couldn't write to the data folder")}
+  paintSync();
+}
+async function fsDeleteKey(k){
+  if(!FS.dir)return;const {p,d}=unkey(k);
+  try{const r=await procRoot(p,false);const y=await r.getDirectoryHandle(d.slice(0,4));const m=await y.getDirectoryHandle(monthDir(d));await m.removeEntry(d+".json")}catch(e){}
+  delete FS.index[k];
+}
+async function fsSyncUp(){if(!FS.dir)return;await fsScan();for(const k of Object.keys(S.days))if(!FS.index[k])await fsWriteKey(k,S.days[k])}
+async function fsSub(name,create){return FS.dir.getDirectoryHandle(name,{create})}
+async function fsWriteText(dirName,fname,text){
+  if(!FS.dir)return false;
+  try{const sd=await fsSub(dirName,true);const fh=await sd.getFileHandle(fname,{create:true});const w=await fh.createWritable();await w.write(text);await w.close();return true}catch(e){return false}
+}
+async function fsReadText(dirName,fname){if(!FS.dir)return null;try{const sd=await fsSub(dirName,false);const fh=await sd.getFileHandle(fname);return await (await fh.getFile()).text()}catch(e){return null}}
+async function fsList(dirName){const out=[];if(!FS.dir)return out;try{const sd=await fsSub(dirName,false);for await(const [n,h] of sd.entries())if(h.kind==="file")out.push(n)}catch(e){}return out}
+async function loadDay(d,p=view.proc){
+  if(!d)return null;const k=dkey(d,p);
+  if(FS.dir&&FS.index[k]){
+    try{const f=await FS.index[k].h.getFile();const c=S.days[k];if(c&&c._lm===f.lastModified)return c;
+      const o=JSON.parse(await f.text());o._lm=f.lastModified;S.days[k]=o;save();return o}catch(e){}
+  }
+  return S.days[k]||null;
+}
+async function persistDay(d,obj){const k=dkey(d);S.days[k]=obj;await save(true);await fsWriteKey(k,obj);save()}
+
+/* ---------- history log ---------- */
+const ACTN={dump:"Dump",merge:"Merge",replace:"Replace",save:"Save",del:"Delete date",shift:"Shift hours",close:"Day complete",reopen:"Day reopened",restore:"Restore from bin",settings:"Settings saved",backup:"Auto backup",remove:"Remove person"};
+async function logAct(a,d,n){
+  const e={at:Date.now(),pc:me.pc,a,p:view.proc,d:d||"",n:n||""};
+  S.log=(S.log||[]).concat(e).slice(-600);save();
+  if(FS.dir&&fsMode()==="readwrite"){const f="log_"+todayISO().slice(0,7)+".json";let arr=[];try{arr=JSON.parse(await fsReadText("_system",f)||"[]")}catch(x){}arr.push(e);await fsWriteText("_system",f,JSON.stringify(arr))}
+}
+async function readLog(){
+  let arr=(S.log||[]).slice();
+  if(FS.dir){for(const n of (await fsList("_system")).filter(n=>/^log_/.test(n)).sort().slice(-2)){try{arr=arr.concat(JSON.parse(await fsReadText("_system",n)||"[]"))}catch(e){}}}
+  const seen={};return arr.filter(e=>{const k=e.at+e.pc+e.a;if(seen[k])return false;seen[k]=1;return true}).sort((a,b)=>b.at-a.at);
+}
+
+/* ---------- recycle bin: replaced and deleted dates are kept 30 days ---------- */
+async function binPut(d,obj,why){
+  if(!obj)return;const k=dkey(d),at=Date.now(),id=k.replace("@","_")+"__"+at;
+  const e={id,k,d,p:view.proc,why,at,pc:me.pc,n:(obj.rows||[]).length};
+  S.bin=(S.bin||[]).filter(x=>at-x.at<30*864e5).concat({...e,obj:clone(obj)}).slice(-40);save();
+  if(FS.dir)await fsWriteText("_bin",id+".json",JSON.stringify({...e,obj}));
+}
+async function binList(){
+  const now=Date.now(),m={};(S.bin||[]).forEach(e=>m[e.id]=e);
+  if(FS.dir){for(const n of await fsList("_bin")){const id=n.replace(/\.json$/,"");if(m[id])continue;const mm=id.match(/^(.*)__(\d+)$/);if(!mm)continue;const k=mm[1].replace(/^([A-Za-z0-9]+)_(\d{4}-)/,"$1@$2");const u=unkey(k);m[id]={id,k,d:u.d,p:u.p,at:+mm[2],why:"",pc:"",fromFolder:1}}}
+  return Object.values(m).filter(e=>now-e.at<30*864e5).sort((a,b)=>b.at-a.at);
+}
+async function binGet(e){if(e.obj)return e.obj;try{const o=JSON.parse(await fsReadText("_bin",e.id+".json"));Object.assign(e,o);return o.obj}catch(x){return null}}
+
+/* ---------- view state & working copy ---------- */
+let view={proc:"DBM",date:null,team:"All",emp:"All",q:"",active:true,dumpOpen:false,work:null,saved:null,dirty:false,as:null,forceReplace:false,trial:false,pf:"All",prev:null,tray:false,tool:null,draft:null,cleared:false};
+const clone=o=>o?JSON.parse(JSON.stringify(o)):null;
+const cur=()=>view.work;
+const dates=(p=view.proc)=>[...new Set([...Object.keys(S.days),...Object.keys(FS.index)])].map(unkey).filter(x=>x.p===p).map(x=>x.d).sort().reverse();
+async function openDate(d){
+  view.trial=false;view.cleared=false;view.date=d||null;view.saved=await loadDay(view.date);view.work=clone(view.saved);view.dirty=false;view.prev=null;view.draft=null;
+  if(view.date){const ds=dates(),older=ds.filter(x=>x<view.date)[0];if(older)view.prev=await loadDay(older);
+    try{const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
+  renderAll();preloadRecent();
+}
+let preT=null;
+function preloadRecent(){clearTimeout(preT);preT=setTimeout(async()=>{for(const d of dates().slice(0,35))await loadDay(d)},600)}
+function guardDirty(fn){
+  if(!view.dirty)return fn();
+  modal(`<h3>Unsaved changes</h3><p style="margin:0;line-height:1.55">You changed ${fmtDate(view.date)} but didn't save.</p>
+   <div class="mrow">${canD("save")?`<button class="cap teal" id="gdSave">Save, then continue</button>`:""}<button class="cap amber" id="gdDrop">Discard changes</button><button class="cap" data-close>Stay here</button></div>`);
+  if($("#gdSave"))$("#gdSave").onclick=async()=>{closeModal();await doSave(true);fn()};
+  $("#gdDrop").onclick=()=>{closeModal();view.dirty=false;dropDraft();fn()};
+}
+window.addEventListener("beforeunload",e=>{if(view.dirty&&!view.trial){e.preventDefault();e.returnValue=""}});
+let draftT=null;
+function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
+function dropDraft(){if(view.date)IDB.put("draft:"+dkey(view.date),null);view.draft=null}
+function paintDirty(){const b=$("#dirtyTag");if(b)b.hidden=!view.dirty;const s=$("#bSave");if(s){s.disabled=!view.dirty;s.classList.toggle("pulse",view.dirty)}}
 
 /* ---------- formulas (same as the Excel sheet) ---------- */
 function calc(r,T){
@@ -297,7 +751,16 @@ function calc(r,T){
   return{times,total,dtHr,hours,prod,pct:prod>0?total/prod*100:0};                        // Productivity = Total / Production Hours
 }
 const perHr=t=>t.ph>0?t.ph:60/t.aht;
-const band=p=>p>=S.cfg.g?"p-hi":p>=S.cfg.a?"p-md":"p-lo";
+const tg=p=>{const t=(S.cfg.tgt||{})[p];return{g:t&&t.g>0?+t.g:S.cfg.g,a:t&&t.a>0?+t.a:S.cfg.a}};
+const band=(p,proc)=>{const t=tg(proc||view.proc);return p>=t.g?"p-hi":p>=t.a?"p-md":"p-lo"};
+function sumUp(rows,T){let tot=0,prod=0,dt=0;rows.forEach(r=>{const c=calc(r,T);tot+=c.total;prod+=c.prod;dt+=c.dtHr});return{tot,prod,dt,pct:prod>0?tot/prod*100:0}}
+function flagOf(r,c){
+  if(!can("flag"))return "";
+  if(c.pct>(+S.cfg.flagHi||150))return "Productivity above "+(+S.cfg.flagHi||150)+"%";
+  if(c.total===0&&c.hours>0&&!(+r.lv>0))return "No count but full hours (leave not marked?)";
+  if(c.prod<0)return "Downtime is more than the hours";
+  return "";
+}
 
 /* ---------- modal ---------- */
 function modal(html){$("#mcard").innerHTML=html;$("#modal").hidden=false;$("#mcard").querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModal)}
@@ -312,17 +775,18 @@ function expired(){
   $("#lockDate").value=new Date(Date.now()+60*864e5).toISOString().slice(0,10);
   return true;
 }
-$("#lockGo").onclick=()=>{if(!isMaster($("#lockPw").value)){$("#lockErr").textContent="Master password is wrong.";return}
+$("#lockGo").onclick=async()=>{if(!isMaster($("#lockPw").value)){$("#lockErr").textContent="Master password is wrong.";return}
   if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
-  S.cfg.exp=$("#lockDate").value;save(true);$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
+  S.cfg.exp=$("#lockDate").value;await save(true);await fsWriteConfig();$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
 
 /* ---------- PC login ---------- */
 function gate(){
-  const pc=dev.get(),known=pc&&allowedPCs().includes(pc);
+  const pc=dev.get(),known=pc&&isRegistered(pc);
+  if(known){const ux=userOf(pc);if(ux&&ux.until&&daysLeft(ux.until)<0){dev.set("");return gate()}}
   $("#gate").hidden=false;$("#app").hidden=true;
   $("#gateBody").innerHTML=known?`
     <div class="pcbox"><small>This PC</small><b>${esc(pc)}</b></div>
-    <div style="font-size:12px;color:#8fe0d9">✓ Registered device</div>
+    <div style="font-size:12px;color:#8fe0d9">✓ Registered device · ${esc((ROLES.find(r=>r[0]===(isBuiltInAdmin(pc)?"admin":userOf(pc).role))||[])[1]||"")}</div>
     <button class="cap amber" id="gLogin">Login</button>
     <button class="lnk" id="gOther">Not this PC? Log in with another PC name</button>`:`
     <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Enter this PC's device name (Settings → System → About). Password is the last 4 characters of the device name.</p>
@@ -334,171 +798,448 @@ function gate(){
   const go=()=>{
     const p=$("#gPc").value.trim().toUpperCase().replace(/\..*$/,""),pw=$("#gPw").value.trim();
     if(p.length<4){$("#gErr").textContent="Enter the device name.";return}
-    if(!allowedPCs().includes(p)&&!isMaster(pw)){$("#gErr").innerHTML="<b>Access Denied.</b> PC "+esc(p)+" is not registered. Please contact Administration.";return}
-    if(pw.toUpperCase()!==p.slice(-4)&&!isMaster(pw)){$("#gErr").textContent="Password is wrong. Use the last 4 characters of the device name.";return}
+    if(isMaster(pw)){view.masterLogin=true;dev.set(p);return enter()}
+    if(!isRegistered(p)){$("#gErr").innerHTML="<b>Access Denied.</b> PC "+esc(p)+" is not registered. Please contact Administration.";return}
+    {const ux=userOf(p);if(ux&&ux.until&&daysLeft(ux.until)<0){$("#gErr").innerHTML="<b>Access expired</b> for "+esc(p)+" on "+ux.until+". Please contact Administration.";return}}
+    if(pw.toUpperCase()!==p.slice(-4)){$("#gErr").textContent="Password is wrong. Use the last 4 characters of the device name.";return}
     dev.set(p);enter();
   };
   $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};$("#gPc").focus();
 }
 function enter(){$("#gate").hidden=true;$("#app").hidden=false;boot()}
-$("#btnOut").onclick=()=>{if(!LOCK_ON){toast("Login is switched off in testing mode");return}$("#app").hidden=true;gate()};
+$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;$("#app").hidden=true;gate()});
+/* ---------- per-PC conveniences (only this browser) ---------- */
+const LS={get(k,d){try{const v=localStorage.getItem("eclipse_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("eclipse_"+k,JSON.stringify(v))}catch(e){}}};
+const COLS={time:1,dtd:1,hrs:1,cm:1};let PINS=LS.get("pins",[]);
+function applyTheme(){const t=LS.get("theme","");if(t)document.documentElement.dataset.theme=t;else delete document.documentElement.dataset.theme}
 
 /* ---------- rail ---------- */
 function renderRail(){
-  $("#rail").innerHTML=PROCESSES.map(p=>`<button class="cap ${p.live?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${p.k}">${p.k}<span class="tag">${p.live?"LIVE":"SOON"}</span></button>`).join("");
-  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>{view.proc=b.dataset.p;renderRail();renderMain()});
+  const vis=procs().filter(procVisible);
+  if(!vis.some(p=>p.k===view.proc)&&vis.length)view.proc=(vis.find(p=>p.status==="live")||vis[0]).k;
+  $("#rail").hidden=!can("rail");
+  $("#rail").innerHTML=vis.map(p=>`<button class="cap ${p.status==="live"?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${esc(p.k)}">${esc(p.label||p.k)}<span class="tag">${p.status==="live"?"LIVE":p.status==="hidden"?"HIDDEN":"SOON"}</span></button>`).join("");
+  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;view.team="All";view.pf="All";view.emp="All";view.tool=null;renderRail();await openDate(dates()[0]||null)}));
 }
+
+/* ---------- notice strip (Admin writes, scrolls left to right) ---------- */
+function renderNotice(){
+  const n=S.cfg.notice||{},el=$("#notice");
+  if(!n.on||!String(n.text||"").trim()||!can("notice")){el.hidden=true;return}
+  el.hidden=false;el.className="notice "+(n.type==="urgent"?"urgent":"");
+  const sp=Math.max(8,Math.min(90,+n.speed||25));
+  el.innerHTML=`<span class="ntag">${n.type==="urgent"?"URGENT":"NOTICE"}</span><div class="ntrack"><span class="nmove" style="animation-duration:${sp}s">${esc(n.text)}</span></div>`;
+}
+
+/* ---------- top bar ---------- */
+function paintSync(){
+  const el=$("#syncDot");if(!el)return;
+  if(!can("sync")){el.hidden=true;return}el.hidden=false;
+  let c="grey",t="This PC only (no data folder connected)";
+  if(!navigator.onLine){c="red";t="Offline — changes stay on this PC"}
+  else if(FS.err){c="red";t="Last write to the data folder failed"}
+  else if(FS.dir){c="green";t="Connected to the data folder · saved"}
+  else if(FS.handle){c="amber";t="Data folder needs Allow"}
+  el.className="sdot "+c;el.title=t;
+}
+window.addEventListener("online",paintSync);window.addEventListener("offline",paintSync);
+function setTop(){
+  const id=ident();
+  $("#pcChip").textContent=view.as?"VIEWING AS "+(view.as.pc&&view.as.pc!=="—"?view.as.pc+" · ":"")+((ROLES.find(r=>r[0]===view.as.role)||[])[1]||"").toUpperCase():(me.pc||"")+" · "+((ROLES.find(r=>r[0]===me.role)||[])[1]||"");
+  $("#pcChip").className="chip "+(view.as?"mgr":"view");
+  $("#expTxt").textContent="Valid till "+expiry();
+  $("#btnAdmin").hidden=!(me.role==="admin"&&!view.as&&adminBtnOK());
+  $("#btnBack").hidden=!view.as;
+  $("#btnHelp").hidden=!can("help");$("#btnTheme").hidden=!can("theme");
+  const fb=$("#btnFolder");
+  if(!fsSupported()||!can("folder"))fb.hidden=true;
+  else if(FS.dir){fb.hidden=false;fb.textContent="📁 "+FS.dir.name;fb.title="Connected to the data folder"+(can("refresh")?" · click to refresh":"");fb.classList.add("on")}
+  else if(FS.handle){fb.hidden=false;fb.textContent="📁 Allow folder";fb.title="Click to give this browser access to the team data folder";fb.classList.remove("on")}
+  else{fb.hidden=false;fb.textContent="📁 Connect";fb.title="Pick the team's synced data folder (one time)";fb.classList.remove("on")}
+  paintSync();renderNotice();
+}
+$("#btnFolder").onclick=()=>{if(FS.dir){if(can("refresh"))refreshFolder();return}FS.handle?fsAllow():fsConnect()};
+$("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;view.team="All";view.pf="All";view.emp="All";renderAll();toast("Back to Admin view")});
+$("#btnTheme").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");LS.set("theme",cur==="dark"?"light":"dark");applyTheme()};
+$("#btnHelp").onclick=showHelp;
 
 /* ---------- main ---------- */
 function dateOptions(){
   const ds=dates();if(!ds.length)return `<option value="">No saved dates</option>`;
+  const ph=view.cleared||!view.date?`<option value="" selected>— pick a date —</option>`:"";
   const by={};ds.forEach(d=>(by[d.slice(0,7)]=by[d.slice(0,7)]||[]).push(d));
-  return Object.keys(by).sort().reverse().map(m=>`<optgroup label="${fmtMonth(m)} · ${by[m].length} day${by[m].length>1?"s":""}">${by[m].map(d=>`<option value="${d}" ${d===view.date?"selected":""}>${fmtDate(d)}</option>`).join("")}</optgroup>`).join("");
+  return ph+Object.keys(by).sort().reverse().map(m=>`<optgroup label="${fmtMonth(m)} · ${by[m].length} day${by[m].length>1?"s":""}">${by[m].map(d=>`<option value="${d}" ${d===view.date?"selected":""}>${fmtDate(d)}${(S.days[dkey(d)]||{}).closed?" ✓":""}</option>`).join("")}</optgroup>`).join("");
 }
-function renderMain(){
-  const p=PROCESSES.find(x=>x.k===view.proc);
-  if(!p.live){$("#main").innerHTML=`<div class="soonbox"><span class="ver" style="background:var(--amber-soft);color:#a86f1c">MODULE ${PROCESSES.indexOf(p)+1} OF 8</span><h2>${p.k} is coming soon</h2><p>This process opens here once its work baskets and formulas are set. DBM is live now.</p><div style="margin-top:20px"><button class="cap teal" id="goDbm">Go to DBM</button></div></div>`;
-    $("#goDbm").onclick=()=>{view.proc="DBM";renderRail();renderMain()};return}
-  if(view.date&&!S.days[view.date])view.date=dates()[0]||null;
-  const D=cur(),rows=D?D.rows:[];
-  const teams=[...new Set(rows.map(r=>r.team||r.proc).filter(Boolean))];
-  $("#main").innerHTML=`
-  <div class="bar datebar">
-    <label class="fld"><span>Saved date</span><select id="fDate" ${dates().length?"":"disabled"}>${dateOptions()}</select></label>
-    <div class="dinfo" id="dInfo">${D?`<b>${dates().length}</b> saved date${dates().length>1?"s":""} · this one: ${esc(D.src||"manual")} · ${D.rows.length} employees · ${D.tasks.length} baskets`:"Nothing saved yet"}</div>
-    <div class="grow"></div>
-    <button class="cap teal sm ${view.dumpOpen?"on":""}" id="bDump">Dump / Paste</button>
-    <button class="cap sm" id="bExp" ${D?"":"disabled"}>Export Excel</button>
-    <button class="cap sm" id="bShare" ${D?"":"disabled"}>Share</button>
-    <button class="cap sm" id="bAdd" ${D?"":"disabled"}>Add employee</button>
-    <button class="cap sm danger" id="bErase" ${D?"":"disabled"}>Erase date</button>
-  </div>
-  <div class="dump" id="dz" ${view.dumpOpen||!D?"":"hidden"}>
-    <div class="dhead">
-      <label class="fld"><span>Save into date</span><input type="date" id="dDate" value="${view.dumpDate||todayISO()}"></label>
-      <p><b>Drop an Excel file here</b> or paste rows below. The whole date is replaced, headings included. Works with the <b>Original Doc</b> report (First Name / Work Basket, shifted rows fixed) and the <b>productivity sheet</b> (Process / User Name).</p>
-    </div>
-    <label class="cap teal sm" style="cursor:pointer">Choose Excel file<input type="file" id="dFile" accept=".xlsx,.xls,.xlsm,.xlsb,.csv" hidden></label>
-    <textarea id="dTxt" placeholder="Or copy from Excel and paste here (Ctrl+V), including the heading rows"></textarea>
-    <button class="cap amber sm" id="dGo">Save pasted data</button>
-  </div>
-  ${D?`
-  <div class="bar">
-    <label class="fld"><span>Process / Team</span><select id="fTeam"><option>All</option>${teams.map(t=>`<option ${t===view.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
-    <label class="fld"><span>Employee</span><select id="fEmp"><option>All</option>${rows.map(r=>`<option ${r.name===view.emp?"selected":""}>${esc(r.name)}</option>`).join("")}</select></label>
-    <label class="fld"><span>Search</span><input id="fQ" placeholder="Type a name" value="${esc(view.q)}"></label>
-    <label class="chk"><input type="checkbox" id="fAct" ${view.active?"checked":""}> Only baskets with data</label>
-  </div>
-  <div class="stats" id="stats"></div>
-  <div class="gridbox" id="gb"></div>
-  <div class="pager" id="pg"></div>`:`
-  <div class="empty"><h2>No data saved yet</h2><p>Pick a date above, then drop the Original Doc or productivity Excel file, or paste the rows. Each date is saved separately on this PC, so older dates never change.</p></div>`}`;
-  $("#fDate").onchange=e=>{view.date=e.target.value;view.emp="All";view.team="All";renderMain()};
-  $("#bDump").onclick=()=>{view.dumpOpen=!view.dumpOpen;renderMain()};
-  $("#dDate").onchange=e=>{view.dumpDate=e.target.value};
-  wireDump();
-  if(!D)return;
-  $("#bExp").onclick=()=>styledExport(view.date,false);
-  $("#bShare").onclick=()=>styledExport(view.date,true);
-  $("#bAdd").onclick=addEmp;$("#bErase").onclick=eraseDate;
-  $("#fTeam").onchange=e=>{view.team=e.target.value;renderGrid()};
-  $("#fEmp").onchange=e=>{view.emp=e.target.value;renderGrid()};
-  $("#fQ").oninput=e=>{view.q=e.target.value;renderGrid()};
-  $("#fAct").onchange=e=>{view.active=e.target.checked;renderGrid()};
-  renderGrid();
+function inScope(r){
+  const sc=scope(),id=ident();
+  if(sc==="team")return !!id.team&&(r.team||"").toLowerCase()===id.team.toLowerCase();
+  if(sc==="own")return !!id.name&&nameKey(r.name)===nameKey(id.name);
+  return true;
 }
+function scopedRows(){const D=cur();if(!D)return[];return D.rows.map((r,i)=>({r,i})).filter(({r})=>inScope(r))}
+const pfOK=r=>view.pf==="All"||(r.proc||"")===view.pf,tmOK=r=>view.team==="All"||(r.team||"")===view.team;
+const pinned=r=>can("pin")&&PINS.includes(nameKey(r.name));
 function rowsFiltered(){
-  const D=cur();if(!D)return[];
-  return D.rows.map((r,i)=>({r,i})).filter(({r})=>(view.team==="All"||(r.team||r.proc)===view.team)&&(view.emp==="All"||r.name===view.emp)&&(!view.q||norm(r.name).includes(norm(view.q))));
+  const l=scopedRows().filter(({r})=>pfOK(r)&&tmOK(r)&&(view.emp==="All"||r.name===view.emp)&&(!view.q||norm(r.name).includes(norm(view.q))));
+  return can("pin")?l.sort((a,b)=>(pinned(b.r)?1:0)-(pinned(a.r)?1:0)):l;
 }
-function visTasks(){const D=cur();if(!D)return[];if(!view.active)return D.tasks;const on=D.tasks.filter(t=>D.rows.some(r=>+r.c[t.k]>0));return on.length?on:D.tasks}
+function visTasks(){const D=cur();if(!D)return[];if(!(view.active&&can("active")))return D.tasks;const rs=rowsFiltered().map(x=>x.r);const on=D.tasks.filter(t=>rs.some(r=>+r.c[t.k]>0));return on.length?on:D.tasks}
+const B=(id,label,feat,cls,tip)=>canD(feat)?`<button class="cap sm ${cls||""}" id="${id}" title="${esc(tip)}">${label}</button>`:"";
+function renderAll(){setTop();renderRail();renderMain()}
+function renderMain(){
+  const p=procOf(view.proc)||procs()[0];
+  if(!p||p.status!=="live"){$("#main").innerHTML=`<div class="soonbox"><span class="ver" style="background:var(--amber-soft);color:#a86f1c">MODULE ${procs().indexOf(p)+1} OF ${procs().length}</span><h2>${esc(p?p.label:"")} is coming soon</h2><p>This process opens here once its work baskets and formulas are set.</p>${procs().some(x=>x.status==="live"&&procVisible(x))?`<div style="margin-top:16px"><button class="cap teal sm" id="goLive">Go to ${esc((procs().find(x=>x.status==="live"&&procVisible(x))||{}).label||"")}</button></div>`:""}</div>`;
+    const gl=$("#goLive");if(gl)gl.onclick=async()=>{view.proc=procs().find(x=>x.status==="live"&&procVisible(x)).k;renderRail();await openDate(dates()[0]||null)};return}
+  const D=cur(),sc=scopedRows(),locked=isLocked(view.date,view.saved);if(view.cleared)view.tray=false;
+  const pfs=[...new Set(sc.map(x=>x.r.proc).filter(Boolean))].sort();
+  if(view.pf!=="All"&&!pfs.includes(view.pf))view.pf="All";
+  const teams=[...new Set(sc.filter(({r})=>pfOK(r)).map(x=>x.r.team).filter(Boolean))].sort();
+  if(view.team!=="All"&&!teams.includes(view.team))view.team="All";
+  const empList=sc.filter(({r})=>pfOK(r)&&tmOK(r)).map(x=>x.r.name).sort();
+  if(view.emp!=="All"&&!empList.includes(view.emp))view.emp="All";
+  const needLink=D&&scope()!=="all"&&!sc.length,ds=dates(),di=ds.indexOf(view.date);
+  const closed=view.saved&&view.saved.closed;
+  $("#main").innerHTML=`
+  ${FS.handle&&!FS.dir?`<div class="banner">📁 The team data folder needs your permission on this PC. <button class="cap teal sm" id="bnAllow">Allow access</button></div>`:""}
+  ${view.trial?`<div class="banner trial"><b>TRIAL MODE</b> · this data is only on your screen and is not saved anywhere. <button class="cap sm" id="trExit">Exit trial</button></div>`:""}
+  ${view.draft&&!view.trial?`<div class="banner">Unsaved work for this date from ${new Date(view.draft.at).toLocaleString("en-IN")} was found. <button class="cap teal sm" id="drRes">Restore it</button><button class="cap sm" id="drDrop">Discard</button></div>`:""}
+  <div class="bar datebar">
+    ${can("datejump")&&!view.trial?`<button class="cap sm ico" id="dPrev" title="Older date" ${di<ds.length-1&&di>=0?"":"disabled"}>‹</button>`:""}
+    <label class="fld"><span>${view.trial?"Trial":"Saved date"}</span><select id="fDate" ${ds.length&&!view.trial?"":"disabled"}>${view.trial?`<option>Trial · not saved</option>`:dateOptions()}</select></label>
+    ${can("datejump")&&!view.trial?`<button class="cap sm ico" id="dNext" title="Newer date" ${di>0?"":"disabled"}>›</button><button class="cap sm" id="dToday" title="Go to today">Today</button>`:""}
+    <div class="dinfo">${D?`${view.trial?"Trial":esc(D.src||"manual")} · ${D.rows.length} emp · ${D.tasks.length} baskets${closed?` · <span class="okb">✓ Day complete</span>`:""}${locked?` · <span class="lkb">🔒 Locked</span>`:""}`:view.cleared?"Screen cleared":"Nothing saved yet"}<span class="dirty" id="dirtyTag" ${view.dirty?"":"hidden"}>● Unsaved</span></div>
+    <div class="grow"></div>
+    ${view.trial?"":B("bDump","Dump","dump","teal"+(view.dumpOpen&&!view.forceReplace&&!view.trialDump?" on":""),"Load a new date from the portal report or the productivity sheet")}
+    ${can("trial")?`<button class="cap sm ${view.dumpOpen&&view.trialDump?"on":""}" id="bTrial" title="Try your own file. Nothing is saved">Trial</button>`:""}
+    ${D&&!view.trial?B("bReplace","Replace","replace",view.forceReplace?"on":"","Clear this date's saved data and load a new file in its place"):""}
+    ${D?B("bSave","Save","save","amber","Make the changes on screen permanent (Ctrl+S)"):""}
+    ${D?B("bReset","Reset","reset","","Clear the screen. Saved data stays safe — pick the date again to see it"):""}
+    ${D&&!closed?B("bClose","Day ✓","dayclose","","Mark this date complete. It locks for everyone except Admin"):""}
+    ${D&&closed&&(role()==="admin"||can("unlock"))&&!view.trial?`<button class="cap sm" id="bReopen" title="Unlock this date again">Reopen</button>`:""}
+    ${D&&!view.trial?B("bDel","Delete","del","danger","Delete this date (kept 30 days in the recycle bin)"):""}
+    ${D?B("bShare","Share / Excel","share","teal","Share or download this view as an Excel file with formulas"):""}
+    ${can("tray")&&D?`<button class="cap sm ico ${view.tray?"on":""}" id="bTray" title="Tools: calendar, summaries, charts">${view.tray?"▲":"▼"} Tools</button>`:""}
+  </div>
+  ${view.tray&&can("tray")&&D?trayHTML():""}
+  ${(can("dump")||can("replace")||can("trial"))?`<div class="dump" id="dz" ${view.dumpOpen||(!D&&can("dump")&&!view.trial&&!view.cleared)?"":"hidden"}>
+    <div class="dhead">
+      ${view.trialDump?"":`<label class="fld"><span>${view.forceReplace?"Replace date":"Save into date"}</span><input type="date" id="dDate" value="${view.forceReplace?view.date:(view.dumpDate||todayISO())}" ${view.forceReplace?"disabled":""}></label>`}
+      <p>${view.trialDump?`<b>Trial:</b> drop or paste your own file to see the result. <b>Nothing is saved.</b>`:view.forceReplace?`<b>Replace ${fmtDate(view.date)}:</b> the saved data is moved to the recycle bin and the new file takes its place.`:`<b>Drop the portal report (.xls) or an Excel file here</b>, or paste rows below. You'll see a preview and confirm with <b>Yes, insert</b>.`}</p>
+    </div>
+    <label class="cap teal sm" style="cursor:pointer">Choose file<input type="file" id="dFile" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.htm,.html" hidden></label>
+    <textarea id="dTxt" placeholder="Or copy from Excel and paste here (Ctrl+V), including the heading rows"></textarea>
+    <button class="cap amber sm" id="dGo">Use pasted data</button>
+    ${view.forceReplace||view.trialDump?`<button class="cap sm" id="dCancel">Cancel</button>`:""}
+  </div>`:""}
+  ${D?(needLink?`<div class="empty"><h2>Nothing to show yet</h2><p>This PC isn't linked to ${scope()==="own"?"an employee name":"a team"}. Ask the Admin to link it in Access control.</p></div>`:`
+  ${can("shift")&&!view.trial?shiftBar():""}
+  ${myCardHTML()}
+  <div class="bar fbar">
+    ${pfs.length>1||scope()==="all"?`<label class="fld"><span>Process</span><select id="fPf"><option>All</option>${pfs.map(t=>`<option ${t===view.pf?"selected":""}>${esc(t)}</option>`).join("")}</select></label>`:""}
+    ${teams.length>1||scope()==="all"?`<label class="fld"><span>Team / Manager</span><select id="fTeam"><option>All</option>${teams.map(t=>`<option ${t===view.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>`:""}
+    ${empList.length>1?`<label class="fld"><span>User Name</span><select id="fEmp"><option>All</option>${empList.map(n=>`<option ${n===view.emp?"selected":""}>${esc(n)}</option>`).join("")}</select></label>`:""}
+    ${can("search")&&empList.length>1?`<label class="fld"><span>Search</span><input id="fQ" placeholder="Type a name" value="${esc(view.q)}"></label>`:""}
+    ${can("active")?`<label class="chk"><input type="checkbox" id="fAct" ${view.active?"checked":""}> Only baskets with data</label>`:""}
+  </div>
+  <div class="stats" id="stats" ${can("stats")?"":"hidden"}></div>
+  <div class="gridbox" id="gb"></div>
+  <div class="pager" id="pg"></div>`):`
+  ${view.cleared?`<div class="empty"><h2>Screen cleared</h2><p>Saved data is safe. Pick a date above${can("dump")?" or use Dump":""} to load it again.</p></div>`:`<div class="empty"><h2>No data yet</h2><p>${can("dump")?"Pick a date, then drop the portal report or the productivity sheet, or paste the rows.":"No date has been saved yet. Data appears here once it's loaded by the data entry team."}${fsSupported()&&!FS.dir?" If your team keeps data in a shared folder, click <b>📁 Connect</b> at the top.":""}</p></div>`}`}`;
+  const on=(id,ev,fn)=>{const el=$(id);if(el)el[ev]=fn};
+  on("#bnAllow","onclick",fsAllow);
+  on("#trExit","onclick",()=>{view.trial=false;view.trialDump=false;view.dumpOpen=false;openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null)});
+  on("#drRes","onclick",()=>{view.work=clone(view.draft.work);view.draft=null;view.dirty=true;renderMain();toast("Unsaved work restored. Click Save to keep it.")});
+  on("#drDrop","onclick",()=>{dropDraft();renderMain()});
+  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{view.emp="All";view.team="All";view.pf="All";view.forceReplace=false;openDate(d)})});
+  on("#dPrev","onclick",()=>jumpDate(1));on("#dNext","onclick",()=>jumpDate(-1));
+  on("#dToday","onclick",()=>{const t=todayISO();if(ds.includes(t))guardDirty(()=>openDate(t));else{toast("Today ("+fmtDate(t)+") has no data yet"+(can("dump")?". Use Dump to add it.":""));if(can("dump")){view.dumpDate=t;view.dumpOpen=true;view.forceReplace=false;view.trialDump=false;renderMain()}}});
+  on("#bDump","onclick",()=>{const was=view.dumpOpen&&!view.forceReplace&&!view.trialDump;view.forceReplace=false;view.trialDump=false;view.dumpOpen=!was;renderMain()});
+  on("#bTrial","onclick",()=>{const was=view.dumpOpen&&view.trialDump;view.forceReplace=false;view.trialDump=!was;view.dumpOpen=!was;renderMain()});
+  on("#bReplace","onclick",()=>{view.trialDump=false;view.forceReplace=!view.forceReplace;view.dumpOpen=view.forceReplace;renderMain()});
+  on("#dCancel","onclick",()=>{view.forceReplace=false;view.trialDump=false;view.dumpOpen=false;renderMain()});
+  on("#dDate","onchange",e=>{view.dumpDate=e.target.value});
+  on("#bSave","onclick",()=>doSave());on("#bReset","onclick",resetDay);on("#bDel","onclick",deleteDate);
+  on("#bClose","onclick",closeDay);on("#bReopen","onclick",reopenDay);
+  on("#bShare","onclick",()=>styledExport(view.trial?"Trial":view.date,true));
+  on("#bTray","onclick",()=>{view.tray=!view.tray;renderMain()});
+  wireDump();wireTray();
+  if(!D||needLink)return;
+  wireShift();
+  on("#fPf","onchange",e=>{view.pf=e.target.value;view.team="All";view.emp="All";renderMain()});
+  on("#fTeam","onchange",e=>{view.team=e.target.value;view.emp="All";renderMain()});
+  on("#fEmp","onchange",e=>{view.emp=e.target.value;renderGrid()});
+  on("#fQ","oninput",e=>{view.q=e.target.value;renderGrid()});
+  on("#fAct","onchange",e=>{view.active=e.target.checked;LS.set("active",view.active);renderGrid()});
+  renderGrid();paintDirty();
+}
+function jumpDate(step){const ds=dates(),i=ds.indexOf(view.date),n=ds[i+step];if(n)guardDirty(()=>openDate(n))}
+
+/* ---------- shift bar: hours × days = 100% ---------- */
+function shiftBar(){
+  const D=cur(),fulls=[...new Set((D?D.rows:[]).map(r=>+r.full||0))];
+  return `<div class="bar shiftbar"><b class="sbl">⏱ Shift</b>
+    <input type="number" id="shH" value="${S.cfg.hpd}" step="0.5" min="0" aria-label="Hours per day"> hrs ×
+    <input type="number" id="shW" value="${S.cfg.wd}" step="1" min="0" aria-label="Working days"> days =
+    <b id="shT">${f2(S.cfg.hpd*S.cfg.wd)}</b> hrs (100%)
+    <span class="muted">${fulls.length===1?"This date uses "+f2(fulls[0]):fulls.length?"This date has mixed 100% values":""}</span>
+    <div class="grow"></div>
+    ${canD("shift")?`<button class="cap sm amber" id="shApply" title="Set 100% for the people on screen and save">Apply to this date</button>`:""}
+    <button class="cap sm" id="shDef" title="Use these hours for new dumps">Set as default</button></div>`;
+}
+function wireShift(){
+  const h=$("#shH");if(!h)return;const w=$("#shW"),t=$("#shT");
+  const up=()=>t.textContent=f2((+h.value||0)*(+w.value||0));h.oninput=up;w.oninput=up;
+  const ap=$("#shApply");
+  if(ap)ap.onclick=()=>{const tot=+f2((+h.value||0)*(+w.value||0)),vis=rowsFiltered();if(!(tot>0)){toast("Enter hours and days first");return}
+    ask("shift","Apply "+tot+" hrs to "+fmtDate(view.date)+"?",`100% becomes <b>${tot}</b> for the <b>${vis.length}</b> people on screen and the date is saved.`,"Apply and save",async()=>{
+      vis.forEach(({r})=>r.full=tot);const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();logAct("shift",view.date,tot+" hrs × "+vis.length);renderMain();toast("100% set to "+tot+" and saved")})};
+  $("#shDef").onclick=async()=>{S.cfg.hpd=+h.value||8;S.cfg.wd=+w.value||21;await save(true);await fsWriteConfig();logAct("settings","","Shift default "+S.cfg.hpd+"×"+S.cfg.wd);toast("New dumps will use "+f2(S.cfg.hpd*S.cfg.wd)+" hrs")};
+}
+
+/* ---------- my dashboard (employee's own card) ---------- */
+function personDays(name,n){
+  const out=[];for(const d of dates()){const o=S.days[dkey(d)];if(!o)continue;const r=findPerson(o.rows,name);if(r){const c=calc(r,o.tasks);if(c.prod>0)out.push({d,pct:c.pct,c})}if(out.length>=n)break}
+  return out;
+}
+function streakOf(days){const g=tg(view.proc).g;let s=0;for(const x of days){if(x.pct>=g)s++;else break}return s}
+function myCardHTML(){
+  if(!can("mydash"))return "";const id=ident();const D=cur();if(!D||!id.name)return "";
+  const r=findPerson(D.rows,id.name);if(!r)return "";
+  const c=calc(r,D.tasks),all=D.rows.map(x=>calc(x,D.tasks).pct).filter(x=>x>0).sort((a,b)=>b-a);
+  const rank=all.indexOf(c.pct)+1,md=personDays(id.name,40).filter(x=>x.d.slice(0,7)===view.date.slice(0,7));
+  const mt=md.reduce((a,x)=>a+x.c.total,0),mp=md.reduce((a,x)=>a+x.c.prod,0),st=can("badge")?streakOf(personDays(id.name,31)):0;
+  return `<div class="mycard"><div class="av">${esc(initials(r.name))}</div><div><b>${esc(r.name)}</b><small>${esc(r.team||"")}</small></div>
+    <div class="mk"><span>Today</span><b class="${band(c.pct,r.proc)}">${f2(c.pct)}%</b></div>
+    <div class="mk"><span>Month avg</span><b>${f2(mp>0?mt/mp*100:0)}%</b></div>
+    <div class="mk"><span>Rank</span><b>${rank>0?rank+" / "+all.length:"—"}</b></div>
+    ${st>=2?`<div class="badge">🔥 ${st}-day streak</div>`:""}</div>`;
+}
+const initials=n=>String(n||"").split(/[\s,]+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+/* ---------- stats & grid ---------- */
 function renderStats(list){
-  const T=cur().tasks;let tot=0,prod=0,dt=0,low=0;list.forEach(({r})=>{const c=calc(r,T);tot+=c.total;prod+=c.prod;dt+=c.dtHr;if(c.pct<S.cfg.a)low++});
+  if(!can("stats"))return;
+  const T=cur().tasks;let tot=0,prod=0,dt=0,low=0,fl=0;const t=tg(view.proc);
+  list.forEach(({r})=>{const c=calc(r,T);tot+=c.total;prod+=c.prod;dt+=c.dtHr;if(c.pct<t.a)low++;if(flagOf(r,c))fl++});
+  const tp=prod>0?tot/prod*100:0;
+  let delta="";if(can("cmp")&&view.prev){const pr=sumUp(view.prev.rows.filter(inScope),view.prev.tasks).pct;if(pr>0){const df=tp-pr;delta=`<em class="${df>=0?"up":"dn"}">${df>=0?"▲":"▼"} ${f2(Math.abs(df))}</em>`}}
   $("#stats").innerHTML=`<div class="stat"><span>Employees</span><b>${list.length}</b></div>
-   <div class="stat"><span>Production time (hrs)</span><b>${f2(tot)}</b></div>
-   <div class="stat"><span>Downtime (hrs)</span><b>${f2(dt)}</b></div>
-   <div class="stat hi"><span>Team productivity</span><b>${f2(prod>0?tot/prod*100:0)}%</b></div>
-   <div class="stat ${low?"lo":""}"><span>Below ${S.cfg.a}%</span><b>${low}</b></div>`;
+   <div class="stat"><span>Earned hrs</span><b>${f2(tot)}</b></div>
+   <div class="stat"><span>Downtime hrs</span><b>${f2(dt)}</b></div>
+   <div class="stat hi"><span>Team productivity</span><b>${f2(tp)}% ${delta}</b></div>
+   <div class="stat ${low?"lo":""}"><span>Below ${t.a}%</span><b>${low}</b></div>
+   ${can("flag")?`<div class="stat ${fl?"wa":""}"><span>To check</span><b>${fl}</b></div>`:""}`;
 }
+function prevPct(r){if(!can("cmp")||!view.prev)return null;const p=findPerson(view.prev.rows,r.name);if(!p)return null;const c=calc(p,view.prev.tasks);return c.prod>0?c.pct:null}
+const mobileMode=()=>can("mobile")&&window.innerWidth<700;
 function renderGrid(){
   const D=cur(),list=rowsFiltered();renderStats(list);
-  const T=visTasks(),du=S.cfg.dtUnit==="min"?"minutes":"hours";
+  if(mobileMode())return renderCards(list);
+  const T=visTasks(),du=S.cfg.dtUnit==="min"?"min":"hrs",E=canD("edit"),HD=canD("heads"),RM=canD("remove"),LV=canD("leave")&&E,PN=can("pin");
+  const sT=COLS.time,sD=COLS.dtd,sH=COLS.hrs,sC=COLS.cm;
+  const L=k=>HD?LH(k):`<span class="hlt">${esc(lab(k))}</span>`;
+  const inp=(attr,val,cls)=>E?`<input ${attr} ${cls?`class="${cls}"`:""} inputmode="decimal" value="${esc(val??"")}">`:`<span class="ro ${cls||""}">${esc(val??"")}</span>`;
   let h=`<table><thead><tr>
-    <th class="h-fix sticky1" rowspan="3">${LH("proc")}</th><th class="h-fix sticky2" rowspan="3">${LH("emp")}</th>
-    ${T.map(t=>`<th class="h-task" colspan="2" title="${esc(t.name)}"><textarea class="hl ht" data-tn="${t.k}" rows="3" spellcheck="false" aria-label="Work basket name">${esc(t.name)}</textarea></th>`).join("")}
-    <th class="h-amb" rowspan="3">${LH("total")}</th><th class="h-amb" colspan="8">${LH("dt")} (${du})</th>
-    <th class="h-amb" rowspan="3">${LH("prod")}</th><th class="h-amb" rowspan="3">${LH("pct")}</th><th class="h-amb" rowspan="3">${LH("cm")}</th>
-    <th class="h-amb" colspan="3">${LH("hrs")}</th></tr><tr>
-    ${T.map(t=>`<th class="h-sub"><input data-aht="${t.k}" value="${t.aht}" aria-label="AHT ${esc(t.name)}"></th><th class="h-sub"><input data-ph="${t.k}" value="${f2(perHr(t))}" title="Per hour. Default is 60 ÷ AHT; type to override" aria-label="Per hour ${esc(t.name)}" class="${t.ph>0?"ovr":""}"></th>`).join("")}
-    ${DT.map(d=>`<th class="h-amb2" rowspan="2">${LH("dt_"+d[0])}</th>`).join("")}<th class="h-amb2" rowspan="2">${LH("tdt")}</th>
-    <th class="h-amb2" rowspan="2">${LH("full")}</th><th class="h-amb2" rowspan="2">${LH("lv")}</th><th class="h-amb2" rowspan="2">${LH("noh")}</th></tr><tr>
-    ${T.map(()=>`<th class="h-cnt">${LH("cnt")}</th><th class="h-cnt">${LH("time")}</th>`).join("")}</tr></thead><tbody>`;
+    <th class="h-fix sticky1" rowspan="3">${L("proc")}</th><th class="h-fix sticky2" rowspan="3">${L("emp")}</th>
+    ${T.map(t=>`<th class="h-task" colspan="${sT?2:1}" title="${esc(t.name)}">${HD?`<textarea class="hl ht" data-tn="${t.k}" rows="3" spellcheck="false" aria-label="Work basket name">${esc(t.name)}</textarea>`:`<span class="hlt ht">${esc(t.name)}</span>`}</th>`).join("")}
+    <th class="h-amb" rowspan="3">${L("total")}</th><th class="h-amb" colspan="${sD?8:1}">${L("dt")} (${du})</th>
+    <th class="h-amb" rowspan="3">${L("prod")}</th><th class="h-amb" rowspan="3">${L("pct")}</th>${sC?`<th class="h-amb" rowspan="3">${L("cm")}</th>`:""}
+    ${sH?`<th class="h-amb" colspan="3">${L("hrs")}</th>`:""}</tr><tr>
+    ${T.map(t=>HD?`<th class="h-sub"><input data-aht="${t.k}" value="${t.aht}" aria-label="AHT ${esc(t.name)}"></th>${sT?`<th class="h-sub"><input data-ph="${t.k}" value="${f2(perHr(t))}" title="Per hour. Default is 60 ÷ AHT; type to override" aria-label="Per hour ${esc(t.name)}" class="${t.ph>0?"ovr":""}"></th>`:""}`
+      :`<th class="h-sub">${t.aht}</th>${sT?`<th class="h-sub">${f2(perHr(t))}</th>`:""}`).join("")}
+    ${sD?DT.map(d=>`<th class="h-amb2" rowspan="2">${L("dt_"+d[0])}</th>`).join(""):""}<th class="h-amb2" rowspan="2">${L("tdt")}</th>
+    ${sH?`<th class="h-amb2" rowspan="2">${L("full")}</th><th class="h-amb2" rowspan="2">${L("lv")}</th><th class="h-amb2" rowspan="2">${L("noh")}</th>`:""}</tr><tr>
+    ${T.map(()=>`<th class="h-cnt">${L("cnt")}</th>${sT?`<th class="h-cnt">${L("time")}</th>`:""}`).join("")}</tr></thead><tbody>`;
   list.forEach(({r,i})=>{
-    const c=calc(r,D.tasks);
-    h+=`<tr data-i="${i}"><td class="proc sticky1"><input class="pc" data-nm="proc" value="${esc(r.proc)}" aria-label="Process"></td>
-    <td class="name sticky2"><div class="nmw"><input class="nm" data-nm="name" value="${esc(r.name)}" aria-label="Employee name"><button class="rm" data-rm="${i}" title="Remove employee" aria-label="Remove ${esc(r.name)}">✕</button></div>
-    <div class="nmw"><input class="tm" data-nm="team" value="${esc(r.team)}" placeholder="team" aria-label="Team"></div></td>
-    ${T.map(t=>`<td><input data-c="${t.k}" inputmode="decimal" value="${r.c[t.k]??""}"></td><td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`).join("")}
+    const c=calc(r,D.tasks),fl=flagOf(r,c),pp=prevPct(r),pin=pinned(r);
+    const lvFull=+r.lv>0&&+r.lv>=+r.full,lvHalf=+r.lv>0&&!lvFull;
+    h+=`<tr data-i="${i}" class="${fl?"flag":""}"><td class="proc sticky1">${E?`<input class="pc" data-nm="proc" value="${esc(r.proc)}" aria-label="Process">`:esc(r.proc)}</td>
+    <td class="name sticky2" data-hv="${i}"><div class="nmw">${PN?`<button class="pin ${pin?"on":""}" data-pin="${i}" title="${pin?"Unpin":"Pin to top"}" aria-label="Pin">${pin?"★":"☆"}</button>`:""}${E?`<input class="nm" data-nm="name" value="${esc(r.name)}" aria-label="Employee name">`:`<span class="nmt">${esc(r.name)}</span>`}${can("hist")?`<button class="hi" data-hist="${i}" title="History" aria-label="History">⌁</button>`:""}${RM?`<button class="rm" data-rm="${i}" title="Remove from this date" aria-label="Remove ${esc(r.name)}">✕</button>`:""}</div>
+    <div class="nmw">${E?`<input class="tm" data-nm="team" value="${esc(r.team)}" placeholder="team" aria-label="Team">`:`<span class="tmt">${esc(r.team||"")}</span>`}${LV?`<button class="lvb ${lvFull?"on":""}" data-lv="full" title="Full day leave">L</button><button class="lvb ${lvHalf?"on":""}" data-lv="half" title="Half day">½</button>`:(lvFull?`<span class="lvt">Leave</span>`:lvHalf?`<span class="lvt">½ day</span>`:"")}</div></td>
+    ${T.map(t=>`<td>${inp(`data-c="${t.k}"`,r.c[t.k])}</td>${sT?`<td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`:""}`).join("")}
     <td class="calc tot" data-o="total">${f2(c.total)}</td>
-    ${DT.map(([k])=>`<td><input data-d="${k}" inputmode="decimal" value="${r.dt[k]??""}"></td>`).join("")}
+    ${sD?DT.map(([k])=>`<td>${inp(`data-d="${k}"`,r.dt[k])}</td>`).join(""):""}
     <td class="calc" data-o="dt">${f2(c.dtHr)}</td><td class="calc" data-o="prod">${f2(c.prod)}</td>
-    <td class="pct" data-o="pct"><span class="pill ${band(c.pct)}">${f2(c.pct)}%</span></td>
-    <td><input class="cm" data-cm="1" value="${esc(r.cm)}" placeholder="—"></td>
-    <td><input data-f="full" value="${r.full??""}"></td><td><input data-f="lv" value="${r.lv??""}"></td>
-    <td class="calc" data-o="hrs">${f2(c.hours)}</td></tr>`;
+    <td class="pct" data-o="pct">${pctCell(c,r,pp,fl)}</td>
+    ${sC?`<td>${E?`<input class="cm" data-cm="1" value="${esc(r.cm)}" placeholder="—">`:`<span class="ro cm">${esc(r.cm||"")}</span>`}</td>`:""}
+    ${sH?`<td>${inp(`data-f="full"`,r.full)}</td><td>${inp(`data-f="lv"`,r.lv)}</td><td class="calc" data-o="hrs">${f2(c.hours)}</td>`:""}</tr>`;
   });
   if(!list.length)h+=`<tr><td colspan="99" style="padding:24px;text-align:center;color:var(--muted)">No employees match these filters.</td></tr>`;
   $("#gb").innerHTML=h+"</tbody></table>";
-  $("#pg").innerHTML=`<span>${fmtDate(view.date)} · ${list.length} employees · ${T.length} of ${D.tasks.length} work baskets shown · saved ${D.at?new Date(D.at).toLocaleString():""}${D.pc?" from "+esc(D.pc):""}</span>`;
+  pagerLine(list,T);
   $("#gb").oninput=onCell;
-  $("#gb").onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph){renderGrid();toast("Heading saved")}};
-  $("#gb").onclick=e=>{const b=e.target.closest("[data-rm]");if(b)removeEmp(+b.dataset.rm)};
+  $("#gb").onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph)renderGrid()};
+  $("#gb").onclick=gridClick;
+  $("#gb").onkeydown=gridKey;
+  wireHover($("#gb"));
+}
+function pctCell(c,r,pp,fl){
+  const ar=pp!=null&&c.prod>0?`<em class="${c.pct>=pp?"up":"dn"}" title="Last date ${f2(pp)}%">${c.pct>=pp?"▲":"▼"}${f2(Math.abs(c.pct-pp))}</em>`:"";
+  return `<span class="pill ${band(c.pct,r.proc)}">${f2(c.pct)}%</span>${ar}${fl?`<i class="fl" title="${esc(fl)}">⚠</i>`:""}`;
+}
+function pagerLine(list,T){
+  const D=cur(),sv=view.saved;
+  $("#pg").innerHTML=`<span>${view.trial?"Trial":fmtDate(view.date)} · ${list.length} employees${T?` · ${T.length} of ${D.tasks.length} baskets`:""}${sv&&sv.at&&!view.trial?" · saved "+new Date(sv.at).toLocaleString("en-IN")+(sv.pc?" from "+esc(sv.pc):""):""}${FS.dir?" · 📁 "+esc(FS.dir.name):" · this PC only"}${can("kbd")?" · Enter = next row, Ctrl+S = save":""}</span>`;
+}
+function renderCards(list){
+  const D=cur(),E=canD("edit");
+  $("#gb").innerHTML=`<div class="cards">${list.map(({r,i})=>{const c=calc(r,D.tasks),pp=prevPct(r),fl=flagOf(r,c);
+    return `<div class="ecard" data-i="${i}" data-hv="${i}"><div class="eh"><b>${pinned(r)?"★ ":""}${esc(r.name)}</b><span>${pctCell(c,r,pp,fl)}</span></div>
+      <small>${esc(r.team||r.proc||"")}</small>
+      <div class="eg"><span>Earned<b>${f2(c.total)}</b></span><span>Prod hrs<b>${f2(c.prod)}</b></span><span>Downtime<b>${f2(c.dtHr)}</b></span><span>Hours<b>${f2(c.hours)}</b></span></div>
+      ${can("hist")?`<button class="cap sm" data-hist="${i}">History</button>`:""}</div>`}).join("")||`<p class="pvnote" style="padding:16px">No employees match these filters.</p>`}</div>
+    ${E?`<p class="pvnote" style="padding:8px 12px">Editing works on a wider screen.</p>`:""}`;
+  pagerLine(list);
+  $("#gb").onclick=gridClick;$("#gb").oninput=null;
+}
+let rzT=null,lastMob=null;window.addEventListener("resize",()=>{clearTimeout(rzT);rzT=setTimeout(()=>{const m=mobileMode();if(m!==lastMob&&cur()&&$("#gb")){lastMob=m;renderGrid()}},250)});
+function gridClick(e){
+  const D=cur();const t=e.target;
+  const rm=t.closest("[data-rm]");if(rm)return removeEmp(+rm.dataset.rm);
+  const hs=t.closest("[data-hist]");if(hs)return showHistory(D.rows[+hs.dataset.hist]);
+  const pn=t.closest("[data-pin]");if(pn){const k=nameKey(D.rows[+pn.dataset.pin].name);PINS=PINS.includes(k)?PINS.filter(x=>x!==k):PINS.concat(k);LS.set("pins",PINS);return renderGrid()}
+  const lv=t.closest("[data-lv]");if(lv){const r=D.rows[+lv.closest("tr").dataset.i],full=+r.full||0;
+    if(lv.dataset.lv==="full")r.lv=(+r.lv>=full&&full>0)?0:full;else{const h=+(full/2).toFixed(2);r.lv=(+r.lv===h)?0:h}
+    markDirty();return renderGrid()}
+  if(!E_ro(t))return;const nm=t.closest(".nmt");if(nm&&can("hist")){const tr=t.closest("tr");showHistory(D.rows[+tr.dataset.i])}
+}
+const E_ro=t=>!t.closest("input,textarea,button");
+function gridKey(e){
+  if(e.key!=="Enter"||!can("kbd"))return;const el=e.target;if(el.tagName!=="INPUT")return;
+  const td=el.closest("td"),tr=el.closest("tr");if(!td||!tr)return;e.preventDefault();
+  const idx=[...tr.children].indexOf(td);let n=e.shiftKey?tr.previousElementSibling:tr.nextElementSibling;
+  while(n){const c=n.children[idx];const i=c&&c.querySelector("input");if(i){i.focus();i.select();return}n=e.shiftKey?n.previousElementSibling:n.nextElementSibling}
 }
 function onCell(e){
   const el=e.target,D=cur();if(!D)return;
-  if(el.dataset.aht){const t=D.tasks.find(x=>x.k===el.dataset.aht);const v=parseFloat(el.value);if(t&&v>0){t.aht=v;delete t.ph;save()}return}
-  if(el.dataset.ph){const t=D.tasks.find(x=>x.k===el.dataset.ph);const v=parseFloat(el.value);if(t){if(v>0&&Math.abs(v-60/t.aht)>0.004)t.ph=v;else delete t.ph;save()}return}
-  if(el.dataset.lab){S.cfg.lab=S.cfg.lab||{};const v=el.value.trim();if(v)S.cfg.lab[el.dataset.lab]=v;else delete S.cfg.lab[el.dataset.lab];save();return}
-  if(el.dataset.tn){const t=D.tasks.find(x=>x.k===el.dataset.tn);const v=el.value.trim();if(t&&v){t.name=v;save()}return}
+  if(el.dataset.lab){if(!canD("heads"))return;S.cfg.lab=S.cfg.lab||{};const v=el.value.trim();if(v)S.cfg.lab[el.dataset.lab]=v;else delete S.cfg.lab[el.dataset.lab];save();fsWriteConfig();return}
+  if(el.dataset.aht||el.dataset.ph||el.dataset.tn){if(!canD("heads"))return;
+    const t=D.tasks.find(x=>x.k===(el.dataset.aht||el.dataset.ph||el.dataset.tn));if(!t)return;const v=el.value.trim();
+    if(el.dataset.aht){if(parseFloat(v)>0){t.aht=parseFloat(v);delete t.ph}}
+    else if(el.dataset.ph){const n=parseFloat(v);if(n>0&&Math.abs(n-60/t.aht)>0.004)t.ph=n;else delete t.ph}
+    else if(v)t.name=v;
+    markDirty();return}
+  if(!canD("edit"))return;
   const tr=el.closest("tr");if(!tr)return;const r=D.rows[+tr.dataset.i];if(!r)return;
-  if(el.dataset.nm){const v=el.value.trim();if(v||el.dataset.nm==="team"){r[el.dataset.nm]=v;save()}return}
+  if(el.dataset.nm){const v=el.value.trim();if(v||el.dataset.nm==="team"){r[el.dataset.nm]=v;markDirty()}return}
   const num=v=>v===""||isNaN(+v)?undefined:+v;
   if(el.dataset.c)r.c[el.dataset.c]=num(el.value);else if(el.dataset.d)r.dt[el.dataset.d]=num(el.value);
   else if(el.dataset.f)r[el.dataset.f]=num(el.value);else if(el.dataset.cm)r.cm=el.value;
-  save();const c=calc(r,D.tasks);
-  if(el.dataset.c){const td=tr.querySelector(`[data-tm="${el.dataset.c}"]`);td.textContent=f2(c.times[el.dataset.c]);td.classList.toggle("nz",!!c.times[el.dataset.c])}
-  tr.querySelector('[data-o="total"]').textContent=f2(c.total);tr.querySelector('[data-o="dt"]').textContent=f2(c.dtHr);
-  tr.querySelector('[data-o="prod"]').textContent=f2(c.prod);tr.querySelector('[data-o="hrs"]').textContent=f2(c.hours);
-  tr.querySelector('[data-o="pct"]').innerHTML=`<span class="pill ${band(c.pct)}">${f2(c.pct)}%</span>`;
+  markDirty();const c=calc(r,D.tasks);const q=s=>tr.querySelector(s);
+  if(el.dataset.c){const td=q(`[data-tm="${el.dataset.c}"]`);if(td){td.textContent=f2(c.times[el.dataset.c]);td.classList.toggle("nz",!!c.times[el.dataset.c])}}
+  q('[data-o="total"]').textContent=f2(c.total);q('[data-o="dt"]').textContent=f2(c.dtHr);
+  q('[data-o="prod"]').textContent=f2(c.prod);const hr=q('[data-o="hrs"]');if(hr)hr.textContent=f2(c.hours);
+  const fl=flagOf(r,c);q('[data-o="pct"]').innerHTML=pctCell(c,r,prevPct(r),fl);tr.classList.toggle("flag",!!fl);
   renderStats(rowsFiltered());
 }
 
-/* ---------- employees ---------- */
-function addEmp(){
-  const D=cur();if(!D)return;
-  modal(`<h3>Add employee · ${fmtDate(view.date)}</h3>
-   <div class="mrow"><label>Name<input id="aN" placeholder="e.g. RAHUL SHARMA"></label></div>
-   <div class="mrow"><label>Process<input id="aP" value="DBM"></label><label>Team<input id="aT" value="${esc((D.rows[0]||{}).team||"")}"></label><label>100% hours<input id="aH" type="number" value="${defFull()}"></label></div>
-   <div class="err" id="aErr"></div>
-   <div class="mrow"><button class="cap amber" id="aGo">Add employee</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#aN").focus();
-  $("#aGo").onclick=()=>{const n=$("#aN").value.trim();if(!n){$("#aErr").textContent="Enter a name.";return}
-    if(D.rows.some(r=>r.key===norm(n))){$("#aErr").textContent="This employee is already on this date.";return}
-    D.rows.push({key:norm(n),name:n,team:$("#aT").value.trim(),proc:$("#aP").value.trim()||"DBM",c:{},dt:{},full:+$("#aH").value||defFull(),lv:0,cm:""});
-    save();closeModal();renderMain();toast(n+" added")};
+/* ---------- hover card ---------- */
+let hvT=null;
+function wireHover(box){
+  const card=$("#hcard");
+  box.onmouseover=e=>{if(!can("hover"))return;const td=e.target.closest("[data-hv]");if(!td)return;clearTimeout(hvT);hvT=setTimeout(()=>showHover(td),380)};
+  box.onmouseout=e=>{const td=e.target.closest("[data-hv]");if(td&&!td.contains(e.relatedTarget)){clearTimeout(hvT);hvT=setTimeout(()=>card.hidden=true,200)}};
+}
+function showHover(td){
+  const D=cur(),r=D&&D.rows[+td.dataset.hv];if(!r)return;const card=$("#hcard");
+  const c=calc(r,D.tasks),days=personDays(r.name,10),wk=days.slice(0,7),wt=wk.reduce((a,x)=>a+x.c.total,0),wp=wk.reduce((a,x)=>a+x.c.prod,0),st=can("badge")?streakOf(personDays(r.name,31)):0;
+  card.innerHTML=`<div class="hh"><div class="av">${esc(initials(r.name))}</div><div><b>${esc(r.name)}</b><small>${esc(r.team||"")} · ${esc(r.proc||"")}</small></div></div>
+    <div class="hk"><span>Today<b class="${band(c.pct,r.proc)}">${f2(c.pct)}%</b></span><span>Last ${wk.length} days<b>${f2(wp>0?wt/wp*100:0)}%</b></span><span>Earned<b>${f2(c.total)}</b></span></div>
+    ${spark(days.slice().reverse().map(x=>x.pct))}${st>=2?`<div class="badge">🔥 ${st}-day streak</div>`:""}`;
+  const b=td.getBoundingClientRect();card.hidden=false;
+  const x=Math.min(window.innerWidth-card.offsetWidth-10,b.right+8),y=Math.min(window.innerHeight-card.offsetHeight-10,Math.max(8,b.top-10));
+  card.style.left=Math.max(8,x)+"px";card.style.top=y+"px";
+}
+function spark(vals,w=220,hgt=46){
+  if(vals.length<2)return `<p class="pvnote" style="font-size:11px">Trend shows once there are 2+ dates.</p>`;
+  const mx=Math.max(...vals,tg(view.proc).g)*1.08,step=w/(vals.length-1),y=v=>hgt-4-(v/mx)*(hgt-8);
+  const pts=vals.map((v,i)=>`${(i*step).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${w} ${hgt}" width="100%" height="${hgt}" aria-hidden="true"><line x1="0" x2="${w}" y1="${y(tg(view.proc).g)}" y2="${y(tg(view.proc).g)}" class="sg"/><polyline points="${pts}" class="sl"/>${vals.map((v,i)=>`<circle cx="${(i*step).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.4" class="sp"/>`).join("")}</svg>`;
+}
+
+/* ---------- employee history popup ---------- */
+async function showHistory(r){
+  if(!r||!can("hist"))return;
+  modal(`<h3>${esc(r.name)}</h3><p class="pvnote">Loading history…</p>`);
+  for(const d of dates().slice(0,30))await loadDay(d);
+  const days=personDays(r.name,30),t=days.reduce((a,x)=>a+x.c.total,0),p=days.reduce((a,x)=>a+x.c.prod,0);
+  modal(`<h3>${esc(r.name)} <span class="ver" style="background:var(--teal-soft);color:var(--teal)">${esc(r.team||r.proc||"")}</span></h3>
+    <p class="pvnote">Last ${days.length} dates · average <b>${f2(p>0?t/p*100:0)}%</b>${can("badge")&&streakOf(days)>=2?` · 🔥 ${streakOf(days)}-day streak`:""}</p>
+    <div style="margin:10px 0">${spark(days.slice().reverse().map(x=>x.pct),520,110)}</div>
+    <div class="pvw"><table><thead><tr><th>Date</th><th>Earned hrs</th><th>Prod hrs</th><th>Downtime</th><th>Productivity</th></tr></thead><tbody>
+    ${days.map(x=>`<tr><td>${fmtDate(x.d)}</td><td>${f2(x.c.total)}</td><td>${f2(x.c.prod)}</td><td>${f2(x.c.dtHr)}</td><td><span class="pill ${band(x.pct,r.proc)}">${f2(x.pct)}%</span></td></tr>`).join("")}</tbody></table></div>
+    <div class="mrow"><button class="cap" data-close>Close</button></div>`);
+}
+
+/* ---------- columns, report, print, help ---------- */
+function colsModal(){
+  const G=[["time","Time columns (next to each count)"],["dtd","Downtime details (Cab, Training…)"],["cm","Comments"],["hrs","100%, Leaves and No. of Hours"]];
+  modal(`<h3>Columns on this PC</h3><p class="pvnote">Only changes your screen. Excel export keeps every column.</p>
+    <div class="toggles" style="flex-direction:column;margin-top:10px">${G.map(([k,n])=>`<label class="tg"><input type="checkbox" data-col="${k}" ${COLS[k]?"checked":""}><span></span>${n}</label>`).join("")}</div>
+    <div class="mrow"><button class="cap teal" id="colOk">Done</button></div>`);
+  $("#colOk").onclick=()=>{$("#mcard").querySelectorAll("[data-col]").forEach(c=>COLS[c.dataset.col]=c.checked?1:0);LS.set("cols",COLS);closeModal();renderGrid()};
+}
+function copyReport(){
+  const D=cur(),list=rowsFiltered().map(x=>x.r),T=D.tasks,s=sumUp(list,T),t=tg(view.proc);
+  const rk=list.map(r=>({r,c:calc(r,T)})).filter(x=>x.c.prod>0).sort((a,b)=>b.c.pct-a.c.pct);
+  const lv=list.filter(r=>+r.lv>0&&+r.lv>=+r.full).map(r=>r.name);
+  const txt=[`${(procOf(view.proc)||{}).label||view.proc} productivity · ${view.trial?"Trial":fmtDate(view.date)}${view.team!=="All"?" · "+view.team:""}`,
+    `Employees: ${list.length} · Team productivity: ${f2(s.pct)}% · Earned hrs: ${f2(s.tot)} · Downtime hrs: ${f2(s.dt)}`,
+    `Below ${t.a}%: ${rk.filter(x=>x.c.pct<t.a).length}`,"",
+    "Top 5:",...rk.slice(0,5).map((x,i)=>`${i+1}. ${x.r.name} – ${f2(x.c.pct)}%`),"",
+    "Bottom 5:",...rk.slice(-5).reverse().map((x,i)=>`${i+1}. ${x.r.name} – ${f2(x.c.pct)}%`),
+    lv.length?"\nOn leave: "+lv.join(", "):""].join("\n");
+  const ok=()=>toast("Report copied. Paste it in mail or Teams.");
+  (navigator.clipboard?navigator.clipboard.writeText(txt).then(ok):Promise.reject()).catch(()=>{modal(`<h3>Report</h3><textarea style="width:100%;height:260px" readonly>${esc(txt)}</textarea><div class="mrow"><button class="cap" data-close>Close</button></div>`)});
+}
+function printView(){$("#pwm").textContent=S.cfg.wm!==false?"Confidential · "+(me.pc||"")+" · "+new Date().toLocaleString("en-IN"):"";window.print()}
+function showHelp(){
+  const H=[["Dump","Load a new date from the portal report (.xls) or the productivity sheet."],["Trial","Try any file. You see the result, nothing is saved."],["Replace","Swap a saved date for a new file. The old one goes to the recycle bin."],["Save","Keep the changes on screen (Ctrl+S)."],["Reset","Clear the screen and any unsaved changes. Saved data is safe; pick the date again to see it."],["Day ✓","Mark the date complete. It locks for everyone except Admin."],["Delete","Remove a date. It stays 30 days in the recycle bin."],["Share / Excel","Excel file with borders and live formulas."],["▼ Tools","Calendar, month and week views, top 5, team summary, heatmap, baskets, attendance, goal, downtime, calculator, bin and log."],["‹ › Today","Jump to the older or newer date, or today."],["Only baskets with data","Tick it to hide work baskets with no count (remembered on your PC)."],["☆ / ⌁","Pin a person to the top / open their history."],["L / ½","Full day leave / half day for that row."],["⚠","Something looks wrong in that row (hover to see why)."],["Keys","Enter = next row, Shift+Enter = row above, Ctrl+S = save, Ctrl+F = search, Alt+‹ › = date, Esc = close."]];
+  modal(`<h3>Help</h3><div class="pvw" style="max-height:60vh"><table><tbody>${H.map(([a,b])=>`<tr><td style="font-family:var(--f-body);font-weight:600;white-space:nowrap">${a}</td><td style="text-align:left;font-family:var(--f-body)">${b}</td></tr>`).join("")}</tbody></table></div><div class="mrow"><button class="cap teal" data-close>Got it</button></div>`);
+}
+
+/* ---------- keyboard ---------- */
+document.addEventListener("keydown",e=>{
+  if($("#app").hidden)return;const k=(e.key||"").toLowerCase(),c=e.ctrlKey||e.metaKey;
+  if(e.key==="Escape"){$("#hcard").hidden=true;if(!$("#modal").hidden)return closeModal();if(view.tray){view.tray=false;renderMain()}return}
+  if(!can("kbd"))return;
+  if(c&&k==="s"){e.preventDefault();if(canD("save")&&view.dirty)doSave();return}
+  if(c&&k==="f"&&$("#fQ")){e.preventDefault();$("#fQ").focus();return}
+  if(e.altKey&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){e.preventDefault();jumpDate(e.key==="ArrowLeft"?1:-1)}
+},true);
+
+/* ---------- actions: Save / Erase / Reset / Delete / Remove / Day complete ---------- */
+async function doSave(silent){
+  if(!canD("save")||!view.work)return;
+  const go=async()=>{const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();paintDirty();logAct("save",view.date);renderGrid();toast("Saved "+fmtDate(view.date)+(FS.dir?" to the data folder ✓":" on this PC ✓"))};
+  if(silent)return go();
+  ask("save","Save "+fmtDate(view.date)+"?","The changes on screen become the saved data for this date"+(FS.dir?" and are written to the team data folder, so everyone sees them.":" on this PC."),"Save",go);
+}
+function resetDay(){
+  ask("reset","Reset the screen?",(view.dirty?"Changes you haven't saved are thrown away. ":"")+(view.trial?"The trial data is cleared.":"The screen is cleared. Saved data for "+fmtDate(view.date)+" is <b>safe</b> — pick the date again to see it."),"Reset",()=>{
+    view.dirty=false;dropDraft();view.trial=false;view.trialDump=false;view.dumpOpen=false;view.forceReplace=false;view.work=null;view.saved=null;view.prev=null;view.cleared=true;view.team="All";view.pf="All";view.emp="All";view.q="";renderAll();toast("Screen cleared. Saved data is safe.")});
+}
+function deleteDate(){
+  const d=view.date;if(!d)return;
+  ask("del","Delete "+fmtDate(d)+"?","Everything saved for this date is deleted"+(FS.dir?" from this PC and from the team data folder":"")+", headings included. A copy stays in the <b>recycle bin</b> for 30 days.","Delete",async()=>{
+    await binPut(d,view.saved,"Deleted");delete S.days[dkey(d)];await save(true);await fsDeleteKey(dkey(d));logAct("del",d);view.forceReplace=false;await openDate(dates()[0]||null);toast(fmtDate(d)+" deleted · in the recycle bin for 30 days")},true);
 }
 function removeEmp(i){
-  const D=cur(),r=D&&D.rows[i];if(!r)return;
-  modal(`<h3>Remove ${esc(r.name)}?</h3><p style="margin:0;line-height:1.5">Their row is removed from ${fmtDate(view.date)} only. Other dates stay as they are.</p>
-   <div class="mrow"><button class="cap amber" id="rGo">Remove</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#rGo").onclick=()=>{D.rows.splice(i,1);save();closeModal();if(view.emp===r.name)view.emp="All";renderMain();toast(r.name+" removed")};
+  const D=cur(),r=D&&D.rows[i];if(!r||!canD("remove"))return;
+  ask("remove","Remove "+esc(r.name)+"?","Their row is removed from "+fmtDate(view.date)+" on screen. "+(canD("save")?"Click <b>Save</b> to make it permanent.":""),"Remove",()=>{D.rows.splice(i,1);markDirty();if(view.emp===r.name)view.emp="All";renderMain();toast(r.name+" removed")});
 }
-function eraseDate(){
-  const d=view.date;if(!d)return;
-  modal(`<h3>Erase ${fmtDate(d)}?</h3><p style="margin:0;line-height:1.5">Everything saved for this date is deleted, headings included. Other dates are not touched. Export it first if you may need it.</p>
-   <div class="mrow"><button class="cap amber" id="eGo">Erase this date</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#eGo").onclick=()=>{delete S.days[d];save(true);closeModal();view.date=dates()[0]||null;view.emp="All";view.team="All";renderMain();toast(fmtDate(d)+" erased")};
+function closeDay(){
+  if(view.dirty){toast("Save your changes first");return}
+  ask("dayclose","Mark "+fmtDate(view.date)+" complete?","The date gets a green tick and locks for everyone except Admin (and PCs allowed to change locked dates).","Mark complete",async()=>{
+    const o=clone(view.saved);o.closed={pc:me.pc,at:Date.now()};await persistDay(view.date,o);logAct("close",view.date);await openDate(view.date);toast("Day marked complete ✓")});
 }
+async function reopenDay(){const o=clone(view.saved);delete o.closed;await persistDay(view.date,o);logAct("reopen",view.date);await openDate(view.date);toast("Date reopened")}
+async function refreshFolder(){
+  if(!FS.dir)return;await fsScan();
+  if(view.dirty||view.trial){renderAll();toast("Folder checked. Your screen is kept.");return}
+  await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);toast("Updated from the data folder");
+}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&FS.dir&&!view.dirty&&!view.trial&&!$("#app").hidden)fsScan().then(async()=>{const d=view.date,k=d&&dkey(d);if(k&&FS.index[k]){const f=await FS.index[k].h.getFile();if(!view.saved||view.saved._lm!==f.lastModified)openDate(d)}else renderAll()})});
 
 /* ---------- DUMP ---------- */
 function wireDump(){
@@ -508,52 +1249,156 @@ function wireDump(){
   dz.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)readFile(f)});
   $("#dFile").onchange=e=>{const f=e.target.files[0];if(f)readFile(f);e.target.value=""};
   $("#dGo").onclick=()=>{const t=$("#dTxt").value;if(!t.trim()){toast("Paste the rows from Excel first");return}
-    dumpRows(t.split(/\r?\n/).map(l=>l.split("\t")),"Pasted data")};
+    dumpRows(t.split(/\r?\n/).map(l=>l.split("\t")),"Pasted data",null,{fh:"p"+H(t),dates:findDatesIn(t.slice(0,3000))})};
 }
 const targetDate=()=>($("#dDate")&&$("#dDate").value)||view.dumpDate||todayISO();
-function findRow(rows,re,max=40){for(let r=0;r<Math.min(rows.length,max);r++){const c=(rows[r]||[]).findIndex(v=>re.test(clean(v)));if(c>=0)return{r,c}}return null}
-function sheetKind(rows){
-  if(findRow(rows,/^first\s*name$/i)&&findRow(rows,/^work\s*basket$/i,60))return "original";
-  if(findRow(rows,/^user\s*name$/i,10))return "summary";
-  return null;
+/* dates written in a file's heading area: 2026-10-21, 10/21/2026, 21-Oct-2026, or a month like Oct-2026 */
+function findDatesIn(text){
+  const out={days:new Set(),months:new Set()},s=String(text||"");let m;
+  const re1=/\b(20\d\d)-(\d\d)-(\d\d)\b/g;while((m=re1.exec(s)))out.days.add(`${m[1]}-${m[2]}-${m[3]}`);
+  const re2=/\b(\d{1,2})\/(\d{1,2})\/(20\d\d)\b/g;while((m=re2.exec(s))){const a=+m[1],b=+m[2];const mo=a>12?b:a,dd=a>12?a:b;if(mo<=12&&dd<=31)out.days.add(`${m[3]}-${String(mo).padStart(2,"0")}-${String(dd).padStart(2,"0")}`)}
+  const re3=/\b(\d{1,2})[-\s]([A-Za-z]{3})[a-z]*[-\s,]+(20\d\d)\b/g;while((m=re3.exec(s))){const mi=MONS.findIndex(x=>x.toLowerCase()===m[2].toLowerCase());if(mi>=0)out.days.add(`${m[3]}-${String(mi+1).padStart(2,"0")}-${String(+m[1]).padStart(2,"0")}`)}
+  const re4=/\b([A-Za-z]{3})[a-z]*[-\s]+(20\d\d)\b/g;while((m=re4.exec(s))){const mi=MONS.findIndex(x=>x.toLowerCase()===m[1].toLowerCase());if(mi>=0)out.months.add(`${m[2]}-${String(mi+1).padStart(2,"0")}`)}
+  return out;
 }
+function dateWarn(meta,d){
+  if(!meta||!meta.dates)return "";const D=meta.dates;
+  if(D.days.size===1){const fd=[...D.days][0];if(fd!==d)return `<li class="bad">The file says <b>${fmtDate(fd)}</b> but it's going into <b>${fmtDate(d)}</b>. <button class="cap sm" data-usedate="${fd}">Use ${fd}</button></li>`;return ""}
+  const ms=[...D.months];if(ms.length&&!ms.includes(d.slice(0,7)))return `<li class="bad">The file is for <b>${ms.map(fmtMonth).join(", ")}</b> but the date picked is in <b>${fmtMonth(d.slice(0,7))}</b>. Check the date.</li>`;
+  return "";
+}
+function applyAlias(rows){
+  const A=aliasMap();if(!Object.keys(A).length)return 0;let n=0;
+  rows.forEach(r=>{const to=A[nameKey(r.name)];if(to&&to!==r.name){r.name=to;r.key=norm(to);n++}});return n;
+}
+function aliasMap(){const m={};String(S.cfg.alias||"").split(/\n/).forEach(l=>{const [a,b]=l.split("=").map(x=>(x||"").trim());if(a&&b)m[nameKey(a)]=b});return m}
+function applyAhtMaster(tasks){
+  const M=S.cfg.aht||{},miss=[];let used=0;
+  tasks.forEach(t=>{const m=M[t.k];if(m&&+m.aht>0){if(+m.aht!==+t.aht)used++;t.aht=+m.aht;if(+m.ph>0)t.ph=+m.ph}else miss.push(t)});
+  return{used,miss};
+}
+async function dumpRows(rows,src,dt,meta){
+  const k=sheetKind(rows),trial=!!view.trialDump;
+  const P=k==="original"?parseOriginal(rows):k==="summary"?parseSummary(rows):{err:"Format not recognised. Use the portal report (First Name / Work Basket) or the productivity sheet (Process / User Name)."};
+  if(P.err){toast(P.err);return}
+  if(view.proc!=="DBM")P.rows.forEach(r=>{if(!r.proc||r.proc==="DBM")r.proc=view.proc});
+  const al=applyAlias(P.rows),am=applyAhtMaster(P.tasks);
+  if(al)P.rep.push(`<li class="ok">${al} name${al>1?"s":""} changed by Name mapping</li>`);
+  if(Object.keys(S.cfg.aht||{}).length){if(am.used)P.rep.push(`<li class="ok">AHT master used for ${am.used} basket${am.used>1?"s":""}</li>`);
+    if(am.miss.length)P.rep.push(`<li class="bad">${am.miss.length} basket${am.miss.length>1?"s are":" is"} not in the AHT master (file's AHT used): ${esc(am.miss.slice(0,6).map(t=>shortName(t.name)).join(", "))}${am.miss.length>6?"…":""}</li>`)}
+  const d=trial?"trial":view.forceReplace?view.date:(dt||targetDate());
+  const old=trial?null:await loadDay(d);
+  if(!trial){
+    if(old&&!can("dump")&&!can("replace")){toast("You don't have permission to change saved dates.");return}
+    if(!old&&!can("dump")){toast("You don't have permission to add new dates.");return}
+    if(old&&isLocked(d,old)){toast(fmtDate(d)+" is locked. Ask the Admin.");return}
+  }
+  const canMerge=!!old&&can("dump")&&!view.forceReplace,canRep=!!old&&can("replace");
+  const matched=old?P.rows.filter(r=>findPerson(old.rows,r.name)).length:0;
+  /* same file loaded before? */
+  let dup="";if(meta&&meta.fh&&!trial){const hit=Object.entries(S.days).find(([kk,o])=>o&&o.fh===meta.fh&&unkey(kk).p===view.proc);if(hit)dup=`<li class="bad">This same file was already loaded into <b>${fmtDate(unkey(hit[0]).d)}</b>.</li>`}
+  /* who is missing compared with the last saved date */
+  let miss="";if(can("missing")&&!trial){const pd=dates().filter(x=>x<d)[0];const po=pd&&await loadDay(pd);
+    if(po){const gone=po.rows.filter(r=>!findPerson(P.rows,r.name)),nw=P.rows.filter(r=>!findPerson(po.rows,r.name));
+      if(gone.length||nw.length)miss=`<li class="${gone.length?"bad":""}">Compared with ${fmtDate(pd)}: <b>${gone.length}</b> not in this file${gone.length?" ("+esc(gone.slice(0,8).map(r=>r.name).join(", "))+(gone.length>8?"…":"")+")":""} · <b>${nw.length}</b> new${nw.length?" ("+esc(nw.slice(0,5).map(r=>r.name).join(", "))+(nw.length>5?"…":"")+")":""}</li>`;
+      else miss=`<li class="ok">Same people as ${fmtDate(pd)} ✓</li>`}}
+  const dw=trial?"":dateWarn(meta,d);
+  const sample=P.rows.slice(0,10),cnt=r=>Object.values(r.c).reduce((a,v)=>a+(+v||0),0);
+  const prev=`<div class="pvw"><table><thead><tr><th>User Name</th><th>Team</th><th>Process</th><th>Baskets</th><th>Total count</th><th>Earned hrs</th></tr></thead><tbody>
+    ${sample.map(r=>`<tr><td>${esc(r.name)}${old?(findPerson(old.rows,r.name)?' <span class="tagm">match</span>':' <span class="tagn">new</span>'):""}</td><td>${esc(r.team||"")}</td><td>${esc(r.proc||"")}</td><td>${Object.keys(r.c).length}</td><td><b>${cnt(r).toLocaleString("en-IN")}</b></td><td>${f2(calc(r,P.tasks).total)}</td></tr>`).join("")}
+    </tbody></table></div>${P.rows.length>10?`<p class="pvnote">…and ${P.rows.length-10} more employees · ${[...new Set(P.rows.map(r=>r.team).filter(Boolean))].length} teams</p>`:""}`;
+  const modes=old?[canMerge?["merge",`<b>Merge</b>: put these counts into the matching people, keep their 100%, leaves and downtime; add new people`]:null,canRep?["replace",`<b>Replace</b>: move the saved data of ${fmtDate(d)} to the recycle bin and use only this file`]:null].filter(Boolean):[];
+  modal(`<h3>${trial?"Trial preview":"Preview"} · ${k==="original"?"Portal report":"Productivity sheet"}</h3>
+    <p class="pvnote"><b>${P.rows.length}</b> employees · <b>${P.tasks.length}</b> work baskets · ${trial?"<b>trial, nothing is saved</b>":`going into <b>${fmtDate(d)}</b>`}${old?` · this date already has ${old.rows.length} employees (${matched} match by name)`:""}</p>
+    ${prev}<ul class="rep">${dw}${dup}${miss}${P.rep.join("")}</ul>
+    ${modes.map(([v,t],i)=>`<label class="chk" style="padding:4px 0"><input type="radio" name="dm" value="${v}" ${i===0?"checked":""}> ${t}</label>`).join("")}
+    <div class="mrow"><button class="cap amber" id="pvYes">${trial?"Show trial":"Yes, insert"}</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#mcard").querySelectorAll("[data-usedate]").forEach(b=>b.onclick=()=>{closeModal();view.dumpDate=b.dataset.usedate;dumpRows(rows,src,b.dataset.usedate,meta)});
+  $("#pvYes").onclick=()=>{
+    if(trial){closeModal();view.trial=true;view.trialDump=false;view.dumpOpen=false;view.work={tasks:P.tasks,rows:P.rows,src:"Trial · "+src};view.saved=null;view.dirty=false;view.prev=null;view.draft=null;view.team="All";view.pf="All";view.emp="All";view.q="";renderAll();toast("Trial ready. Nothing is saved.");return}
+    const mode=old?($("#mcard").querySelector('input[name="dm"]:checked')||{}).value:"new";
+    const commit=async()=>{
+      let obj,added=0,upd=0;
+      if(mode==="merge"){obj=clone(old);
+        P.tasks.forEach(t=>{if(!obj.tasks.some(x=>x.k===t.k))obj.tasks.push(t)});
+        P.rows.forEach(r=>{const e=findPerson(obj.rows,r.name);
+          if(!e){obj.rows.push(r);added++;return}upd++;
+          P.tasks.forEach(t=>{if(r.c[t.k]>0)e.c[t.k]=r.c[t.k];else delete e.c[t.k]});
+          if(k==="summary"){e.dt=r.dt;e.full=r.full;e.lv=r.lv;if(r.cm)e.cm=r.cm;if(r.proc)e.proc=r.proc}
+          if(!e.team&&r.team)e.team=r.team});
+        obj.src=(obj.src?obj.src+" + ":"")+src;
+      }else{if(mode==="replace")await binPut(d,old,"Replaced");obj={tasks:P.tasks,rows:P.rows,src}}
+      obj.at=Date.now();obj.pc=me.pc;if(meta&&meta.fh)obj.fh=meta.fh;
+      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;view.emp="All";view.team="All";view.pf="All";view.q="";await openDate(d);
+      toast(mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`Saved ${P.rows.length} employees into ${fmtDate(d)}${FS.dir?" and the data folder":""}`);
+    };
+    if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) moves to the recycle bin and this file takes its place, headings included.","Replace",commit,true);
+    else commit();
+  };
+}
+function fileHash(buf){const u=new Uint8Array(buf),n=Math.min(u.length,400000);let s="";for(let i=0;i<n;i+=3)s+=String.fromCharCode(u[i]);return u.length+"-"+H(s)}
 function readFile(f){
-  if(typeof XLSX==="undefined"){toast("Excel reader didn't load (no internet?). Copy the rows from Excel and paste them instead.");return}
   const rd=new FileReader();
   rd.onload=e=>{
-    let wb;try{wb=XLSX.read(e.target.result,{type:"array"})}catch(err){toast("This file couldn't be read. Save it as .xlsx and try again.");return}
+    const buf=e.target.result,fh=fileHash(buf);
+    const head=new TextDecoder().decode(new Uint8Array(buf.slice(0,4096))).toLowerCase();
+    if(/<html|<table|<!--/.test(head)){
+      toast("Reading portal report…");
+      setTimeout(()=>{const text=new TextDecoder().decode(new Uint8Array(buf));const rows=htmlToRows(text);
+        if(!rows){toast("No First Name / User Name table found in this report.");return}
+        const top=text.slice(0,30000).replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ");
+        dumpRows(rows,f.name,null,{fh,dates:findDatesIn(f.name+" "+top.split(/First\s*Name/i)[0])})},30);
+      return;
+    }
+    if(typeof XLSX==="undefined"){toast("Excel reader didn't load (no internet?). Copy the rows from Excel and paste them instead.");return}
+    let wb;try{wb=XLSX.read(buf,{type:"array"})}catch(err){const enc=/password|encrypt|protect|cfb|ole/i.test(String(err&&err.message));modal(`<h3>This file can't be opened here</h3><p style="margin:0;line-height:1.6">${enc?"It looks protected (password or sensitivity label).":"The format isn't readable."} Easy way: open it in Excel → <b>Ctrl+A</b> → <b>Ctrl+C</b> → come back and paste in the box (Ctrl+V) → <b>Use pasted data</b>.</p><div class="mrow"><button class="cap teal" data-close>OK</button></div>`);return}
     const sheets=wb.SheetNames.map(n=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:"",raw:false});return{n,rows,k:sheetKind(rows)}}).filter(s=>s.k);
     if(!sheets.length){toast("No Original Doc or Process / User Name sheet found in this file.");return}
-    if(sheets.length===1)return dumpRows(sheets[0].rows,f.name+" · "+sheets[0].n);
+    const meta=s=>({fh:fh+"#"+s.n,dates:findDatesIn(f.name+" "+s.rows.slice(0,6).map(r=>r.join(" ")).join(" "))});
+    if(sheets.length===1)return dumpRows(sheets[0].rows,f.name+" · "+sheets[0].n,null,meta(sheets[0]));
     const td=targetDate();
-    modal(`<h3>Which sheet to save?</h3><p style="color:var(--muted);margin:0">It goes into ${fmtDate(td)}.</p>
+    modal(`<h3>Which sheet to use?</h3><p style="color:var(--muted);margin:0">${view.trialDump?"Trial, nothing is saved.":"It goes into "+fmtDate(td)+"."}</p>
       <div class="mrow" style="flex-direction:column;align-items:stretch">${sheets.map((s,i)=>`<button class="cap" data-sh="${i}" style="text-align:left">${esc(s.n)} <span style="color:var(--muted);font-weight:500">· ${s.k==="original"?"Original Doc report":"Process / User Name sheet"}</span></button>`).join("")}</div>
       <div class="mrow"><button class="cap" data-close>Cancel</button></div>`);
-    $("#mcard").querySelectorAll("[data-sh]").forEach(b=>b.onclick=()=>{closeModal();const s=sheets[+b.dataset.sh];dumpRows(s.rows,f.name+" · "+s.n,td)});
+    $("#mcard").querySelectorAll("[data-sh]").forEach(b=>b.onclick=()=>{closeModal();const s=sheets[+b.dataset.sh];dumpRows(s.rows,f.name+" · "+s.n,td,meta(s))});
   };
   rd.readAsArrayBuffer(f);
 }
-function dumpRows(rows,src,dt){
-  const k=sheetKind(rows);
-  const P=k==="original"?parseOriginal(rows):k==="summary"?parseSummary(rows):{err:"Format not recognised. Use the Original Doc report (First Name / Work Basket) or the productivity sheet (Process / User Name)."};
-  if(P.err){toast(P.err);return}
-  const d=dt||targetDate();
-  const commit=()=>{
-    S.days[d]={tasks:P.tasks,rows:P.rows,src,at:Date.now(),pc:dev.get()};save(true);
-    view.date=d;view.emp="All";view.team="All";view.q="";view.dumpOpen=false;renderMain();
-    modal(`<h3>Saved · ${fmtDate(d)}</h3><ul class="rep">${P.rep.join("")}</ul><div class="mrow"><button class="cap teal" data-close>Done</button></div>`);
-  };
-  if(S.days[d]){
-    modal(`<h3>Replace ${fmtDate(d)}?</h3><p style="margin:0;line-height:1.5">This date already has ${S.days[d].rows.length} employees saved. The new data replaces all of it, headings included.</p>
-     <div class="mrow"><button class="cap amber" id="rpGo">Replace</button><button class="cap" data-close>Cancel</button></div>`);
-    $("#rpGo").onclick=()=>{closeModal();commit()};
-  }else commit();
-}
 
+function findRow(rows,re,max=40){for(let r=0;r<Math.min(rows.length,max);r++){const c=(rows[r]||[]).findIndex(v=>re.test(clean(v)));if(c>=0)return{r,c}}return null}
+function sheetKind(rows){
+  const fn=findRow(rows,/^first\s*name$/i);
+  if(fn&&(findRow(rows,/^work\s*basket$/i,60)||findRow(rows,/^team/i)||findRow(rows,/^last\s*name$/i)))return "original";
+  if(findRow(rows,/^user\s*name$/i,10))return "summary";
+  return null;
+}
+/* portal reports (NICE "UOM Volume Summary") are HTML saved as .xls: read the big table directly */
+function htmlToRows(text){
+  const doc=new DOMParser().parseFromString(text,"text/html");
+  const tables=[...doc.querySelectorAll("table")].filter(t=>/first\s*name|user\s*name/i.test(t.textContent));
+  if(!tables.length)return null;
+  const t=tables.sort((a,b)=>b.rows.length-a.rows.length)[0];
+  const grid=[],occ={};
+  [...t.rows].forEach((tr,ri)=>{const g=grid[ri]=grid[ri]||[];let ci=0;
+    [...tr.cells].forEach(td=>{while(occ[ri+","+ci]){g[ci]="";ci++}
+      const cs=Math.max(1,+td.colSpan||1),rs=Math.max(1,+td.rowSpan||1),txt=(td.querySelector("table")?"":td.textContent).replace(/\s+/g," ").trim();
+      for(let k=0;k<cs;k++){g[ci+k]=k?"":txt;for(let r2=1;r2<rs;r2++)occ[(ri+r2)+","+(ci+k)]=1}ci+=cs});
+  });
+  return grid.map(r=>Array.from(r,v=>v??""));
+}
+/* names written differently still match: "ABIMELAK TONY" = "TONY,ABIMELAK" */
+const nameKey=n=>String(n||"").toLowerCase().replace(/[^a-z\s]/g," ").split(/\s+/).filter(w=>w.length>1).sort().join(" ");
+function findPerson(rows,name){
+  const k=nameKey(name);if(!k)return null;
+  let r=rows.find(x=>nameKey(x.name)===k);if(r)return r;
+  const kt=k.split(" ");
+  r=rows.find(x=>{const xt=nameKey(x.name).split(" ");const hit=kt.filter(w=>xt.includes(w)).length;return hit>=2||(hit===1&&kt.length===1&&xt.length===1)});
+  return r||null;
+}
 /* Original Doc "Below Me (UOM)" report: baskets down, employees across */
 function parseOriginal(rows){
-  const fn=findRow(rows,/^first\s*name$/i),wb=findRow(rows,/^work\s*basket$/i,60);
-  const ln=findRow(rows,/^last\s*name$/i),tm=findRow(rows,/^team/i);
+  const fn=findRow(rows,/^first\s*name$/i),ln=findRow(rows,/^last\s*name$/i),tm=findRow(rows,/^team/i);
+  const wb=findRow(rows,/^work\s*basket$/i,60)||{r:Math.max(fn.r,ln?ln.r:0,tm?tm.r:0),c:0};
   const hdr=[fn.r,ln?.r,tm?.r].filter(x=>x!=null);
   let totalCol=null;const people=[];
   const width=Math.max(...rows.slice(0,wb.r+3).map(r=>r.length));
@@ -565,25 +1410,30 @@ function parseOriginal(rows){
   if(!people.length)return{err:"No employee names found next to “First Name”."};
   const lastP=people[people.length-1].c;
   let shifted=0,totalsRow=null;const data=[];
+  const rowShift=row=>{if(totalCol==null)return null;for(const s of [0,1,-1,2,3]){const tv=numVal(row[totalCol+s]);if(tv==null||!(tv>0)||clean(row[totalCol+s])==="")continue;
+      const sum=people.reduce((a,p)=>a+(numVal(row[p.c+s])||0),0);if(Math.abs(sum-tv)<0.01)return s}return null};
+  /* most rows of a report share one shift: vote it, then use it where a row can't prove its own */
+  const votes={};for(let r=wb.r+1;r<rows.length;r++){const row=rows[r]||[];if(!clean(row[wb.c]))continue;const s=rowShift(row);if(s!=null)votes[s]=(votes[s]||0)+1}
+  const gShift=+(Object.entries(votes).sort((a,b)=>b[1]-a[1])[0]||[0])[0];
   for(let r=wb.r+1;r<rows.length;r++){
     const row=rows[r]||[];const name=clean(row[wb.c]);
     if(!name){if(row.slice(fn.c+1).some(v=>numVal(v)>0)&&!totalsRow)totalsRow=row;continue}
     if(/^totals?$/i.test(name)){totalsRow=row;continue}
-    let shift=0,found=false;
-    if(totalCol!=null){for(const s of [0,1,-1,2,3]){const tv=numVal(row[totalCol+s]);if(tv==null||clean(row[totalCol+s])==="")continue;
-      const sum=people.reduce((a,p)=>a+(numVal(row[p.c+s])||0),0);if(Math.abs(sum-tv)<0.01&&(s===0||tv>0)){shift=s;found=true;break}}}
-    if(!found){let li=-1;row.forEach((v,i)=>{if(i>fn.c&&clean(v)!=="")li=i});const ex=totalCol!=null?totalCol:lastP;if(li>ex&&li-ex<=3)shift=li-ex}
+    let shift=rowShift(row);if(shift==null)shift=gShift;
     if(shift)shifted++;
-    data.push({name,stm:numVal(row[fn.c]),vals:people.map(p=>numVal(row[p.c+shift])||0)});
+    data.push({name,stm:numVal(row[fn.c])||numVal(row[wb.c+1]),vals:people.map(p=>numVal(row[p.c+shift])||0)});
   }
   if(!data.length)return{err:"No work basket rows found under “Work Basket”."};
   const tasks=[];data.forEach(d=>{if(!tasks.some(t=>t.k===bk(d.name)))tasks.push({k:bk(d.name),name:d.name,aht:d.stm>0?d.stm:5})});
-  const out=people.map((p,pi)=>{const r={key:norm(p.first+p.last),name:(p.first+" "+p.last).trim(),team:p.team,proc:"DBM",c:{},dt:{},full:defFull(),lv:0,cm:""};
+  const guessProc=pi=>{let best=null,bv=0;data.forEach(d=>{if(d.vals[pi]/(60/(d.stm||5))>bv){bv=d.vals[pi]/(60/(d.stm||5));best=d.name}});if(!best)return "";const n=best.toLowerCase();
+    return /pcrl/.test(n)?"PCRL":/pend_?52/.test(n)?"Pend52":/outreach/.test(n)?"Outreach":/non_?par/.test(n)?"NonPar":/onbase/.test(n)?"Onbase":/cpq/.test(n)?"CPQ":/cpa/.test(n)?"CPA":/dbm/.test(n)?"DBM":""};
+  const out=people.map((p,pi)=>{const r={key:norm(p.first+p.last),name:(p.first+" "+p.last).replace(/\s+-$/,"").trim(),team:p.team,proc:guessProc(pi)||"DBM",c:{},dt:{},full:defFull(),lv:0,cm:""};
     data.forEach(d=>{if(d.vals[pi])r.c[bk(d.name)]=(r.c[bk(d.name)]||0)+d.vals[pi]});return r});
   const rep=[`<li>Original Doc report: ${tasks.length} work baskets, ${out.length} employees</li>`,
     shifted?`<li class="ok">${shifted} shifted rows moved back under the right employee</li>`:`<li>No shifted rows found</li>`,
     `<li>AHT taken from the STM column. 100% hours set to ${defFull()} (change in Admin or in the row)</li>`];
-  if(totalsRow){const bad=[];people.forEach((p,pi)=>{const want=numVal(totalsRow[p.c]);const got=data.reduce((a,d)=>a+d.vals[pi],0);if(want!=null&&clean(totalsRow[p.c])!==""&&Math.abs(want-got)>0.01)bad.push(`${p.first}: report ${want}, loaded ${got}`)});
+  const tShift=totalsRow?[gShift,0].map(sh=>[sh,people.filter((p,pi)=>Math.abs((numVal(totalsRow[p.c+sh])||0)-data.reduce((a,d)=>a+d.vals[pi],0))<0.01).length]).sort((a,b)=>b[1]-a[1])[0][0]:0;
+  if(totalsRow){const bad=[];people.forEach((p,pi)=>{const want=numVal(totalsRow[p.c+tShift]);const got=data.reduce((a,d)=>a+d.vals[pi],0);if(want!=null&&clean(totalsRow[p.c+tShift])!==""&&Math.abs(want-got)>0.01)bad.push(`${p.first}: report ${want}, loaded ${got}`)});
     rep.push(bad.length?`<li class="bad">Totals mismatch for ${bad.length}: ${esc(bad.slice(0,5).join(" · "))}</li>`:`<li class="ok">Every employee total matches the report's Totals row ✓</li>`)}
   return{tasks,rows:out,rep};
 }
@@ -609,7 +1459,7 @@ function parseSummary(rows){
     if(d){map[c]={t:"d",k:d[0]};continue}
     const text=texts[0];if(SKIP.test(text)||/^time/i.test(text))continue;
     const ti=labels.indexOf(text);const aht=labels.slice(ti+1).map(numVal).find(v=>v>0);if(!aht)continue;
-    let t=tasks.find(x=>x.k===bk(text));if(!t){t={k:bk(text),name:text,aht};tasks.push(t)}
+    let k0=bk(text),k=k0,i2=1;while(tasks.some(x=>x.k===k)){i2++;k=k0+"_"+i2}const t={k,name:i2>1?text+" ("+i2+")":text,aht};tasks.push(t);
     map[c]={t:"c",k:t.k};
   }
   if(!tasks.length)return{err:"No task columns (name with AHT below it) found in this sheet."};
@@ -630,12 +1480,121 @@ function parseSummary(rows){
     `<li>Downtime, ${hasFull?"100% hours, ":""}leaves and comments taken from the sheet</li>`,
     `<li class="ok">Time, Total, Production Hours and Productivity worked out with the sheet's formulas</li>`]};
 }
+/* ---------- ▼ Tools tray: opens only on click ---------- */
+const TOOLS=[["cal","Calendar"],["month","Month"],["week","Week"],["top5","Top / Bottom 5"],["teams","Teams"],["heat","Heatmap"],["basket","Baskets"],["attend","Attendance"],["goal","Goal"],["dtchart","Downtime"],["selfcalc","Calculator"],["undo","Recycle bin"],["log","History log"]];
+const toolsOn=()=>TOOLS.filter(([k])=>can(k));
+function trayHTML(){
+  const T=toolsOn();if(!T.length)return `<div class="tray"><p class="pvnote">No tools are switched on for you.</p></div>`;
+  if(!T.some(([k])=>k===view.tool))view.tool=T[0][0];
+  return `<div class="tray"><div class="ttabs">${T.map(([k,n])=>`<button class="tt ${view.tool===k?"on":""}" data-tool="${k}">${n}</button>`).join("")}</div><div class="tpanel" id="tpanel"><p class="pvnote">Loading…</p></div></div>`;
+}
+function wireTray(){
+  const tp=$("#tpanel");if(!tp)return;
+  document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>{view.tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(x=>x.classList.toggle("on",x===b));renderTool()});
+  renderTool();
+}
+async function monthDays(ym){const ds=dates().filter(d=>d.slice(0,7)===ym).sort();const out=[];for(const d of ds){const o=await loadDay(d);if(o)out.push({d,o})}return out}
+const rowsIn=o=>o.rows.filter(inScope).filter(r=>pfOK(r)&&tmOK(r));
+const bar=(v,max,cls)=>`<div class="hb"><i class="${cls||""}" style="width:${Math.max(0,Math.min(100,max>0?v/max*100:0)).toFixed(1)}%"></i></div>`;
+async function renderTool(){
+  const tp=$("#tpanel");if(!tp)return;const k=view.tool,D=cur();if(!D){tp.innerHTML="";return}
+  const ym=(view.date||todayISO()).slice(0,7),T=D.tasks,t=tg(view.proc);
+  const list=rowsFiltered().map(x=>x.r);
+  const set=h=>{if($("#tpanel")===tp&&view.tool===k)tp.innerHTML=h};
+  if(k==="cal"){
+    const [y,m]=ym.split("-").map(Number),n=new Date(y,m,0).getDate(),have=new Set(dates()),td=todayISO();
+    let h=`<div class="calh"><b>${fmtMonth(ym)}</b><span class="muted">Green = saved · ✓ = day complete · red = weekday with no data</span></div><div class="cal">`;
+    for(let i=1;i<=n;i++){const d=`${ym}-${String(i).padStart(2,"0")}`,wd=new Date(d+"T12:00:00").getDay(),o=S.days[dkey(d)];
+      const cls=have.has(d)?"has":(d<td&&wd>0&&wd<6?"miss":d>td?"fut":"off");
+      h+=`<button class="cd ${cls} ${d===view.date?"cur":""}" ${have.has(d)?`data-go="${d}"`:""} title="${fmtDate(d)}"><small>${DAYS[wd][0]}</small>${i}${o&&o.closed?"<em>✓</em>":""}</button>`}
+    set(h+"</div>");
+    tp.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>guardDirty(()=>openDate(b.dataset.go)));return}
+  if(k==="top5"){
+    const rk=list.map(r=>({r,c:calc(r,T)})).filter(x=>x.c.prod>0).sort((a,b)=>b.c.pct-a.c.pct);
+    const li=(a)=>a.map((x,i)=>`<tr><td>${i+1}</td><td style="text-align:left">${esc(x.r.name)}</td><td>${esc(x.r.team||"")}</td><td><span class="pill ${band(x.c.pct,x.r.proc)}">${f2(x.c.pct)}%</span></td></tr>`).join("");
+    set(`<div class="two"><div><h5>Top 5</h5><table class="mt">${li(rk.slice(0,5))}</table></div><div><h5>Bottom 5</h5><table class="mt">${li(rk.slice(-5).reverse())}</table></div></div>`);return}
+  if(k==="teams"){
+    const g={};list.forEach(r=>{const tm=r.team||r.proc||"—";(g[tm]=g[tm]||[]).push(r)});
+    const rows=Object.entries(g).map(([tm,rs])=>({tm,n:rs.length,...sumUp(rs,T)})).sort((a,b)=>b.pct-a.pct),mx=Math.max(...rows.map(x=>x.pct),t.g);
+    set(`<table class="mt wide"><thead><tr><th style="text-align:left">Team</th><th>People</th><th>Earned hrs</th><th>Prod hrs</th><th>Productivity</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr><td style="text-align:left">${esc(x.tm)}</td><td>${x.n}</td><td>${f2(x.tot)}</td><td>${f2(x.prod)}</td><td><span class="pill ${band(x.pct)}">${f2(x.pct)}%</span></td><td style="width:30%">${bar(x.pct,mx,band(x.pct))}</td></tr>`).join("")}</tbody></table>`);return}
+  if(k==="basket"){
+    const rows=T.map(tk=>{let n=0,ppl=[];list.forEach(r=>{const v=+r.c[tk.k]||0;if(v>0){n+=v;ppl.push([r.name,v])}});return{tk,n,hrs:n/perHr(tk),ppl:ppl.sort((a,b)=>b[1]-a[1])}}).filter(x=>x.n>0).sort((a,b)=>b.hrs-a.hrs),mx=Math.max(1,...rows.map(x=>x.hrs));
+    set(`<table class="mt wide"><thead><tr><th style="text-align:left">Work basket</th><th>AHT</th><th>Count</th><th>Earned hrs</th><th>People</th><th style="text-align:left">Top people</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr><td style="text-align:left">${esc(shortName(x.tk.name))}</td><td>${x.tk.aht}</td><td>${x.n.toLocaleString("en-IN")}</td><td>${f2(x.hrs)}</td><td>${x.ppl.length}</td><td style="text-align:left">${esc(x.ppl.slice(0,3).map(p=>p[0].split(" ")[0]+" ("+p[1]+")").join(", "))}</td><td style="width:18%">${bar(x.hrs,mx,"p-hi")}</td></tr>`).join("")||`<tr><td colspan="7">No counts on screen.</td></tr>`}</tbody></table>`);return}
+  if(k==="attend"){
+    const g={};list.forEach(r=>{const tm=r.team||r.proc||"—";const a=g[tm]=g[tm]||{p:0,l:0,h:0};const full=+r.full||0,lv=+r.lv||0;if(lv>0&&lv>=full)a.l++;else if(lv>0)a.h++;else a.p++});
+    const tot=Object.values(g).reduce((s,a)=>({p:s.p+a.p,l:s.l+a.l,h:s.h+a.h}),{p:0,l:0,h:0});
+    set(`<div class="kp"><span>Present<b>${tot.p}</b></span><span>Half day<b>${tot.h}</b></span><span>Leave<b>${tot.l}</b></span><span>Attendance<b>${f2((tot.p+tot.h/2)/Math.max(1,tot.p+tot.h+tot.l)*100)}%</b></span></div>
+      <table class="mt wide"><thead><tr><th style="text-align:left">Team</th><th>Present</th><th>Half day</th><th>Leave</th></tr></thead><tbody>${Object.entries(g).map(([tm,a])=>`<tr><td style="text-align:left">${esc(tm)}</td><td>${a.p}</td><td>${a.h}</td><td>${a.l}</td></tr>`).join("")}</tbody></table>`);return}
+  if(k==="dtchart"){
+    const sums=DT.map(([dk])=>[dk,list.reduce((a,r)=>a+(+r.dt[dk]||0),0)/(S.cfg.dtUnit==="min"?60:1)]).sort((a,b)=>b[1]-a[1]),mx=Math.max(0.01,...sums.map(x=>x[1])),all=sums.reduce((a,x)=>a+x[1],0);
+    set(`<p class="pvnote">Total downtime on screen: <b>${f2(all)} hrs</b> (about ${f2(all/Math.max(1,S.cfg.hpd))} person-days)</p><table class="mt wide">${sums.map(([dk,v])=>`<tr><td style="text-align:left;width:160px">${esc(lab("dt_"+dk))}</td><td style="width:70px">${f2(v)} h</td><td>${bar(v,mx,"p-md")}</td></tr>`).join("")}</table>`);return}
+  if(k==="selfcalc"){
+    set(`<p class="pvnote">Check your own number. Nothing is saved.</p>
+      <div class="mrow"><label>Work basket<select id="scB">${T.map(x=>`<option value="${x.k}">${esc(shortName(x.name))} · AHT ${x.aht}</option>`).join("")}</select></label><label>Count<input id="scN" type="number" min="0"></label><button class="cap sm teal" id="scAdd">Add</button></div>
+      <div id="scL" class="pvnote" style="margin-top:6px"></div>
+      <div class="mrow"><label>Hours (100% − leave)<input id="scH" type="number" value="${f2(S.cfg.hpd)}"></label><label>Downtime (${S.cfg.dtUnit==="min"?"min":"hrs"})<input id="scD" type="number" value="0"></label></div>
+      <div class="kp" id="scR"></div>`);
+    const items=[];const paint=()=>{const tot=items.reduce((a,x)=>a+x.n/perHr(x.t),0),hrs=+$("#scH").value||0,dtv=(+$("#scD").value||0)/(S.cfg.dtUnit==="min"?60:1),pr=hrs-dtv,p=pr>0?tot/pr*100:0;
+      $("#scL").innerHTML=items.map((x,i)=>`${esc(shortName(x.t.name))}: ${x.n} → ${f2(x.n/perHr(x.t))} h <button class="rm" data-sci="${i}">✕</button>`).join("<br>")||"Add baskets and counts above.";
+      $("#scR").innerHTML=`<span>Earned hrs<b>${f2(tot)}</b></span><span>Production hrs<b>${f2(pr)}</b></span><span>Productivity<b class="${band(p)}">${f2(p)}%</b></span>`;
+      $("#scL").querySelectorAll("[data-sci]").forEach(b=>b.onclick=()=>{items.splice(+b.dataset.sci,1);paint()})};
+    $("#scAdd").onclick=()=>{const n=+$("#scN").value;if(!(n>0)){toast("Enter a count");return}items.push({t:T.find(x=>x.k===$("#scB").value),n});$("#scN").value="";paint()};
+    $("#scH").oninput=paint;$("#scD").oninput=paint;paint();return}
+  if(k==="undo"){
+    const L=await binList();
+    set(L.length?`<table class="mt wide"><thead><tr><th style="text-align:left">Date</th><th>Process</th><th>Why</th><th>When</th><th>By</th><th></th></tr></thead><tbody>${L.map((e,i)=>`<tr><td style="text-align:left">${fmtDate(e.d)}</td><td>${esc(e.p)}</td><td>${esc(e.why||"")}</td><td>${new Date(e.at).toLocaleString("en-IN")}</td><td>${esc(e.pc||"")}</td><td><button class="cap sm" data-rs="${i}">Restore</button></td></tr>`).join("")}</tbody></table><p class="pvnote">Kept for 30 days.</p>`:`<p class="pvnote">The recycle bin is empty. Replaced and deleted dates appear here for 30 days.</p>`);
+    tp.querySelectorAll("[data-rs]").forEach(b=>b.onclick=()=>{const e=L[+b.dataset.rs];
+      ask("restore","Restore "+fmtDate(e.d)+"?","This version comes back as the saved data for that date"+(e.p!==view.proc?" ("+esc(e.p)+")":"")+". The current version, if any, goes to the bin.","Restore",async()=>{
+        const o=await binGet(e);if(!o){toast("Couldn't read that bin entry");return}const pp=view.proc;view.proc=e.p;const curO=await loadDay(e.d);if(curO)await binPut(e.d,curO,"Before restore");await persistDay(e.d,clone(o));logAct("restore",e.d);await openDate(e.d);renderRail();if(pp!==e.p)toast("Switched to "+e.p);toast("Restored "+fmtDate(e.d))})});return}
+  if(k==="log"){
+    const L=(await readLog()).slice(0,300);
+    set(L.length?`<div class="pvw" style="max-height:340px"><table><thead><tr><th>When</th><th>PC</th><th>Action</th><th>Process</th><th>Date</th><th>Note</th></tr></thead><tbody>${L.map(e=>`<tr><td>${new Date(e.at).toLocaleString("en-IN")}</td><td>${esc(e.pc)}</td><td>${esc(ACTN[e.a]||e.a)}</td><td>${esc(e.p||"")}</td><td>${e.d?esc(e.d):""}</td><td style="text-align:left">${esc(e.n||"")}</td></tr>`).join("")}</tbody></table></div>`:`<p class="pvnote">No actions logged yet.</p>`);return}
+  /* month-based tools */
+  set(`<p class="pvnote">Loading ${fmtMonth(ym)}…</p>`);
+  const MD=await monthDays(ym);
+  if(k==="month"){
+    const P={};MD.forEach(({d,o})=>rowsIn(o).forEach(r=>{const c=calc(r,o.tasks),key=nameKey(r.name);const p=P[key]=P[key]||{name:r.name,team:r.team,days:0,tot:0,prod:0,lv:0,hd:0,pcts:[]};
+      const full=+r.full||0,lv=+r.lv||0;if(lv>0&&lv>=full)p.lv++;else{if(lv>0)p.hd++;if(c.prod>0){p.days++;p.tot+=c.total;p.prod+=c.prod;p.pcts.push(c.pct)}}}));
+    const arr=Object.values(P).map(p=>{const avg=p.prod>0?p.tot/p.prod*100:0,m=p.pcts.reduce((a,x)=>a+x,0)/Math.max(1,p.pcts.length),sd=Math.sqrt(p.pcts.reduce((a,x)=>a+(x-m)**2,0)/Math.max(1,p.pcts.length)),cons=p.pcts.length>1&&m>0?Math.max(0,100-sd/m*100):null;return{...p,avg,cons}}).sort((a,b)=>b.avg-a.avg);
+    view.monthRows=arr;
+    set(`<div class="calh"><b>${fmtMonth(ym)} · ${MD.length} dates · ${arr.length} people</b><button class="cap sm teal" id="mExp">Export month</button></div>
+      <div class="pvw" style="max-height:380px"><table><thead><tr><th>User Name</th><th>Team</th><th>Days worked</th><th>Leave</th><th>Half day</th><th>Earned hrs</th><th>Prod hrs</th><th>Avg productivity</th><th>Consistency</th></tr></thead><tbody>
+      ${arr.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.team||"")}</td><td>${p.days}</td><td>${p.lv}</td><td>${p.hd}</td><td>${f2(p.tot)}</td><td>${f2(p.prod)}</td><td><span class="pill ${band(p.avg)}">${f2(p.avg)}%</span></td><td>${p.cons==null?"—":`${Math.round(p.cons)} · ${p.cons>=85?"Stable":p.cons>=65?"OK":"Up & down"}`}</td></tr>`).join("")}</tbody></table></div>`);
+    const ex=$("#mExp");if(ex)ex.onclick=()=>exportMonth(ym,arr);return}
+  if(k==="goal"){
+    const goal=+S.cfg.goal||t.g,s=MD.reduce((a,{o})=>{const x=sumUp(rowsIn(o),o.tasks);return{tot:a.tot+x.tot,prod:a.prod+x.prod}},{tot:0,prod:0}),mtd=s.prod>0?s.tot/s.prod*100:0;
+    set(`<div class="kp"><span>Month goal<b>${f2(goal)}%</b></span><span>Month to date<b class="${mtd>=goal?"p-hi":"p-lo"}">${f2(mtd)}%</b></span><span>Gap<b>${mtd>=goal?"On track ✓":f2(goal-mtd)+" to go"}</b></span><span>Dates so far<b>${MD.length}</b></span></div>
+      <div class="gbar"><i style="width:${Math.min(100,goal>0?mtd/goal*100:0).toFixed(1)}%" class="${mtd>=goal?"p-hi":"p-md"}"></i><span>${f2(goal>0?mtd/goal*100:0)}% of goal</span></div>`);return}
+  if(k==="week"){
+    const base=new Date((view.date||todayISO())+"T12:00:00"),mon=new Date(base);mon.setDate(base.getDate()-((base.getDay()+6)%7));
+    const wd=[...Array(7)].map((_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return new Date(x-x.getTimezoneOffset()*6e4).toISOString().slice(0,10)});
+    const W=[];for(const d of wd){const o=dates().includes(d)?await loadDay(d):null;W.push({d,o})}
+    const P={};W.forEach(({d,o},i)=>{if(!o)return;rowsIn(o).forEach(r=>{const c=calc(r,o.tasks),key=nameKey(r.name);const p=P[key]=P[key]||{name:r.name,v:Array(7).fill(null),tot:0,prod:0};if(c.prod>0){p.v[i]=c.pct;p.tot+=c.total;p.prod+=c.prod}})});
+    const arr=Object.values(P).sort((a,b)=>(b.prod>0?b.tot/b.prod:0)-(a.prod>0?a.tot/a.prod:0));
+    set(`<div class="calh"><b>Week of ${fmtDate(wd[0]).slice(0,11)}</b></div><div class="pvw" style="max-height:380px"><table><thead><tr><th>User Name</th>${wd.map(d=>`<th>${DAYS[new Date(d+"T12:00:00").getDay()]} ${+d.slice(8)}</th>`).join("")}<th>Week avg</th></tr></thead><tbody>
+      ${arr.map(p=>`<tr><td>${esc(p.name)}</td>${p.v.map(v=>`<td>${v==null?"·":`<span class="pill ${band(v)}">${f2(v)}</span>`}</td>`).join("")}<td><b>${f2(p.prod>0?p.tot/p.prod*100:0)}%</b></td></tr>`).join("")||`<tr><td colspan="9">No data this week.</td></tr>`}</tbody></table></div>`);return}
+  if(k==="heat"){
+    const ds=MD.map(x=>x.d),P={};MD.forEach(({d,o},i)=>rowsIn(o).forEach(r=>{const c=calc(r,o.tasks),key=nameKey(r.name);const p=P[key]=P[key]||{name:r.name,v:{}};if(c.prod>0)p.v[d]=c.pct;else if(+r.lv>0)p.v[d]="L"}));
+    const arr=Object.values(P).sort((a,b)=>a.name.localeCompare(b.name));
+    set(`<div class="calh"><b>${fmtMonth(ym)} heatmap</b><span class="muted">green ≥ ${t.g}% · amber ≥ ${t.a}% · red below · L = leave</span></div><div class="pvw heat" style="max-height:420px"><table><thead><tr><th>User Name</th>${ds.map(d=>`<th>${+d.slice(8)}</th>`).join("")}</tr></thead><tbody>
+      ${arr.map(p=>`<tr><td>${esc(p.name)}</td>${ds.map(d=>{const v=p.v[d];return v==null?`<td></td>`:v==="L"?`<td class="hL" title="${fmtDate(d)} · leave">L</td>`:`<td class="${band(v)}" title="${esc(p.name)} · ${fmtDate(d)} · ${f2(v)}%"></td>`}).join("")}</tr>`).join("")}</tbody></table></div>`);return}
+}
+function exportMonth(ym,arr){
+  const head=["User Name","Team","Days worked","Leave","Half day","Earned hrs","Prod hrs","Avg productivity %","Consistency"];
+  const out=[head,...arr.map(p=>[p.name,p.team||"",p.days,p.lv,p.hd,+f2(p.tot),+f2(p.prod),+f2(p.avg),p.cons==null?"":Math.round(p.cons)])];
+  if(S.cfg.wm!==false)out.push([],["Confidential · "+me.pc+" · "+new Date().toLocaleString("en-IN")]);
+  const fname=`Eclipse_${view.proc}_${ym}_summary`;
+  try{const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(out);ws["!cols"]=head.map((h,i)=>({wch:i<2?28:14}));XLSX.utils.book_append_sheet(wb,ws,fmtMonth(ym));XLSX.writeFile(wb,fname+".xlsx")}
+  catch(e){const csv=out.map(r=>r.map(v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\r\n");saveBlob(new Blob(["﻿"+csv],{type:"text/csv"}),fname+".csv")}
+  toast("Month summary exported");
+}
 
+const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
-  const D=S.days[d],T=visTasksFor(d),X=window.ExcelJS;
+  const D=view.work,rowsX=rowsFiltered().map(x=>x.r),T=visTasks(),X=window.ExcelJS;
   const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v16.1";
-  const name=fmtDate(d).slice(0,11);
+  const name=fmtD(d).slice(0,11);
   const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
   const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
   const F=c=>({type:"pattern",pattern:"solid",fgColor:{argb:"FF"+c}});
@@ -656,7 +1615,7 @@ async function buildStyled(d){
   const prodC=c++,pctC=c++,cmC=c++,fullC=c++,lvC=c++,nohC=c++;
   [[prodC,"prod"],[pctC,"pct"],[cmC,"cm"],[fullC,"full"],[lvC,"lv"],[nohC,"noh"]].forEach(([cc,k])=>box(1,cc,3,cc,lab(k),cc>=fullC?"C55A11":"F47B20",W));
   const div=S.cfg.dtUnit==="min"?"/60":"";
-  D.rows.forEach((r,i)=>{const R=4+i,x=calc(r,D.tasks);
+  rowsX.forEach((r,i)=>{const R=4+i,x=calc(r,D.tasks);
     const cell=(cc,v,fill,fmt,font)=>{const e=ws.getCell(R,cc);e.value=v;e.border=BOX;if(fill)e.fill=F(fill);if(fmt)e.numFmt=fmt;e.font=font||{size:10,name:"Calibri"};e.alignment={horizontal:cc<=2?"left":"center",vertical:"middle"};return e};
     cell(1,r.proc,"D9E5F2",null,K);cell(2,r.name,"2F55A4",null,W);
     cols.forEach(({t,cc,tc})=>{const n=r.c[t.k];cell(cc,n>0?n:null,"C6EFCE");cell(tc,{formula:`IFERROR(${L(cc)}${R}/${L(cc)}$3,0)`,result:+(x.times[t.k]||0).toFixed(4)},"C6EFCE","0.00")});
@@ -669,11 +1628,12 @@ async function buildStyled(d){
     cell(pctC,{formula:`IFERROR(${L(totC)}${R}/${L(prodC)}${R},0)`,result:+(x.pct/100).toFixed(6)},x.pct>=S.cfg.g?"C6EFCE":x.pct>=S.cfg.a?"FFEB9C":"FFC7CE","0.00%",K);
     cell(cmC,r.cm||null,"FFFFFF");
   });
+  if(S.cfg.wm!==false){const R=4+rowsX.length+1;ws.getCell(R,2).value="Confidential · "+me.pc+" · "+new Date().toLocaleString("en-IN");ws.getCell(R,2).font={italic:true,size:9,color:{argb:"FF7F93A8"}};ws.headerFooter={oddFooter:"&LConfidential · "+me.pc+"&R&D &T"}}
   ws.getColumn(1).width=11;ws.getColumn(2).width=28;
   for(let k=3;k<c;k++)ws.getColumn(k).width=k>=dt0?11:10;ws.getColumn(cmC).width=22;
   ws.getRow(1).height=44;ws.getRow(2).height=30;ws.getRow(3).height=18;
-  ws.autoFilter={from:{row:3,column:1},to:{row:3+D.rows.length,column:c-1}};
-  return{buf:await wb.xlsx.writeBuffer(),fname:"Eclipse_DBM_"+d+".xlsx"};
+  ws.autoFilter={from:{row:3,column:1},to:{row:3+rowsX.length,column:c-1}};
+  return{buf:await wb.xlsx.writeBuffer(),fname:"Eclipse_"+view.proc+"_"+d+".xlsx"};
 }
 function visTasksFor(d){const D=S.days[d];const on=D.tasks.filter(t=>D.rows.some(r=>+r.c[t.k]>0));return view.active&&on.length?on:D.tasks}
 function saveBlob(blob,fname){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
@@ -687,7 +1647,7 @@ async function styledExport(d,share){
     if(share){
       const file=new File([blob],fname,{type});
       if(navigator.canShare&&navigator.canShare({files:[file]})){
-        try{await navigator.share({files:[file],title:"Alpha NextGen Eclipse · "+fmtDate(d)});toast("Shared");return}catch(e){if(e&&e.name==="AbortError")return}
+        try{await navigator.share({files:[file],title:"Alpha NextGen Eclipse · "+fmtD(d)});toast("Shared");return}catch(e){if(e&&e.name==="AbortError")return}
       }
       saveBlob(blob,fname);toast("Downloaded "+fname+". Attach it in Outlook or Teams to share.");return;
     }
@@ -697,15 +1657,15 @@ async function styledExport(d,share){
 
 /* ---------- plain export fallback (.xlsx via SheetJS, else .csv) ---------- */
 function sheetRows(d){
-  const D=S.days[d],T=D.tasks;
+  const D=view.work,T=visTasks();
   const head=[lab("proc"),lab("emp"),"Team",...T.flatMap(t=>[t.name+" (AHT "+t.aht+")",lab("time")]),lab("total"),...DT.map(x=>lab("dt_"+x[0])),lab("tdt"),lab("prod"),lab("pct"),lab("cm"),lab("full"),lab("lv"),lab("noh")];
   const n=v=>+f2(v);const out=[head];
-  D.rows.forEach(r=>{const c=calc(r,T);out.push([r.proc,r.name,r.team,...T.flatMap(t=>[r.c[t.k]??"",n(c.times[t.k])]),n(c.total),...DT.map(([k])=>r.dt[k]??""),n(c.dtHr),n(c.prod),+(c.pct/100).toFixed(4),r.cm||"",r.full??"",r.lv??"",n(c.hours)])});
+  rowsFiltered().map(x=>x.r).forEach(r=>{const c=calc(r,D.tasks);out.push([r.proc,r.name,r.team,...T.flatMap(t=>[r.c[t.k]??"",n(c.times[t.k])]),n(c.total),...DT.map(([k])=>r.dt[k]??""),n(c.dtHr),n(c.prod),+(c.pct/100).toFixed(4),r.cm||"",r.full??"",r.lv??"",n(c.hours)])});
   return{head,out};
 }
 function exportDates(ds){
   if(!ds.length)return;
-  const fname="Eclipse_DBM_"+(ds.length===1?ds[0]:ds[0].slice(0,7)+"_month");
+  const fname="Eclipse_"+view.proc+"_"+(ds.length===1?ds[0]:ds[0].slice(0,7)+"_month");
   try{
     if(typeof XLSX==="undefined")throw 0;
     const wb=XLSX.utils.book_new();
@@ -713,58 +1673,321 @@ function exportDates(ds){
       ws["!cols"]=head.map((h,i)=>({wch:i<3?26:Math.max(9,Math.min(34,String(h).length+2))}));
       const pc=head.indexOf(lab("pct"));for(let r=1;r<out.length;r++){const a=XLSX.utils.encode_cell({r,c:pc});if(ws[a])ws[a].z="0.00%"}
       ws["!autofilter"]={ref:XLSX.utils.encode_range({s:{r:0,c:0},e:{r:out.length-1,c:head.length-1}})};
-      XLSX.utils.book_append_sheet(wb,ws,fmtDate(d).slice(0,11))});
+      XLSX.utils.book_append_sheet(wb,ws,fmtD(d).slice(0,11))});
     XLSX.writeFile(wb,fname+".xlsx");
   }catch(e){
-    const csv=ds.map(d=>{const {out}=sheetRows(d);return [[fmtDate(d)],...out].map(r=>r.map(v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\r\n")}).join("\r\n\r\n");
+    const csv=ds.map(d=>{const {out}=sheetRows(d);return [[fmtD(d)],...out].map(r=>r.map(v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\r\n")}).join("\r\n\r\n");
     const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download=fname+".csv";document.body.appendChild(a);a.click();a.remove();
   }
-  toast(ds.length===1?"Exported "+fmtDate(ds[0]):"Exported "+ds.length+" dates of "+fmtMonth(ds[0].slice(0,7))+", one sheet per date");
+  toast(ds.length===1?"Exported "+fmtD(ds[0]):"Exported "+ds.length+" dates of "+fmtMonth(ds[0].slice(0,7))+", one sheet per date");
+}
+/* ---------- ADMIN: 3 pages (master password) ---------- */
+/* Admin button shows only on the Admin PC (remembered in this browser), unless switched off in Admin */
+const adminBtnOK=()=>S.cfg.adminMine===false||LS.get("adminpc",false)||(LOCK_ON&&isBuiltInAdmin(me.pc));
+function openAdminLogin(){
+  modal(`<h3>Admin</h3><p style="color:var(--muted);margin:0">Enter the master password.</p>
+   <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div>
+   <label class="chk" style="padding:8px 0 0"><input type="checkbox" id="adRem" ${LS.get("adminpc",false)?"checked":""}> Remember this PC as the Admin PC (Admin button shows here)</label><div class="err" id="adErr"></div>
+   <div class="mrow"><button class="cap amber" id="adGo">Open</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#adPw").focus();const go=()=>{if(!isMaster($("#adPw").value)){$("#adErr").textContent="Master password is wrong.";return}LS.set("adminpc",$("#adRem").checked);closeModal();setTop();openAdmin(1)};
+  $("#adGo").onclick=go;$("#adPw").onkeydown=e=>{if(e.key==="Enter")go()};
+}
+$("#btnAdmin").onclick=openAdminLogin;
+let brandClicks=[];
+document.querySelector(".top .brand").addEventListener("click",()=>{const t=Date.now();brandClicks=brandClicks.filter(x=>t-x<1500).concat(t);if(brandClicks.length>=3){brandClicks=[];if($("#adminPg").hidden)openAdminLogin()}});
+let AD=null,ADF={q:"",role:"",team:"",sel:new Set()};
+const ROLEN=r=>(ROLES.find(x=>x[0]===r)||[])[1]||r;
+function openAdmin(page){
+  AD=AD||clone(S.cfg);AD.page=page;
+  $("#adminPg").hidden=false;document.body.style.overflow="hidden";
+  $("#adminPg").innerHTML=`<div class="apin">
+    <div class="ahead"><div><div class="brand" style="font-size:18px">Admin <span>Control</span></div><div class="exp" style="color:var(--muted)">Changes apply after <b>Save & apply</b>${FS.dir?" · saved to the data folder, so every PC gets them":" · saved on this PC (connect a data folder to share them)"}</div></div>
+      <div class="atabs">${[["1","① Access control"],["2","② Processes & screen"],["3","③ Data & system"]].map(([p,n])=>`<button class="cap sm ${page==p?"on teal":""}" data-pg="${p}">${n}</button>`).join("")}</div>
+      <div class="grow"></div><span class="dirty" id="adDirty" hidden>● Not saved yet</span><button class="cap amber sm" id="adSave">Save & apply</button><button class="cap sm" id="adClose">Close</button></div>
+    <div class="abody">${page===1?adminPage1():page===2?adminPage2():adminPage3()}</div></div>`;
+  const P=$("#adminPg");
+  P.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>openAdmin(+b.dataset.pg));
+  $("#adClose").onclick=()=>{const close=()=>{AD=null;$("#adminPg").hidden=true;document.body.style.overflow=""};if(AD.changed){ask(null,"Close without saving?","Your Admin changes are not saved yet.","Close anyway",close,true)}else close()};
+  $("#adSave").onclick=async()=>{const pg=AD.page;delete AD.page;delete AD.changed;Object.assign(S.cfg,clone(AD));fixCfg();await save(true);await fsWriteConfig();logAct("settings");resolveMe();renderAll();toast("Settings saved"+(FS.dir?" and shared through the data folder":""));AD=clone(S.cfg);openAdmin(pg)};
+  /* generic binding: data-k="path" on inputs */
+  P.querySelectorAll("[data-k]").forEach(el=>{el.addEventListener(el.type==="checkbox"?"change":"input",()=>{setPath(AD,el.dataset.k,el.type==="checkbox"?el.checked:el.type==="number"?(el.value===""?"":+el.value):el.value);adChanged();renderNoticePreview()})});
+  if(AD.changed)$("#adDirty").hidden=false;
+  page===1?wireAdmin1():page===2?wireAdmin2():wireAdmin3();
+}
+function adChanged(){AD.changed=true;const d=$("#adDirty");if(d)d.hidden=false}
+function setPath(o,p,v){const ks=p.split(".");let x=o;ks.slice(0,-1).forEach(k=>{x[k]=x[k]&&typeof x[k]==="object"?x[k]:{};x=x[k]});x[ks[ks.length-1]]=v}
+const tgl=(k,on,label)=>`<label class="tg"><input type="checkbox" data-k="${k}" ${on?"checked":""}><span></span>${label}</label>`;
+const GROUPS=["Actions","Screen","Tools"];
+
+/* ===== page 1: access control ===== */
+function adminPage1(){
+  const users=AD.users||[],cnt=r=>users.filter(u=>u.role===r).length,ds=dates(),last=ds[0]&&S.days[dkey(ds[0])];
+  return `
+  <section class="acard wide"><h4>📊 Quick look</h4><div class="kp">
+    <span>PCs registered<b>${users.length+ALLOWED_PCS.length}</b></span><span>Data Entry<b>${cnt("entry")}</b></span><span>Managers<b>${cnt("manager")}</b></span><span>Employees<b>${cnt("employee")}</b></span>
+    <span>Dates saved (${esc(view.proc)})<b>${ds.length}</b></span><span>Last date<b style="font-size:13px">${ds[0]?fmtDate(ds[0]).slice(0,11):"—"}</b></span><span>Last saved by<b style="font-size:13px">${last&&last.pc?esc(last.pc):"—"}</b></span><span>Login<b style="font-size:13px">${LOCK_ON?"ON":"OFF (testing)"}</b></span></div></section>
+
+  <section class="acard wide"><h4>🧪 Test the screen</h4>
+    <p class="ahelp">See the tool exactly as someone else sees it. Nothing is saved. Use <b>Back to Admin</b> at the top to return.</p>
+    <div class="mrow"><label>As a PC from the list<select id="asPc"><option value="">— pick a PC —</option>${users.map(u=>`<option value="${esc(u.pc)}">${esc(u.pc)} · ${esc(u.name||"")} · ${ROLEN(u.role)}</option>`).join("")}</select></label><button class="cap teal sm" id="asPcGo">View as this PC</button>
+    <span style="width:18px"></span>
+    <label>Or as a role<select id="asRole">${ROLES.slice(1).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select></label><label>Name (own row)<input id="asName" placeholder="ABIMELAK TONY"></label><label>Team (own team)<input id="asTeam" placeholder="TM-VINESH KUMAR"></label><button class="cap sm" id="asGo">View as role</button></div>
+    ${LOCK_ON?"":`<p class="ahelp">Login is <b>OFF</b> while testing, so PC rules apply only in this test view. Turn login on later in the file: <code>LOCK_ON = true</code>.</p>`}</section>
+
+  <section class="acard wide"><h4>🔐 Role defaults</h4>
+    <p class="ahelp"><b>On</b> switches a feature off for everyone (you too) when unticked. The role columns are the default for every PC of that role. A PC can be changed one by one in the big table below. The <span class="stag">green tag</span> is the short name used as the column heading in that table.</p>
+    <div class="utable" style="max-height:420px"><table class="perm"><thead><tr><th>Feature</th><th>On</th><th>Admin</th>${ROLE3.map(r=>`<th>${ROLEN(r)}</th>`).join("")}</tr></thead><tbody>
+      ${GROUPS.map(g=>`<tr class="grp"><td colspan="6">${g==="Actions"?"Buttons and actions":g==="Screen"?"Screen parts":"▼ Tools tray"}</td></tr>`+FEAT.filter(f=>f[3]===g).map(([f,n,sh])=>`<tr><td>${n} <span class="stag" title="Short name in the PC table below">${esc(sh)}</span></td><td><input type="checkbox" data-fon="${f}" ${(AD.fon||{})[f]!==false?"checked":""}></td><td><input type="checkbox" checked disabled></td>${ROLE3.map(r=>`<td><input type="checkbox" data-pf="${r}:${f}" ${AD.perms[r][f]?"checked":""}></td>`).join("")}</tr>`).join("")).join("")}
+      <tr class="scope"><td><b>What they can see</b></td><td></td><td>Everything</td>${ROLE3.map(r=>`<td><select data-sc="${r}">${[["all","Everyone"],["team","Own team"],["own","Own row"]].map(([v,n])=>`<option value="${v}" ${AD.scope[r]===v?"selected":""}>${n}</option>`).join("")}</select></td>`).join("")}</tr>
+    </tbody></table></div></section>
+
+  <section class="acard wide"><h4>👥 Every PC, every access <span class="muted" id="uCount"></span></h4>
+    <p class="ahelp">Click a box to change it for that PC only: <span class="pp inh">✓</span> = role default (faded) → <span class="pp y">✓</span> allow → <span class="pp n">✗</span> block → back to default. ⭐ = this PC has custom access. Hover a column heading to see the full name.</p>
+    <div class="mrow ubar">
+      <input id="uQ" placeholder="Search PC or name" value="${esc(ADF.q)}" style="max-width:190px">
+      <select id="uR" style="max-width:150px"><option value="">All roles</option>${ROLES.slice(1).map(([k,n])=>`<option value="${k}" ${ADF.role===k?"selected":""}>${n}</option>`).join("")}</select>
+      <select id="uT" style="max-width:170px"><option value="">All teams</option>${[...new Set(users.map(u=>u.team).filter(Boolean))].sort().map(t=>`<option ${ADF.team===t?"selected":""}>${esc(t)}</option>`).join("")}</select>
+      <span class="muted" id="uSelN">0 selected</span>
+      <select id="uSetRole" style="max-width:150px">${ROLES.slice(1).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select><button class="cap sm" id="uApplyRole">Apply role to selected</button>
+      <input type="date" id="uSetTill" style="max-width:150px"><button class="cap sm" id="uApplyTill">Set valid till</button>
+      <button class="cap sm" id="uResetSel" title="Remove custom access from the selected PCs">Reset custom</button>
+      <button class="cap sm danger" id="uDelSel">Remove selected</button>
+    </div>
+    <div class="utable big" id="uTable"></div>
+    <div class="mrow"><label>Add PCs (one per line: <code>PC, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;LHTU05CG2122XYZ, manager, SANKETH, SANKETH&#10;LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
+    <div class="err" id="uErr"></div></section>`;
+}
+function effPerm(u,f){if(u.role==="admin")return 1;if(u.ov&&u.ov[f]!=null)return u.ov[f];return (AD.perms[u.role]||{})[f]?1:0}
+const isCustom=u=>(u.ov&&Object.keys(u.ov).length)||u.scope||Array.isArray(u.procs);
+function userRows(){
+  const q=norm(ADF.q);
+  return (AD.users||[]).map((u,i)=>({u,i})).filter(({u})=>(!q||norm(u.pc+" "+(u.name||"")).includes(q))&&(!ADF.role||u.role===ADF.role)&&(!ADF.team||u.team===ADF.team));
+}
+function pcTable(){
+  const rows=userRows(),PR=(AD.procs&&AD.procs.length?AD.procs:PROC0);
+  const pill=(u,i,f)=>{if(u.role==="admin")return `<span class="pp y lk">✓</span>`;const o=u.ov&&u.ov[f]!=null?u.ov[f]:null,d=(AD.perms[u.role]||{})[f]?1:0;
+    return o==null?`<button class="pp inh ${d?"":"x"}" data-pu="${i}" data-f="${f}">${d?"✓":"✗"}</button>`:`<button class="pp ${o?"y":"n"}" data-pu="${i}" data-f="${f}">${o?"✓":"✗"}</button>`};
+  const procCell=(u,i)=>PR.map(p=>{const def=(p.roles||{})[u.role]!==0&&p.status!=="hidden",on=u.role==="admin"?true:Array.isArray(u.procs)?u.procs.includes(p.k):def;
+    return `<button class="pc2 ${on?"on":""} ${Array.isArray(u.procs)||u.role==="admin"?"":"inh"}" data-pp="${i}" data-p="${esc(p.k)}" ${u.role==="admin"?"disabled":""}>${esc(p.label||p.k)}</button>`}).join("")+(Array.isArray(u.procs)?`<button class="pc2 rst" data-ppr="${i}" title="Back to role default">↺</button>`:"");
+  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">PC number</th><th rowspan="2" class="s2">Name</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
+  const head2=`<tr>${FEAT.map(([f,n,s])=>`<th class="fh" title="${esc(n)}">${esc(s)}</th>`).join("")}</tr>`;
+  const adm=ALLOWED_PCS.map(p=>`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(p.toUpperCase())}</td><td class="s2">You (built in)</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`).join("");
+  const body=rows.map(({u,i})=>`<tr class="${ADF.sel.has(u.pc)?"sel":""}"><td class="s0"><input type="checkbox" data-us="${esc(u.pc)}" ${ADF.sel.has(u.pc)?"checked":""}></td>
+    <td class="s1 mono">${isCustom(u)?"⭐ ":""}${esc(u.pc)}</td>
+    <td class="s2"><input data-un="${i}" value="${esc(u.name||"")}" placeholder="name"></td>
+    <td><input data-ut="${i}" value="${esc(u.team||"")}" placeholder="team"></td>
+    <td><select data-ur="${i}">${ROLES.map(([k,n])=>`<option value="${k}" ${k===u.role?"selected":""}>${n}</option>`).join("")}</select></td>
+    <td><input type="date" data-uu="${i}" value="${esc(u.until||"")}"></td>
+    <td>${u.role==="admin"?"All":`<select data-usc="${i}"><option value="">Role (${({all:"All",team:"Team",own:"Own"})[AD.scope[u.role]]||"All"})</option>${[["all","All"],["team","Own team"],["own","Own row"]].map(([v,n])=>`<option value="${v}" ${u.scope===v?"selected":""}>${n}</option>`).join("")}</select>`}</td>
+    <td class="pcs">${procCell(u,i)}</td>
+    ${FEAT.map(([f])=>`<td>${pill(u,i,f)}</td>`).join("")}
+    <td><button class="x" data-ud="${i}" aria-label="Remove ${esc(u.pc)}">✕</button></td></tr>`).join("");
+  $("#uTable").innerHTML=`<table><thead>${head1}${head2}</thead><tbody>${adm}${body||`<tr><td colspan="99" style="padding:16px;color:var(--muted)">${(AD.users||[]).length?"No PC matches the filter.":"No PCs yet. Add them below."}</td></tr>`}</tbody></table>`;
+  $("#uCount").textContent=`· ${rows.length} of ${(AD.users||[]).length+ALLOWED_PCS.length} PCs shown`;
+  $("#uSelN").textContent=ADF.sel.size+" selected";
+}
+function wireAdmin1(){
+  const P=$("#adminPg");pcTable();
+  $("#asPcGo").onclick=()=>{const u=(AD.users||[]).find(x=>x.pc===$("#asPc").value);if(!u){toast("Pick a PC first");return}
+    if(AD.changed){Object.assign(S.cfg,clone({...AD,page:undefined,changed:undefined}));fixCfg()}
+    view.as={pc:u.pc,role:u.role,name:u.name||"",team:u.team||""};closeAdminForTest()};
+  $("#asGo").onclick=()=>{view.as={pc:"—",role:$("#asRole").value,name:$("#asName").value.trim(),team:$("#asTeam").value.trim()};closeAdminForTest()};
+  P.querySelectorAll("[data-pf]").forEach(c=>c.onchange=()=>{const [r,f]=c.dataset.pf.split(":");AD.perms[r][f]=c.checked?1:0;adChanged();pcTable()});
+  P.querySelectorAll("[data-fon]").forEach(c=>c.onchange=()=>{AD.fon=AD.fon||{};if(c.checked)delete AD.fon[c.dataset.fon];else AD.fon[c.dataset.fon]=false;adChanged()});
+  P.querySelectorAll("[data-sc]").forEach(s=>s.onchange=()=>{AD.scope[s.dataset.sc]=s.value;adChanged();pcTable()});
+  $("#uQ").oninput=e=>{ADF.q=e.target.value;pcTable()};$("#uR").onchange=e=>{ADF.role=e.target.value;pcTable()};$("#uT").onchange=e=>{ADF.team=e.target.value;pcTable()};
+  const U=$("#uTable");
+  U.onclick=e=>{const t=e.target;
+    const pu=t.closest("[data-pu]");if(pu){const u=AD.users[+pu.dataset.pu],f=pu.dataset.f;u.ov=u.ov||{};const o=u.ov[f];if(o==null)u.ov[f]=1;else if(o===1)u.ov[f]=0;else delete u.ov[f];if(!Object.keys(u.ov).length)delete u.ov;adChanged();pcTable();return}
+    const pp=t.closest("[data-pp]");if(pp){const u=AD.users[+pp.dataset.pp],PR=AD.procs&&AD.procs.length?AD.procs:PROC0;if(!Array.isArray(u.procs))u.procs=PR.filter(p=>(p.roles||{})[u.role]!==0&&p.status!=="hidden").map(p=>p.k);const k=pp.dataset.p;u.procs=u.procs.includes(k)?u.procs.filter(x=>x!==k):u.procs.concat(k);adChanged();pcTable();return}
+    const pr=t.closest("[data-ppr]");if(pr){delete AD.users[+pr.dataset.ppr].procs;adChanged();pcTable();return}
+    const ud=t.closest("[data-ud]");if(ud){const u=AD.users[+ud.dataset.ud];ask(null,"Remove "+esc(u.pc)+"?","This PC loses its role and custom access.","Remove",()=>{AD.users.splice(+ud.dataset.ud,1);ADF.sel.delete(u.pc);adChanged();pcTable()},true);return}
+  };
+  U.onchange=e=>{const t=e.target,d=t.dataset;
+    if(t.id==="uAll"){userRows().forEach(({u})=>t.checked?ADF.sel.add(u.pc):ADF.sel.delete(u.pc));pcTable();return}
+    if(d.us!=null){t.checked?ADF.sel.add(d.us):ADF.sel.delete(d.us);t.closest("tr").classList.toggle("sel",t.checked);$("#uSelN").textContent=ADF.sel.size+" selected";return}
+    if(d.ur!=null){AD.users[+d.ur].role=t.value;adChanged();pcTable();return}
+    if(d.usc!=null){const u=AD.users[+d.usc];if(t.value)u.scope=t.value;else delete u.scope;adChanged();pcTable();return}
+    if(d.uu!=null){const u=AD.users[+d.uu];if(t.value)u.until=t.value;else delete u.until;adChanged();return}
+  };
+  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
+  const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(u.pc));
+  $("#uApplyRole").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>u.role=$("#uSetRole").value);adChanged();pcTable();toast(s.length+" PCs set to "+ROLEN($("#uSetRole").value))};
+  $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
+  $("#uResetSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{delete u.ov;delete u.scope;delete u.procs});adChanged();pcTable();toast("Custom access removed for "+s.length+" PCs")};
+  $("#uDelSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}ask(null,"Remove "+s.length+" PCs?","They lose their role and custom access.","Remove",()=>{AD.users=AD.users.filter(u=>!ADF.sel.has(u.pc));ADF.sel.clear();adChanged();pcTable()},true)};
+  $("#uAdd").onclick=()=>{const lines=$("#uBulk").value.split(/\n/).map(l=>l.split(",").map(x=>x.trim())).filter(a=>a[0]);let n=0;const bad=[];
+    lines.forEach(([pc,r,name,team])=>{pc=(pc||"").toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
+      if(pc.length<4){bad.push(pc||"(blank)");return}const old=AD.users.find(u=>u.pc===pc);if(old)Object.assign(old,{role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({pc,role:r,name:name||"",team:team||""});n++});
+    $("#uBulk").value="";$("#uErr").textContent=bad.length?"Skipped: "+bad.join(", "):"";adChanged();openAdmin(1);toast(n+" PC"+(n===1?"":"s")+" added. Click Save & apply.")};
+}
+function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overflow="";view.team="All";view.pf="All";view.emp="All";renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
+
+/* ===== page 2: processes & screen ===== */
+function adminPage2(){
+  const PR=AD.procs&&AD.procs.length?AD.procs:(AD.procs=clone(PROC0)),n=AD.notice||(AD.notice={on:false,text:"",type:"info",speed:25});
+  return `
+  <section class="acard wide"><h4>🔘 Process buttons</h4>
+    <p class="ahelp"><b>Live</b> = opens the console (each process keeps its own dates). <b>Soon</b> = shows “coming soon”. <b>Hidden</b> = only you see it. Tick which roles see the button. A PC can be changed one by one on page ①.</p>
+    <div class="utable"><table class="perm"><thead><tr><th>Key</th><th>Button name</th><th>Status</th>${ROLE3.map(r=>`<th>${ROLEN(r)}</th>`).join("")}<th>Order</th><th></th></tr></thead><tbody>
+    ${PR.map((p,i)=>`<tr><td class="mono">${esc(p.k)}</td><td><input data-k="procs.${i}.label" value="${esc(p.label||p.k)}"></td>
+      <td><select data-k="procs.${i}.status">${[["live","Live"],["soon","Soon"],["hidden","Hidden"]].map(([v,t])=>`<option value="${v}" ${p.status===v?"selected":""}>${t}</option>`).join("")}</select></td>
+      ${ROLE3.map(r=>`<td><input type="checkbox" data-pr="${i}:${r}" ${(p.roles||{})[r]!==0?"checked":""}></td>`).join("")}
+      <td><button class="x" data-mv="${i}:-1" ${i?"":"disabled"} aria-label="Move up">↑</button><button class="x" data-mv="${i}:1" ${i<PR.length-1?"":"disabled"} aria-label="Move down">↓</button></td>
+      <td>${p.k==="DBM"?"🔒":`<button class="x" data-pdel="${i}" aria-label="Remove ${esc(p.k)}">✕</button>`}</td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="mrow"><label>New process name<input id="npN" placeholder="e.g. Claims"></label><button class="cap teal sm" id="npAdd">Add process</button></div></section>
+
+  <section class="acard wide"><h4>📢 Notice strip</h4>
+    <p class="ahelp">A thin strip at the top that scrolls from left to right on every PC that can see it.</p>
+    <div class="mrow"><label style="flex:3">Message<input data-k="notice.text" data-live="1" value="${esc(n.text||"")}" placeholder="Today: please finish data entry by 6 PM"></label>
+      <label>Type<select data-k="notice.type" data-live="1"><option value="info" ${n.type!=="urgent"?"selected":""}>Info (blue)</option><option value="urgent" ${n.type==="urgent"?"selected":""}>Urgent (red)</option></select></label>
+      <label>Speed (seconds per run)<input type="number" data-k="notice.speed" data-live="1" value="${+n.speed||25}" min="8" max="90"></label></div>
+    <div class="toggles" style="margin-top:8px">${tgl("notice.on",n.on,"Show the notice")}</div>
+    <div id="npv" style="margin-top:10px"></div></section>
+
+  <section class="acard"><h4>⏱️ Shift hours and colours</h4>
+    <div class="mrow"><label>Hours per day<input type="number" data-k="hpd" value="${AD.hpd}" step="0.5"></label><label>Working days (100%)<input type="number" data-k="wd" value="${AD.wd}"></label>
+      <label>Downtime entered in<select data-k="dtUnit"><option value="min" ${AD.dtUnit==="min"?"selected":""}>Minutes (÷ 60)</option><option value="hr" ${AD.dtUnit==="hr"?"selected":""}>Hours</option></select></label></div>
+    <div class="mrow"><label>Green from %<input type="number" data-k="g" value="${AD.g}"></label><label>Amber from %<input type="number" data-k="a" value="${AD.a}"></label></div>
+    <p class="ahelp">The shift bar on the main screen shows to PCs with “Change shift hours” (page ①). Default: Admin and Manager.</p></section>
+
+  <section class="acard"><h4>🎯 Targets per process</h4>
+    <p class="ahelp">Leave blank to use the green / amber above.</p>
+    <div class="utable"><table class="perm"><thead><tr><th>Process</th><th>Green from %</th><th>Amber from %</th></tr></thead><tbody>
+    ${PR.map(p=>`<tr><td>${esc(p.label||p.k)}</td><td><input type="number" data-k="tgt.${p.k}.g" value="${esc(((AD.tgt||{})[p.k]||{}).g||"")}"></td><td><input type="number" data-k="tgt.${p.k}.a" value="${esc(((AD.tgt||{})[p.k]||{}).a||"")}"></td></tr>`).join("")}</tbody></table></div>
+    <div class="mrow"><label>Month goal % (Goal tracker)<input type="number" data-k="goal" value="${esc(AD.goal||"")}" placeholder="${AD.g}"></label><label>Flag above % (suspicious)<input type="number" data-k="flagHi" value="${esc(AD.flagHi||150)}"></label></div></section>
+
+  <section class="acard"><h4>🔒 Lock old dates</h4>
+    <div class="mrow"><label>Lock dates older than (days, 0 = off)<input type="number" data-k="lockDays" value="${+AD.lockDays||0}" min="0"></label></div>
+    <p class="ahelp">Locked and “Day complete” dates can only be changed by you, or by PCs allowed “Change locked or old dates”.</p></section>
+
+  <section class="acard"><h4>💬 Confirm messages</h4>
+    <p class="ahelp">When on, the button asks “Are you sure?” first.</p>
+    <div class="toggles">${MSGS.map(([k,n])=>tgl("msg."+k,AD.msg[k]!==false,n)).join("")}</div></section>`;
+}
+function renderNoticePreview(){const n=AD.notice||{},el=$("#npv");if(!el)return;const sp=Math.max(8,Math.min(90,+n.speed||25));
+  el.innerHTML=String(n.text||"").trim()?`<div class="notice ${n.type==="urgent"?"urgent":""}" style="position:static;border-radius:10px"><span class="ntag">${n.type==="urgent"?"URGENT":"NOTICE"}</span><div class="ntrack"><span class="nmove" style="animation-duration:${sp}s">${esc(n.text)}</span></div></div><p class="ahelp">Preview${n.on?"":" · switched off"}</p>`:""}
+function wireAdmin2(){
+  const P=$("#adminPg");renderNoticePreview();
+  P.querySelectorAll("[data-pr]").forEach(c=>c.onchange=()=>{const [i,r]=c.dataset.pr.split(":");const p=AD.procs[+i];p.roles=p.roles||{};p.roles[r]=c.checked?1:0;adChanged()});
+  P.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{const [i,d]=b.dataset.mv.split(":").map(Number),a=AD.procs;[a[i],a[i+d]]=[a[i+d],a[i]];adChanged();openAdmin(2)});
+  P.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{const p=AD.procs[+b.dataset.pdel];ask(null,"Remove "+esc(p.label)+"?","The button goes away. Saved dates of this process stay in the data folder.","Remove",()=>{AD.procs.splice(+b.dataset.pdel,1);adChanged();openAdmin(2)},true)});
+  $("#npAdd").onclick=()=>{const n=$("#npN").value.trim(),k=n.replace(/[^A-Za-z0-9]/g,"");if(!k){toast("Type a name");return}if(AD.procs.some(p=>p.k.toLowerCase()===k.toLowerCase())){toast("That process already exists");return}
+    AD.procs.push({k,label:n,status:"soon",roles:{entry:1,manager:1,employee:1}});adChanged();openAdmin(2);toast(n+" added as Soon")};
 }
 
-/* ---------- admin (master password): expiry, PC list, defaults ---------- */
-$("#btnAdmin").onclick=()=>{
-  modal(`<h3>Admin</h3><p style="color:var(--muted);margin:0">Enter the master password.</p>
-   <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div><div class="err" id="adErr"></div>
-   <div class="mrow"><button class="cap amber" id="adGo">Open</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#adPw").focus();const go=()=>{if(!isMaster($("#adPw").value)){$("#adErr").textContent="Master password is wrong.";return}openAdmin()};
-  $("#adGo").onclick=go;$("#adPw").onkeydown=e=>{if(e.key==="Enter")go()};
-};
-function openAdmin(){
-  const pcs=allowedPCs();
-  modal(`<h3>Admin settings</h3>
-  <h4>Formulas used</h4>
-  <div class="fx">Per hour = 60 ÷ AHT (can be typed over in the heading)<br>Time = Count ÷ Per hour<br>Total = SUM of all Time<br>Total Downtime = SUM(downtime) ÷ ${S.cfg.dtUnit==="min"?"60":"1"}<br>No. of Hours = 100% − Leaves<br>Production Hours = No. of Hours − Total Downtime<br>Productivity % = Total ÷ Production Hours</div>
-  <h4>Default 100% hours for new dumps</h4>
-  <div class="mrow"><label>Hours per day<input id="sH" type="number" value="${S.cfg.hpd}"></label><label>Working days<input id="sW" type="number" value="${S.cfg.wd}"></label></div>
-  <div class="mrow"><label>Downtime entered in<select id="sDU"><option value="min" ${S.cfg.dtUnit==="min"?"selected":""}>Minutes (÷ 60)</option><option value="hr" ${S.cfg.dtUnit==="hr"?"selected":""}>Hours</option></select></label>
-    <label>Green from %<input id="sG" type="number" value="${S.cfg.g}"></label><label>Amber from %<input id="sA" type="number" value="${S.cfg.a}"></label></div>
-  <h4>Tool expiry</h4>
-  <div class="mrow"><label>Expires on<input id="sE" type="date" value="${expiry()}"></label></div>
-  <h4>Registered PCs · ${pcs.length}</h4>
-  <div class="pclist">${pcs.map(p=>`<span class="pcchip">${esc(p)} <small>pw ${esc(p.slice(-4))}</small><button data-pcdel="${esc(p)}" aria-label="Remove ${esc(p)}">✕</button></span>`).join("")}</div>
-  <div class="mrow"><textarea id="sPcNew" placeholder="Add PC names, one per line or comma separated" style="flex:1;min-height:60px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:8px"></textarea><button class="cap sm" id="sPcAdd">Add PCs</button></div>
-  <p style="font-size:12px;color:var(--muted);margin:6px 0 0">PCs added here are saved on this PC only. For all PCs, the list goes in the file (ALLOWED_PCS) — send it and it gets built in.</p>
-  <div class="err" id="sErr"></div>
-  <div class="mrow"><button class="cap amber" id="sSave">Save settings</button><button class="cap" data-close>Close</button></div>`);
-  $("#mcard").querySelectorAll("[data-pcdel]").forEach(b=>b.onclick=()=>{const p=b.dataset.pcdel;S.cfg.pcsAdd=(S.cfg.pcsAdd||[]).filter(x=>x!==p);if(!S.cfg.pcsDel.includes(p))S.cfg.pcsDel.push(p);save();openAdmin();toast(p+" removed")});
-  $("#sPcAdd").onclick=()=>{const list=$("#sPcNew").value.split(/[\s,;]+/).map(x=>x.trim().toUpperCase().replace(/\..*$/,"")).filter(x=>x.length>=4);
-    if(!list.length){$("#sErr").textContent="Enter at least one PC name.";return}
-    list.forEach(p=>{S.cfg.pcsDel=S.cfg.pcsDel.filter(x=>x!==p);if(!S.cfg.pcsAdd.includes(p))S.cfg.pcsAdd.push(p)});save();openAdmin();toast(list.length+" PC"+(list.length>1?"s":"")+" added")};
-  $("#sSave").onclick=()=>{const e=$("#sE").value;if(!e){$("#sErr").textContent="Pick an expiry date.";return}
-    Object.assign(S.cfg,{hpd:+$("#sH").value||8,wd:+$("#sW").value||21,dtUnit:$("#sDU").value,g:+$("#sG").value||85,a:+$("#sA").value||60,exp:e});
-    save(true);closeModal();setTop();renderMain();toast("Settings saved")};
+/* ===== page 3: data & system ===== */
+function adminPage3(){
+  const ds=dates(),M=AD.aht||{},seen={};
+  Object.values(S.days).forEach(o=>(o&&o.tasks||[]).forEach(t=>{if(!seen[t.k])seen[t.k]=t}));
+  const allK=[...new Set([...Object.keys(M),...Object.keys(seen)])].sort((a,b)=>((M[a]||seen[a]).name||"").localeCompare((M[b]||seen[b]).name||""));
+  return `
+  <section class="acard"><h4>📁 Team data folder</h4>
+    <p class="ahelp">Pick a folder that OneDrive / SharePoint keeps in sync. Saves go to <code>Year\\Month\\date.json</code> (other processes in their own sub folder), settings to <code>config.json</code>, the bin to <code>_bin</code>, the log to <code>_system</code>.</p>
+    <div class="fstat">${!fsSupported()?"⚠️ This browser can't connect folders. Use Chrome or Edge.":FS.dir?`✅ Connected: <b>${esc(FS.dir.name)}</b> · ${Object.keys(FS.index).length} dates in the folder`:FS.handle?`⏸️ Folder remembered, waiting for permission`:"Not connected — data is saved on this PC only"}</div>
+    <div class="mrow">${fsSupported()?`<button class="cap teal sm" id="fsC">${FS.dir?"Change folder":"Connect folder"}</button>${FS.handle&&!FS.dir?`<button class="cap sm" id="fsA">Allow access</button>`:""}${FS.dir?`<button class="cap sm" id="fsS">Sync now</button><button class="cap sm" id="fsD">Disconnect</button>`:""}`:""}</div></section>
+
+  <section class="acard"><h4>💾 Backup & restore</h4>
+    <p class="ahelp">Backup downloads every saved date of every process (${Object.keys(S.days).length} on this PC) plus settings in one file.</p>
+    <div class="mrow"><button class="cap teal sm" id="bkB">Download backup</button><label class="cap sm" style="cursor:pointer">Restore from backup<input type="file" id="bkR" accept=".json" hidden></label></div>
+    <div class="toggles" style="margin-top:8px">${tgl("autoBk",AD.autoBk!==false,"Weekly auto backup into the data folder (<code>_backup</code>)")}</div>
+    <p class="ahelp">Last auto backup: ${AD.bkAt?new Date(AD.bkAt).toLocaleString("en-IN"):"never"}.</p></section>
+
+  <section class="acard wide"><h4>🧾 AHT master list <span class="muted">· ${allK.length} baskets</span></h4>
+    <p class="ahelp">Set the AHT of each work basket once. Every dump uses these values, and the preview warns about baskets not in the list. Blank = use the file's AHT.</p>
+    <div class="mrow"><input id="ahQ" placeholder="Search basket" style="max-width:220px"><button class="cap sm" id="ahFill">Fill blanks from saved data</button><button class="cap sm" id="ahClr">Clear list</button></div>
+    <div class="utable" style="max-height:300px"><table class="perm" id="ahT"><thead><tr><th>Work basket</th><th>File AHT</th><th>Master AHT</th><th>Per hour (optional)</th></tr></thead><tbody>
+    ${allK.map(k=>{const s=seen[k]||{},m=M[k]||{};return `<tr data-ahn="${esc(norm(s.name||m.name))}"><td>${esc(shortName(s.name||m.name||k))}</td><td>${s.aht??"—"}</td><td><input type="number" step="0.01" data-ah="${k}" data-nm="${esc(s.name||m.name||k)}" value="${m.aht??""}"></td><td><input type="number" step="0.01" data-ahp="${k}" value="${m.ph??""}"></td></tr>`}).join("")||`<tr><td colspan="4">Dump a file first, the baskets appear here.</td></tr>`}
+    </tbody></table></div></section>
+
+  <section class="acard"><h4>🔤 Name mapping</h4>
+    <p class="ahelp">When the portal writes a name differently, map it once: <code>Portal name = Main name</code>, one per line.</p>
+    <div class="mrow"><textarea data-k="alias" rows="5" placeholder="SANKETH K = SANKETH KUMAR&#10;TONY,ABIMELAK = ABIMELAK TONY">${esc(AD.alias||"")}</textarea></div></section>
+
+  <section class="acard"><h4>📅 Tool expiry and safety</h4>
+    <div class="mrow"><label>Tool expires on<input type="date" data-k="exp" value="${AD.exp||APP_EXPIRY}"></label><label>Lock screen after idle (min, 0 = off)<input type="number" data-k="idleMin" value="${+AD.idleMin||0}" min="0"></label></div>
+    <div class="toggles" style="margin-top:8px">${tgl("wm",AD.wm!==false,"Watermark on Excel and print (Confidential · PC · date)")}</div>
+    <p class="ahelp">Idle lock works when login is on. Per-PC “Valid till” is on page ①.</p></section>
+
+  <section class="acard"><h4>🧮 Formulas used</h4>
+    <div class="fx">Per hour = 60 ÷ AHT (can be typed over)<br>Time = Count ÷ Per hour<br>Total = SUM of all Time<br>Total Downtime = SUM(downtime) ÷ ${AD.dtUnit==="min"?"60":"1"}<br>No. of Hours = 100% − Leaves<br>Production Hours = No. of Hours − Total Downtime<br>Productivity % = Total ÷ Production Hours</div></section>
+
+  <section class="acard"><h4>🛡️ Admin button</h4>
+    <div class="toggles">${tgl("adminMine",AD.adminMine!==false,"Show the Admin button only on the Admin PC")}</div>
+    <p class="ahelp">This PC: <b>${LS.get("adminpc",false)?"Admin PC ✓":"not the Admin PC"}</b>. On any other PC, open Admin by clicking the name <b>“Alpha NextGen Eclipse”</b> 3 times and typing the master password.</p>
+    <div class="mrow">${LS.get("adminpc",false)?`<button class="cap sm" id="apForget">Forget this PC as Admin PC</button>`:`<button class="cap sm teal" id="apSet">Make this PC the Admin PC</button>`}</div></section>
+
+  <section class="acard"><h4>📜 History log</h4><p class="ahelp">Who did Dump, Replace, Save, Delete and more, from which PC.</p><div class="mrow"><button class="cap sm teal" id="lgOpen">Open history log</button></div></section>
+
+  <section class="acard danger"><h4>⚠️ Clean up</h4>
+    <p class="ahelp">Removes every saved date from <b>this PC's browser</b> only. The data folder and backups are not touched.</p>
+    <div class="mrow"><button class="cap sm" id="wipe">Clear this PC's saved data</button></div><div id="wipeBox"></div></section>`;
+}
+async function backupObj(){const all={};if(FS.dir)for(const k of Object.keys(FS.index)){const u=unkey(k);await loadDay(u.d,u.p)}Object.keys(S.days).forEach(k=>{const o={...S.days[k]};delete o._lm;all[k]=o});return{app:"Alpha NextGen Eclipse",v:17,at:new Date().toISOString(),cfg:S.cfg,days:all}}
+function wireAdmin3(){
+  const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};const P=$("#adminPg");
+  on("#fsC",async()=>{await fsConnect();openAdmin(3)});on("#fsA",async()=>{await fsAllow();openAdmin(3)});
+  on("#fsS",async()=>{await fsSyncUp();await fsWriteConfig();await fsScan();openAdmin(3);toast("Synced with the data folder")});
+  on("#fsD",async()=>{await fsDisconnect();openAdmin(3)});
+  on("#bkB",async()=>{const b=await backupObj();saveBlob(new Blob([JSON.stringify(b)],{type:"application/json"}),"Eclipse_Backup_"+todayISO()+".json");toast("Backup of "+Object.keys(b.days).length+" dates downloaded")});
+  $("#bkR").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{let b;try{b=JSON.parse(rd.result);if(!b.days)throw 0}catch(err){toast("That file isn't an Eclipse backup");return}
+    const ks=Object.keys(b.days),have=new Set(Object.keys(S.days).concat(Object.keys(FS.index))),clash=ks.filter(k=>have.has(k)).length;
+    modal(`<h3>Restore backup?</h3><p class="pvnote">${ks.length} dates in the backup (${b.at?new Date(b.at).toLocaleString("en-IN"):""}). ${clash} of them already exist here.</p>
+      <label class="chk" style="padding:4px 0"><input type="radio" name="rm" value="merge" checked> <b>Merge</b>: add missing dates, keep the ones already here</label>
+      <label class="chk" style="padding:4px 0"><input type="radio" name="rm" value="over"> <b>Overwrite</b>: backup wins for dates that exist in both</label>
+      <label class="chk" style="padding:4px 0"><input type="checkbox" id="rmCfg"> Also restore settings, users and permissions</label>
+      <div class="mrow"><button class="cap amber" id="rmGo">Restore</button><button class="cap" data-close>Cancel</button></div>`);
+    $("#rmGo").onclick=async()=>{const over=$("#mcard").querySelector('input[name="rm"]:checked').value==="over";let c=0;
+      for(const [k,o] of Object.entries(b.days)){if(over||!have.has(k)){S.days[k]=o;await fsWriteKey(k,o);c++}}await save(true);
+      if($("#rmCfg").checked&&b.cfg){SHARED.forEach(k=>{if(b.cfg[k]!==undefined)S.cfg[k]=b.cfg[k]});fixCfg();await save(true);await fsWriteConfig();resolveMe()}
+      AD=clone(S.cfg);closeModal();await openDate(view.date||dates()[0]||null);openAdmin(3);toast(c+" dates restored")}};rd.readAsText(f);e.target.value=""};
+  P.querySelectorAll("[data-ah],[data-ahp]").forEach(el=>el.oninput=()=>{const k=el.dataset.ah||el.dataset.ahp;AD.aht=AD.aht||{};const m=AD.aht[k]=AD.aht[k]||{name:(P.querySelector(`[data-ah="${k}"]`)||{}).dataset.nm||k};
+    if(el.dataset.ah){if(el.value==="")delete m.aht;else m.aht=+el.value}else{if(el.value==="")delete m.ph;else m.ph=+el.value}
+    if(m.aht==null&&m.ph==null)delete AD.aht[k];adChanged()});
+  $("#ahQ").oninput=e=>{const q=norm(e.target.value);P.querySelectorAll("#ahT tbody tr").forEach(tr=>tr.hidden=q&&!(tr.dataset.ahn||"").includes(q))};
+  on("#ahFill",()=>{let n=0;P.querySelectorAll("[data-ah]").forEach(el=>{if(el.value==="") {const s=el.closest("tr").children[1].textContent;if(+s>0){el.value=s;el.oninput();n++}}});toast(n+" filled. Click Save & apply.")});
+  on("#ahClr",()=>ask(null,"Clear the AHT master?","Dumps will use the AHT inside each file again.","Clear",()=>{AD.aht={};adChanged();openAdmin(3)},true));
+  on("#apForget",()=>{LS.set("adminpc",false);setTop();openAdmin(3);toast("This PC is no longer the Admin PC")});
+  on("#apSet",()=>{LS.set("adminpc",true);setTop();openAdmin(3);toast("This PC is now the Admin PC")});
+  on("#lgOpen",async()=>{const L=(await readLog()).slice(0,400);modal(`<h3>History log</h3>${L.length?`<div class="pvw" style="max-height:62vh"><table><thead><tr><th>When</th><th>PC</th><th>Action</th><th>Process</th><th>Date</th><th>Note</th></tr></thead><tbody>${L.map(e=>`<tr><td>${new Date(e.at).toLocaleString("en-IN")}</td><td>${esc(e.pc)}</td><td>${esc(ACTN[e.a]||e.a)}</td><td>${esc(e.p||"")}</td><td>${esc(e.d||"")}</td><td style="text-align:left">${esc(e.n||"")}</td></tr>`).join("")}</tbody></table></div>`:`<p class="pvnote">No actions logged yet.</p>`}<div class="mrow"><button class="cap" data-close>Close</button></div>`)});
+  on("#wipe",()=>{$("#wipeBox").innerHTML=`<div class="confirm">Clear every saved date from this PC's browser?<div class="mrow"><button class="cap amber sm" id="wYes">Yes, clear</button><button class="cap sm" id="wNo">Cancel</button></div></div>`;
+    $("#wYes").onclick=async()=>{S.days={};await save(true);await openDate(dates()[0]||null);openAdmin(3);toast("This PC's saved data cleared")};$("#wNo").onclick=()=>$("#wipeBox").innerHTML=""});
 }
 
 /* ---------- start ---------- */
-function setTop(){$("#pcChip").textContent=dev.get()||(LOCK_ON?"":"TESTING");$("#expTxt").textContent="Valid till "+expiry()}
-function boot(){setTop();if(!view.date)view.date=dates()[0]||null;renderRail();renderMain()}
+function fixCfg(){
+  const c=S.cfg;c.users=Array.isArray(c.users)?c.users:[];
+  c.perms=c.perms||{};ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
+  c.scope=Object.assign({},DEFSCOPE,c.scope||{});c.msg=Object.assign({},c.msg||{});c.lab=c.lab||{};c.fon=c.fon||{};
+  /* older "screen parts" switches become global feature switches */
+  if(c.ui){Object.entries(c.ui).forEach(([k,v])=>{if(v===false)c.fon[k]=false});delete c.ui}
+  if(!Array.isArray(c.procs)||!c.procs.length)c.procs=clone(PROC0);
+  c.procs.forEach(p=>{p.roles=Object.assign({entry:1,manager:1,employee:1},p.roles||{});p.label=p.label||p.k;p.status=p.status||"soon"});
+  c.notice=c.notice||{on:false,text:"",type:"info",speed:25};c.tgt=c.tgt||{};c.aht=c.aht||{};
+  (c.pcsAdd||[]).forEach(p=>{if(!c.users.some(u=>u.pc===p)&&!isBuiltInAdmin(p))c.users.push({pc:p,role:"employee",name:"",team:""})});c.pcsAdd=[];
+}
+async function autoBackup(){
+  if(!FS.dir||S.cfg.autoBk===false||fsMode()!=="readwrite"||!["admin","entry"].includes(me.role))return;
+  if(S.cfg.bkAt&&Date.now()-S.cfg.bkAt<7*864e5)return;
+  try{const b=await backupObj();if(await fsWriteText("_backup","Eclipse_Backup_"+todayISO()+".json",JSON.stringify(b))){S.cfg.bkAt=Date.now();await save(true);await fsWriteConfig();logAct("backup","",Object.keys(b.days).length+" dates")}}catch(e){}
+}
+async function checkUpdate(){
+  if(!can("update")||!/^https?:/.test(location.protocol))return;
+  try{const t=await (await fetch(location.pathname,{cache:"no-store"})).text();const m=t.match(/const BUILD="(\d+)"/);
+    if(m&&+m[1]>+BUILD&&$("#updBar").hidden){$("#updBar").hidden=false;$("#updBar").innerHTML=`New version (build ${m[1]}) is ready. <button class="cap sm teal" onclick="location.reload()">Refresh</button>`}}catch(e){}
+}
+let idleT=null,idleLast=0;
+function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||!m||$("#app").hidden)return;idleT=setTimeout(()=>{if(view.dirty)return idleReset();view.as=null;$("#app").hidden=true;gate();toast("Locked after "+m+" minutes idle")},m*6e4)}
+["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
+async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
 function start(){if(expired())return;if(LOCK_ON)gate();else enter()}
 (async()=>{
   storeOK=await IDB.open();
   S=(await IDB.get("state"))||fresh();
   if(!S.cfg)S=fresh();
-  S.cfg=Object.assign(fresh().cfg,S.cfg);S.days=S.days||{};
+  S.cfg=Object.assign(fresh().cfg,S.cfg);S.days=S.days||{};fixCfg();
   start();
 })();
+
 </script>
