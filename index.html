@@ -397,7 +397,7 @@ td.name{min-width:215px}
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v12.2.1 · build 23.0</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v12.3.0 · build 24.0</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -420,7 +420,7 @@ td.name{min-width:215px}
 
 <div id="gate" class="gate" hidden><div class="lcard">
   <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
-  <span class="ver" style="margin-top:8px">v12.2.1 · PRODUCTION CONSOLE</span>
+  <span class="ver" style="margin-top:8px">v12.3.0 · PRODUCTION CONSOLE</span>
   <div id="gateBody"></div>
 </div></div>
 
@@ -499,7 +499,7 @@ const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
 /* ---------- build ---------- */
-const BUILD="23";
+const BUILD="24";
 
 /* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
 const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
@@ -574,9 +574,11 @@ const ident=()=>view.as||me;
 const userOf=pc=>(S.cfg.users||[]).find(u=>u.pc===pc);
 const identUser=()=>{const id=ident();return id.pc?userOf(id.pc):null};
 const featOn=f=>(S.cfg.fon||{})[f]!==false;
+const NEVER_EMP=new Set(["shift","qvcedit","unlock"]);
 function can(f){
   if(!featOn(f))return false;
   if(role()==="admin")return true;
+  if(role()==="employee"&&NEVER_EMP.has(f))return false;
   const u=identUser();if(u&&u.ov&&u.ov[f]!=null)return !!u.ov[f];
   return !!((S.cfg.perms[role()]||{})[f]);
 }
@@ -794,7 +796,7 @@ $("#lockGo").onclick=async()=>{if(!(await isMaster($("#lockPw").value))){$("#loc
   if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
   S.cfg.exp=$("#lockDate").value;await save(true);await fsWriteConfig();$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
 
-/* ===================== v12.2.1 · MSID login, locked settings, QVC, name finder ===================== */
+/* ===================== v12.3.0 · MSID login, locked settings, QVC, name finder ===================== */
 const ADMIN_MSID="ARANJA14",ADMIN_MC="LHTU05CG2122RJJ",FILE_KEY="Dwarkadesh14ar";
 const ROSTER=[];
 const roleFrom=r=>{r=String(r||"employee").toLowerCase();return r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee"};
@@ -898,19 +900,24 @@ function qvcBlock(q,s,kind){
     return `<div class="qrow ${ok?"ok":""}"><span>Tier ${i} · ${f2(th)}%</span><span>${money(m["a"+i])}</span><span>${ok?"✓ reached":need}</span></div>`}).join("");
   return `<div class="qbox"><div class="qh"><b>${kind==="util"?"Utilisation":"Productivity"}</b><span class="qv">${f2(v)}%</span><span>${t?`Tier ${t} · <b>${money(amt)}</b>`:"No tier yet"}</span></div>${rows}</div>`;
 }
+function mpFind(mp,name){const k=nameKey(name);if(!k)return null;if(mp.has(k))return mp.get(k);const kt=k.split(" ");
+  for(const [kk,v] of mp){const xt=kk.split(" "),hit=kt.filter(w=>xt.includes(w)).length;if(hit>=2||(hit===1&&kt.length===1&&xt.length===1))return v}return null}
 function qvcHTML(){
   if(!can("qvc")||view.trial||!view.date)return "";const D=cur();if(!D)return "";
-  const id=ident(),all=can("qvcall"),edit=can("qvcedit"),q=qv(view.proc),mp=qvcMap(),mo=fmtMonth(view.date.slice(0,7));
-  const mine=id.name&&findPerson(D.rows,id.name);let body="";
-  if(mine){const ap=qvApply(view.proc,mine.name),s=qvS(mp.get(nameKey(mine.name)));
+  const id=ident(),all=can("qvcall"),edit=can("qvcedit"),q=qv(view.proc),mp=qvcMap(),mo=fmtMonth(view.date.slice(0,7));let body="";
+  if(id.name){const x=mpFind(mp,id.name),ap=qvApply(view.proc,id.name),s=qvS(x);
     if(ap==="off")body=`<div class="muted" style="font-size:12px">QVC is not applied to you in this process.</div>`;
-    else{let rank=0,n=0;mp.forEach(x=>{if(x.P>0){n++;if(x.E/x.P*100>s.pp+1e-9)rank++}});
+    else if(!x)body=`<div class="muted" style="font-size:12px">No QVC data for you yet this month. It appears after a saved day that has your work.</div>`;
+    else{let rank=0,n=0;mp.forEach(v=>{if(v.P>0){n++;if(v.E/v.P*100>s.pp+1e-9)rank++}});
       const u=ap!=="prod",p=ap!=="util",tu=tierOf(q.util,s.up),tp=tierOf(q.prod,s.pp),tot=(u&&tu?q.util["a"+tu]:0)+(p&&tp?q.prod["a"+tp]:0);
       body=`<div class="qsum"><span>${s.done} days done · <b>${s.left}</b> to go</span><span>Standing <b>${s.pp>0?(rank+1)+" / "+n:"—"}</b></span><span>Amount so far <b>${money(tot)}</b></span></div><div class="qgrid">${u?qvcBlock(q,s,"util"):""}${p?qvcBlock(q,s,"prod"):""}</div>`}}
-  else if(!all)return "";
+  else if(!all)return pickHTML()||`<div class="qcard"><b>🔒 QVC is locked</b><div class="muted" style="font-size:12px;margin-top:4px">Ask Admin to link your name.</div></div>`;
   if(all)body+=`<details id="qvAll" style="margin-top:8px"><summary class="cap sm" style="display:inline-block;cursor:pointer">👥 Everyone's QVC (${scKeys().size})</summary><div id="qvAllB"></div></details>`;
   return `<div class="qcard"><div class="qtop"><b>💰 QVC · ${esc(mo)} · ${esc(view.proc)}</b><span class="grow"></span>${edit?`<button class="cap sm" id="qvEdit">Set tiers & amounts</button>`:""}</div>${body}</div>`;
 }
+function untilFrom(x){if(x==null||x==="")return "";let d;if(typeof x==="number")d=new Date(Math.round((x-25569)*864e5));else{const m=String(x).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);d=m?new Date(Date.UTC(+m[3],+m[1]-1,+m[2])):new Date(String(x))}
+  return isNaN(d)||d.getUTCFullYear()>2100?"":d.toISOString().slice(0,10)}
+function previewNote(){return view.dirty&&!view.trial&&!canD("save")&&role()!=="admin"?`<div class="bar" style="margin:8px 0;font-size:13px">👀 <b>Preview on your PC only.</b>&nbsp;This is not saved. Use <b>Trial</b> to check your own data. Your SME or Manager saves the day for everyone.</div>`:""}
 const scKeys=()=>new Set(scopedRows().map(({r})=>nameKey(r.name)));
 function wireQvc(){
   const b=$("#qvEdit");if(b)b.onclick=qvcEditor;const d=$("#qvAll");if(!d)return;
@@ -944,7 +951,7 @@ function lev(a,b){const d=[];for(let i=0;i<=a.length;i++){d[i]=[i];}for(let j=1;
 function nameScore(q,n){const a=norm(q),b=norm(n);if(!a||!b)return 0;if(b.includes(a))return 1;if([...a].sort().join("")===[...b].sort().join(""))return .95;
   let s=1-lev(a,b)/Math.max(a.length,b.length);String(n).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).forEach(w=>{if(w.length>1&&a.length>1)s=Math.max(s,(1-lev(a,w)/Math.max(a.length,w.length))*.95)});return s}
 function pickHTML(){
-  if(!can("pickname")||scope()!=="own"||view.as)return "";const id=ident();if(!id.pc||id.pc==="—")return "";
+  if(!can("pickname")||role()!=="employee"||view.as)return "";const id=ident();if(!id.pc||id.pc==="—")return "";
   const done=S.auth&&S.auth[id.pc]&&S.auth[id.pc].nm;
   if(done||(S.cfg.pick||{}).on===false)return `<div class="qcard" style="margin-top:10px"><b>🔒 Your data and QVC are locked</b><div class="muted" style="font-size:12px;margin-top:4px">${done?"Your name is linked as <b>"+esc(done)+"</b>, but it isn't in this date's data. If that is wrong, ask Admin to reset your login.":"Ask Admin to link your name."}</div></div>`;
   return `<div class="qcard" style="margin-top:10px"><b>🔒 Pick your name first</b><div class="muted" style="font-size:12px;margin:4px 0">Type your name in any spelling (even letters mixed up). Your data and QVC then open for you only, and nobody else's. You can pick only once.</div>
@@ -997,7 +1004,7 @@ function wireAdminX(){
     const ks=Object.keys(FS.index);let n=0;for(const k of ks){const u=unkey(k),o=await loadDay(u.d,u.p);if(o){await fsWriteKey(k,o);n++}}toast(n+" files locked")});
   $("#adXlsOut").onclick=()=>{const rows=[["MSID","Code","Device name","Role","Name","Team","Valid till"],...(AD.users||[]).map(u=>[u.pc,u.code||"",u.mc||"",ROLEN(u.role),u.name||"",u.team||"",u.until||""])];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),"Access");XLSX.writeFile(wb,"Eclipse_Access_Register_"+todayISO()+".xlsx")};
   $("#adXlsIn").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const wb=XLSX.read(await f.arrayBuffer());const a=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});let n=0;
-    a.slice(1).forEach(r=>{const pc=String(r[0]||"").trim().toUpperCase().replace(/\s+/g,"");if(pc.length<2||pc===ADMIN_MSID)return;const v={pc,code:String(r[1]||"").trim(),mc:String(r[2]||"").trim().toUpperCase(),role:roleFrom(r[3]),name:String(r[4]||"").trim(),team:String(r[5]||"").trim()};if(r[6])v.until=String(r[6]);const o=AD.users.find(u=>u.pc===pc);if(o)Object.assign(o,v);else AD.users.push(v);n++});
+    a.slice(1).forEach(r=>{const pc=String(r[0]||"").trim().toUpperCase().replace(/\s+/g,"");if(pc.length<2||pc===ADMIN_MSID)return;const v={pc,code:String(r[1]||"").trim(),mc:String(r[2]||"").trim().toUpperCase(),role:roleFrom(r[3]),name:String(r[4]||"").trim(),team:String(r[5]||"").trim()};{const un=untilFrom(r[6]);if(un)v.until=un}const o=AD.users.find(u=>u.pc===pc);if(o)Object.assign(o,v);else AD.users.push(v);n++});
     adChanged();openAdmin(1);toast(n+" rows imported. Click Save & apply.")}catch(x){toast("Couldn't read that file")}};
   $("#adCfgOut").onclick=async()=>{const c={};SHARED.forEach(k=>c[k]=AD[k]!==undefined?AD[k]:S.cfg[k]);const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([await encT(JSON.stringify(c))],{type:"text/plain"}));a.download="Eclipse_Settings_"+todayISO()+".eclipse";a.click()};
   $("#adCfgIn").onchange=async e=>{try{const c=JSON.parse(await decT(await e.target.files[0].text()));SHARED.forEach(k=>{if(c[k]!==undefined)AD[k]=c[k]});adChanged();openAdmin(1);toast("Settings loaded. Click Save & apply.")}catch(x){toast("That settings file couldn't be opened")}};
@@ -1138,7 +1145,7 @@ function renderMain(){
     ${view.forceReplace||view.trialDump?`<button class="cap sm" id="dCancel">Cancel</button>`:""}
   </div>`:""}
   ${D?(needLink?`<div class="empty"><h2>Nothing to show yet</h2><p>This PC isn't linked to ${scope()==="own"?"an employee name":"a team"}. Ask the Admin to link it in Access control.</p>${pickHTML()}</div>`:`
-  ${can("shift")&&!view.trial?shiftBar():""}
+  ${can("shift")&&!view.trial?shiftBar():""}${previewNote()}
   ${myCardHTML()}
   ${qvcHTML()}
   <div class="bar fbar">
@@ -1417,7 +1424,7 @@ document.addEventListener("keydown",e=>{
 
 /* ---------- actions: Save / Erase / Reset / Delete / Remove / Day complete ---------- */
 async function doSave(silent){
-  if(!canD("save")||!view.work)return;
+  if(!view.work)return;if(!canD("save")){toast("No access to save. Use Trial to check your own data.");return}
   const go=async()=>{const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();paintDirty();logAct("save",view.date);renderGrid();toast("Saved "+fmtDate(view.date)+(FS.dir?" to the data folder ✓":" on this PC ✓"))};
   if(silent)return go();
   ask("save","Save "+fmtDate(view.date)+"?","The changes on screen become the saved data for this date"+(FS.dir?" and are written to the team data folder, so everyone sees them.":" on this PC."),"Save",go);
@@ -1800,7 +1807,7 @@ const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
   const D=view.work,rowsX=rowsFiltered().map(x=>x.r),T=visTasks(),X=window.ExcelJS;
-  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.2.1";
+  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.3.0";
   const name=fmtD(d).slice(0,11);
   const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
   const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
@@ -1957,6 +1964,7 @@ function adminPage1(){
       <select id="uT" style="max-width:170px"><option value="">All teams</option>${[...new Set(users.map(u=>u.team).filter(Boolean))].sort().map(t=>`<option ${ADF.team===t?"selected":""}>${esc(t)}</option>`).join("")}</select>
       <span class="muted" id="uSelN">0 selected</span>
       <select id="uSetRole" style="max-width:150px">${ROLES.slice(1).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select><button class="cap sm" id="uApplyRole">Apply role to selected</button>
+      <select id="uCopyFrom" style="max-width:190px"><option value="">Copy access from…</option>${(AD.users||[]).map((u,i)=>`<option value="${i}">${esc(u.pc)} · ${esc(u.name||"")}</option>`).join("")}</select><button class="cap sm" id="uCopy">Copy to selected</button>
       <input type="date" id="uSetTill" style="max-width:150px"><button class="cap sm" id="uApplyTill">Set valid till</button>
       <button class="cap sm" id="uResetSel" title="Remove custom access from the selected PCs">Reset custom</button>
       <button class="cap sm danger" id="uDelSel">Remove selected</button>
@@ -2022,6 +2030,8 @@ function wireAdmin1(){
   };
   U.oninput=e=>{const t=e.target,d=t.dataset;if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.um!=null){AD.users[+d.um].mc=t.value.trim().toUpperCase();adChanged()}if(d.uc!=null){AD.users[+d.uc].code=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
   const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(u.pc));
+  $("#uCopy").onclick=()=>{const s2=sel(),f=AD.users[+$("#uCopyFrom").value];if(!f||!s2.length){toast("Pick who to copy from, and tick users first");return}
+    s2.forEach(u=>{if(u===f)return;u.role=f.role;if(f.ov)u.ov=clone(f.ov);else delete u.ov;if(f.scope!==undefined)u.scope=f.scope;else delete u.scope;if(f.procs!==undefined)u.procs=clone(f.procs);else delete u.procs});adChanged();pcTable();toast("Access copied to "+s2.length+" users")};
   $("#uApplyRole").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>u.role=$("#uSetRole").value);adChanged();pcTable();toast(s.length+" PCs set to "+ROLEN($("#uSetRole").value))};
   $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
   $("#uResetSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{delete u.ov;delete u.scope;delete u.procs});adChanged();pcTable();toast("Custom access removed for "+s.length+" PCs")};
