@@ -397,7 +397,7 @@ td.name{min-width:215px}
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v12.3.0 · build 24.0</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v12.0.7 · build 27.0</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -420,7 +420,7 @@ td.name{min-width:215px}
 
 <div id="gate" class="gate" hidden><div class="lcard">
   <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
-  <span class="ver" style="margin-top:8px">v12.3.0 · PRODUCTION CONSOLE</span>
+  <span class="ver" style="margin-top:8px">v12.0.7 · PRODUCTION CONSOLE</span>
   <div id="gateBody"></div>
 </div></div>
 
@@ -490,7 +490,8 @@ const IDB={db:null,
 };
 let S=null,saveT=null,storeOK=false;
 const fresh=()=>({v:5,cfg:{hpd:8,wd:21,dtUnit:"min",g:85,a:60,exp:null,lab:{},pcsAdd:[],pcsDel:[],users:[],perms:{},scope:{},msg:{},ui:{}},days:{}});
-function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Use Share / Excel or a backup.")});if(now)return go();saveT=setTimeout(go,350);return Promise.resolve()}
+const noLocal=()=>{const r=me&&me.role;return r==="employee"||r==="entry"};
+function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",noLocal()?{...S,days:{}}:S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Use Share / Excel or a backup.")});if(now)return go();saveT=setTimeout(go,350);return Promise.resolve()}
 const dev={get(){try{return localStorage.getItem("eclipse_pc")||""}catch(e){return ""}},set(v){try{v?localStorage.setItem("eclipse_pc",v):localStorage.removeItem("eclipse_pc")}catch(e){}}};
 
 const lab=k=>(S.cfg.lab&&S.cfg.lab[k])||LAB0[k]||k;
@@ -499,10 +500,10 @@ const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
 /* ---------- build ---------- */
-const BUILD="24";
+const BUILD="27";
 
 /* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
-const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
+const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","SME"],["employee","Employee"]];
 const ROLE3=["entry","manager","employee"];
 const FEAT=[
  ["dump","Dump / paste a new date","Dump","Actions",[1,0,0]],
@@ -666,7 +667,10 @@ async function fsScan(){
   try{
     await scanYears(FS.dir,"",idx);
     for(const p of procs()){if(p.k==="DBM")continue;try{const ph=await FS.dir.getDirectoryHandle(p.k);await scanYears(ph,p.k+"@",idx)}catch(e){}}
-    FS.index=idx;FS.err=false;await fsReadConfig();
+    FS.index=idx;FS.err=false;
+    let ok=false;try{await FS.dir.getFileHandle("_eclipse.eclipse");ok=true}catch(e){try{await FS.dir.getFileHandle("config.eclipse");ok=true}catch(e2){}}
+    if(ok){let gone=0;for(const k of Object.keys(S.days)){if(!idx[k]&&S.days[k]&&S.days[k]._lm){delete S.days[k];gone++}}if(gone){view.saved=null;view.work=null;save()}}
+    await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
 const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","qvc","pick","seeded","liveAll","defV2","mph","folder"];
@@ -683,7 +687,7 @@ async function fsDeleteKey(k){
   try{const r=await procRoot(p,false);const y=await r.getDirectoryHandle(d.slice(0,4));const m=await y.getDirectoryHandle(monthDir(d));await m.removeEntry(d+".json")}catch(e){}
   delete FS.index[k];
 }
-async function fsSyncUp(){if(!FS.dir)return;await fsScan();for(const k of Object.keys(S.days))if(!FS.index[k])await fsWriteKey(k,S.days[k])}
+async function fsSyncUp(){if(!FS.dir)return;await fsScan();for(const k of Object.keys(S.days))if(!FS.index[k]&&!S.days[k]._lm)await fsWriteKey(k,S.days[k])}
 async function fsSub(name,create){return FS.dir.getDirectoryHandle(name,{create})}
 async function fsWriteText(dirName,fname,text){
   if(!/^ECL1:/.test(text))text=await encT(text);
@@ -739,7 +743,7 @@ const dates=(p=view.proc)=>[...new Set([...Object.keys(S.days),...Object.keys(FS
 async function openDate(d){
   view.trial=false;view.cleared=false;view.date=d||null;view.saved=await loadDay(view.date);view.work=clone(view.saved);view.dirty=false;view.prev=null;view.draft=null;
   if(view.date){const ds=dates(),older=ds.filter(x=>x<view.date)[0];if(older)view.prev=await loadDay(older);
-    try{const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
+    try{if(noLocal())throw 0;const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
   renderAll();preloadRecent();
 }
 let preT=null;
@@ -753,7 +757,7 @@ function guardDirty(fn){
 }
 window.addEventListener("beforeunload",e=>{if(view.dirty&&!view.trial){e.preventDefault();e.returnValue=""}});
 let draftT=null;
-function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
+function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);if(noLocal())return;draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
 function dropDraft(){if(view.date)IDB.put("draft:"+dkey(view.date),null);view.draft=null}
 function paintDirty(){const b=$("#dirtyTag");if(b)b.hidden=!view.dirty;const s=$("#bSave");if(s){s.disabled=!view.dirty;s.classList.toggle("pulse",view.dirty)}}
 
@@ -796,7 +800,7 @@ $("#lockGo").onclick=async()=>{if(!(await isMaster($("#lockPw").value))){$("#loc
   if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
   S.cfg.exp=$("#lockDate").value;await save(true);await fsWriteConfig();$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
 
-/* ===================== v12.3.0 · MSID login, locked settings, QVC, name finder ===================== */
+/* ===================== v12.0.7 · MSID login, locked settings, QVC, name finder ===================== */
 const ADMIN_MSID="ARANJA14",ADMIN_MC="LHTU05CG2122RJJ",FILE_KEY="Dwarkadesh14ar";
 const ROSTER=[];
 const roleFrom=r=>{r=String(r||"employee").toLowerCase();return r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee"};
@@ -917,7 +921,7 @@ function qvcHTML(){
 }
 function untilFrom(x){if(x==null||x==="")return "";let d;if(typeof x==="number")d=new Date(Math.round((x-25569)*864e5));else{const m=String(x).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);d=m?new Date(Date.UTC(+m[3],+m[1]-1,+m[2])):new Date(String(x))}
   return isNaN(d)||d.getUTCFullYear()>2100?"":d.toISOString().slice(0,10)}
-function previewNote(){return view.dirty&&!view.trial&&!canD("save")&&role()!=="admin"?`<div class="bar" style="margin:8px 0;font-size:13px">👀 <b>Preview on your PC only.</b>&nbsp;This is not saved. Use <b>Trial</b> to check your own data. Your SME or Manager saves the day for everyone.</div>`:""}
+function previewNote(){return view.dirty&&!view.trial&&!canD("save")&&role()!=="admin"?`<div class="bar" style="margin:8px 0;font-size:13px">👀 <b>Preview on your PC only.</b>&nbsp;This is not saved. Use <b>Trial</b> to check your own data. Your SME saves the day for everyone.</div>`:""}
 const scKeys=()=>new Set(scopedRows().map(({r})=>nameKey(r.name)));
 function wireQvc(){
   const b=$("#qvEdit");if(b)b.onclick=qvcEditor;const d=$("#qvAll");if(!d)return;
@@ -1807,7 +1811,7 @@ const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
   const D=view.work,rowsX=rowsFiltered().map(x=>x.r),T=visTasks(),X=window.ExcelJS;
-  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.3.0";
+  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.0.7";
   const name=fmtD(d).slice(0,11);
   const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
   const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
@@ -2204,7 +2208,7 @@ async function checkUpdate(){
 let idleT=null,idleLast=0;
 function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||!m||$("#app").hidden)return;idleT=setTimeout(()=>{if(view.dirty)return idleReset();view.as=null;$("#app").hidden=true;gate();toast("Locked after "+m+" minutes idle")},m*6e4)}
 ["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
-async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
+async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();if(noLocal())S.days={};await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
 async function start(){if(expired())return;if(!LOCK_ON)return enter();
   try{await fsInit()}catch(e){}
   const p=dev.get(),u=userOf(p);if(p&&isRegistered(p)&&!(u&&u.until&&daysLeft(u.until)<0))return enter();gate()}
