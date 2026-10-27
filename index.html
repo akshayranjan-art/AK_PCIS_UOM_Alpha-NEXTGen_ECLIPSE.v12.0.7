@@ -383,26 +383,48 @@ td.name{min-width:215px}
 
 .stag{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--teal-soft);color:var(--teal);vertical-align:1px}
 
-.qcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
-.qtop{display:flex;align-items:center;gap:8px;margin-bottom:6px}.qtop .grow{flex:1}
-.qsum{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);margin-bottom:8px}.qsum b{color:var(--ink)}
-.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
-.qbox{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--cellin)}
-.qh{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:4px}.qh .qv{font-family:var(--f-num);font-weight:600;color:var(--teal)}
-.qrow{display:grid;grid-template-columns:1.2fr .7fr 1.3fr;gap:6px;font-size:12px;padding:3px 0;border-top:1px dashed var(--line)}
-.qrow.ok{color:var(--teal);font-weight:600}.qrow em{color:var(--danger);font-style:normal}
+/* multi-select filters */
+.ms{position:relative}
+.msb{min-width:150px;max-width:230px;display:flex;justify-content:space-between;gap:8px;align-items:center;padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--ink)}
+.msb.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal);font-weight:600}
+.msb i{font-style:normal;font-size:10px;opacity:.7;flex:none}
+.msp{position:absolute;top:calc(100% + 4px);left:0;z-index:30;min-width:250px;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0003;padding:8px}
+.mss{width:100%;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);margin-bottom:6px}
+.msl{max-height:280px;overflow:auto}
+.msi{display:flex;gap:8px;align-items:center;padding:4px 6px;border-radius:6px;font-size:12.5px;cursor:pointer;white-space:nowrap;text-transform:none;letter-spacing:0;color:var(--ink)}
+.msi:hover{background:var(--bg)}.msi.all{border-bottom:1px solid var(--line);margin-bottom:4px;border-radius:0}
+.msi input{accent-color:var(--teal);width:15px;height:15px}
+.msf{display:flex;justify-content:flex-end;gap:6px;margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+/* QVC sheet */
+.qbtn{font-weight:800;font-family:var(--f-num)}
+.qgrid table{width:100%}
+.qgrid thead th{background:var(--navy);color:#fff;padding:4px 8px;height:auto!important}
+.qgrid th small{display:block;font-size:9px;color:#9fb5cc;font-weight:500;margin-top:2px}
+.qhd{background:transparent;border:1px dashed #ffffff55;color:#fff;border-radius:6px;text-align:center;width:100%;min-width:70px;font:600 11px var(--f-body);padding:3px 4px}
+.qgrid td{padding:2px 8px;text-align:center;font-size:12px;height:30px}
+.qgrid td input{width:110px;text-align:center;border-radius:6px}
+.qgrid td select{height:26px;border-radius:6px;border:1px solid var(--line);background:var(--bg);padding:0 6px}
+.qgrid input.ovr{background:var(--amber-soft);outline:1px solid var(--amber)}
+.qgrid tr.qlk td{background:var(--bg)}
+.qtier{font-weight:700;color:var(--teal)}.qtag{display:block;font-size:9px;color:#a86f1c;font-weight:700;text-transform:uppercase}
+.qlock{border:0;background:transparent;cursor:pointer;font-size:14px}.qlock:disabled{cursor:default}
+.qslab input{width:100%;padding:4px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);text-align:center}
+.modal{z-index:75}
+.msi input{min-width:0!important;padding:0!important;width:15px!important;height:15px;flex:none;margin:0}
+
 </style>
 
 <section id="app" hidden>
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v12.0.7 · build 27.0</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v12.0.7 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
       <button class="cap ghost sm" id="btnFolder" hidden>📁 Connect data</button>
       <button class="cap amber sm" id="btnBack" hidden>Back to Admin</button>
+      <button class="cap ghost sm ico qbtn" id="btnQvc" aria-label="Open" hidden>$</button>
       <button class="cap ghost sm ico" id="btnHelp" title="Help" aria-label="Help">?</button>
       <button class="cap ghost sm ico" id="btnTheme" title="Light / dark" aria-label="Light or dark theme"><span class="moon"></span></button>
       <button class="cap ghost sm" id="btnAdmin">Admin</button>
@@ -415,6 +437,7 @@ td.name{min-width:215px}
 </section>
 
 <div class="adminpg" id="adminPg" hidden></div>
+<div class="adminpg" id="qvcPg" hidden></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 <div id="hcard" hidden></div><div id="pwm"></div>
 
@@ -436,10 +459,10 @@ td.name{min-width:215px}
 <script>
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_EXPIRY  = "2027-03-31";            // tool stops after this date; master password can extend it per PC
-const ALLOWED_PCS = [                        // built-in admin MSID (logs in with the master password from any PC)
-  "ARANJA14",
+const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
+  "LHTU05CG2122RJJ",
 ];
-const PW_MASTER   = 2349399753747566;        // hash of master password (caps and spaces ignored)
+const PW_MASTER   = 5662684247018612;        // hash of master password (caps and spaces ignored)
 const LOCK_ON     = true;                    // PC login is ON. Set to false only for testing
 /* ========================================================================= */
 
@@ -455,8 +478,7 @@ const LOCK_ON     = true;                    // PC login is ON. Set to false onl
   document.addEventListener("selectstart",e=>{if(!/INPUT|TEXTAREA/.test(e.target.tagName))e.preventDefault()});
 })();
 const H=(str,seed=161)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)};
-const MPH_BAKED="";
-const isMaster=async p=>{const q=String(p||""),w=(S.cfg&&S.cfg.mph)||MPH_BAKED;if(w)return(await sha("master|"+q))===w;return H(q.replace(/\s+/g,"").toLowerCase())===PW_MASTER};
+const isMaster=p=>H(String(p||"").replace(/\s+/g,"").toLowerCase())===PW_MASTER;
 
 /* ---------- constants ---------- */
 const DT=[["cab","Cab Delay"],["app","Application Issues"],["lap","Laptop Replacement"],["eea","EEA"],["ramp","RAMP"],["trn","Training"],["ll","LL"]];
@@ -490,8 +512,7 @@ const IDB={db:null,
 };
 let S=null,saveT=null,storeOK=false;
 const fresh=()=>({v:5,cfg:{hpd:8,wd:21,dtUnit:"min",g:85,a:60,exp:null,lab:{},pcsAdd:[],pcsDel:[],users:[],perms:{},scope:{},msg:{},ui:{}},days:{}});
-const noLocal=()=>{const r=me&&me.role;return r==="employee"||r==="entry"};
-function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",noLocal()?{...S,days:{}}:S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Use Share / Excel or a backup.")});if(now)return go();saveT=setTimeout(go,350);return Promise.resolve()}
+function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S).then(ok=>{if(!ok&&storeOK)toast("Couldn't save on this PC. Use Share / Excel or a backup.")});if(now)return go();saveT=setTimeout(go,350);return Promise.resolve()}
 const dev={get(){try{return localStorage.getItem("eclipse_pc")||""}catch(e){return ""}},set(v){try{v?localStorage.setItem("eclipse_pc",v):localStorage.removeItem("eclipse_pc")}catch(e){}}};
 
 const lab=k=>(S.cfg.lab&&S.cfg.lab[k])||LAB0[k]||k;
@@ -500,10 +521,10 @@ const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
 /* ---------- build ---------- */
-const BUILD="27";
+const BUILD="17";
 
 /* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
-const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","SME"],["employee","Employee"]];
+const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
 const ROLE3=["entry","manager","employee"];
 const FEAT=[
  ["dump","Dump / paste a new date","Dump","Actions",[1,0,0]],
@@ -522,7 +543,6 @@ const FEAT=[
  ["dayclose","Mark day complete","Day ✓","Actions",[1,0,0]],
  ["unlock","Change locked or old dates","Unlock","Actions",[0,0,0]],
  ["undo","Recycle bin (undo)","Bin","Actions",[1,0,0]],
- ["qvcedit","Edit QVC tiers and amounts","QVC set","Actions",[0,1,0]],
  ["rail","Process buttons (DBM, CPA…)","Procs","Screen",[1,1,1]],
  ["stats","Summary cards","Cards","Screen",[1,1,1]],
  ["search","Search box","Search","Screen",[1,1,1]],
@@ -543,9 +563,7 @@ const FEAT=[
  ["mobile","Phone card view","Phone","Screen",[1,1,1]],
  ["mydash","My dashboard card","My card","Screen",[0,0,1]],
  ["badge","Streak badges","Badges","Screen",[1,1,1]],
- ["qvc","QVC panel (own utilisation, productivity, amount)","QVC","Screen",[0,1,1]],
- ["qvcall","QVC of everyone (table)","QVC all","Screen",[0,1,0]],
- ["pickname","Find and pick own name","Name","Screen",[1,1,1]],
+ ["qvc","$ QVC sheet (hidden icon)","QVC $","Screen",[0,1,0]],
  ["tray","Tools tray (▼)","Tray","Tools",[1,1,1]],
  ["cal","Calendar strip","Calendar","Tools",[1,1,1]],
  ["month","Month summary + consistency","Month","Tools",[1,1,0]],
@@ -562,12 +580,10 @@ const FEAT=[
  ["missing","Missing employee alert (dump)","Missing","Tools",[1,0,0]],
 ];
 const FK=Object.fromEntries(FEAT.map(f=>[f[0],f]));
-const EMP_ON=new Set(["dump","reset","trial","rail","stats","search","active","notice","datejump","sync","folder","update","theme","help","mobile","qvc","pickname"]);
-FEAT.forEach(f=>{f[4][2]=EMP_ON.has(f[0])?1:0;if(f[0]==="reset")f[4][1]=0});
 const DEFPERM=Object.fromEntries(ROLE3.map((r,i)=>[r,Object.fromEntries(FEAT.map(f=>[f[0],f[4][i]]))]));
 const DEFSCOPE={entry:"all",manager:"all",employee:"own"};
 const MSGS=[["save","Save"],["reset","Reset"],["replace","Replace"],["del","Delete date"],["remove","Remove a person"],["shift","Shift hours"],["dayclose","Day complete"],["restore","Restore from bin"]];
-const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["Pend52","soon"],["PCRL","soon"],["Onbase","soon"],["NonPar","soon"]].map(([k,s])=>({k,label:k==="DBM"?"PCIS":k,status:"live",roles:{entry:1,manager:1,employee:1}}));
+const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["Pend52","soon"],["PCRL","soon"],["Onbase","soon"],["NonPar","soon"]].map(([k,s])=>({k,label:k,status:s,roles:{entry:1,manager:1,employee:1}}));
 
 let me={pc:"",role:"admin",name:"",team:""};
 const role=()=>view.as?view.as.role:me.role;
@@ -575,11 +591,9 @@ const ident=()=>view.as||me;
 const userOf=pc=>(S.cfg.users||[]).find(u=>u.pc===pc);
 const identUser=()=>{const id=ident();return id.pc?userOf(id.pc):null};
 const featOn=f=>(S.cfg.fon||{})[f]!==false;
-const NEVER_EMP=new Set(["shift","qvcedit","unlock"]);
 function can(f){
   if(!featOn(f))return false;
   if(role()==="admin")return true;
-  if(role()==="employee"&&NEVER_EMP.has(f))return false;
   const u=identUser();if(u&&u.ov&&u.ov[f]!=null)return !!u.ov[f];
   return !!((S.cfg.perms[role()]||{})[f]);
 }
@@ -591,7 +605,7 @@ const isRegistered=pc=>isBuiltInAdmin(pc)||!!userOf(pc);
 function resolveMe(){
   if(!LOCK_ON){me={pc:"TESTING",role:"admin",name:"",team:""};return}
   const pc=dev.get(),u=userOf(pc);
-  me=isBuiltInAdmin(pc)?{pc,role:"admin",name:"",team:""}:u?{pc,role:u.role,name:(S.auth&&S.auth[pc]&&S.auth[pc].nm)||u.name||"",team:u.team||""}:{pc,role:"employee",name:"",team:""};
+  me=isBuiltInAdmin(pc)?{pc,role:"admin",name:"",team:""}:u?{pc,role:u.role,name:u.name||"",team:u.team||""}:{pc,role:"employee",name:"",team:""};
   if(view.masterLogin)me.role="admin";
 }
 
@@ -629,7 +643,7 @@ function ask(key,title,body,okText,fn,danger){
 /* ---------- data folder (OneDrive / SharePoint synced folder) ---------- */
 const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
 const fsSupported=()=>"showDirectoryPicker" in window;
-const fsMode=()=>(["save","dump","shift","dayclose","undo","replace","del"].some(can)||role()==="admin")?"readwrite":"read";
+const fsMode=()=>(["save","dump","shift","dayclose","undo","replace","del","qvc"].some(can)||role()==="admin")?"readwrite":"read";
 const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
 async function fsInit(){
   if(!fsSupported())return;
@@ -641,16 +655,9 @@ async function fsAllow(){
   if(!FS.handle)return fsConnect();
   try{if(await FS.handle.requestPermission({mode:fsMode()})==="granted"){FS.dir=FS.handle;await fsSyncUp();await fsScan();toast("Data folder connected");await openDate(view.date||dates()[0]||null)}else toast("Permission not given. Data stays on this PC only.")}catch(e){toast("Couldn't open the data folder")}
 }
-async function folderOK(h,adm){
-  const want=String(S.cfg.folder||"PCIS Data").trim(),nameOk=h.name.trim().toLowerCase()===want.toLowerCase();let has=false;
-  try{await h.getFileHandle("_eclipse.eclipse");has=true}catch(e){}
-  if(has&&nameOk)return "";
-  if(adm&&nameOk){try{const fh=await h.getFileHandle("_eclipse.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify({t:"eclipse",at:Date.now()})));await w.close();return ""}catch(e){return "Couldn't prepare the folder. Allow write access."}}
-  return nameOk?"This folder is not set up yet. Ask Admin to connect it first.":"Wrong folder. Please pick the folder “"+want+"”.";
-}
 async function fsConnect(){
   if(!fsSupported()){toast("This browser can't connect a folder. Use Chrome or Edge.");return}
-  try{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});const bad=await folderOK(h,me.role==="admin"&&!view.as);if(bad){toast(bad);return}FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);
+  try{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);
     await fsReadConfig();await fsSyncUp();await fsScan();toast("Connected to folder “"+h.name+"”");await openDate(view.date||dates()[0]||null)}
   catch(e){if(e&&e.name!=="AbortError")toast("Couldn't connect the folder")}
 }
@@ -667,18 +674,26 @@ async function fsScan(){
   try{
     await scanYears(FS.dir,"",idx);
     for(const p of procs()){if(p.k==="DBM")continue;try{const ph=await FS.dir.getDirectoryHandle(p.k);await scanYears(ph,p.k+"@",idx)}catch(e){}}
-    FS.index=idx;FS.err=false;
-    let ok=false;try{await FS.dir.getFileHandle("_eclipse.eclipse");ok=true}catch(e){try{await FS.dir.getFileHandle("config.eclipse");ok=true}catch(e2){}}
-    if(ok){let gone=0;for(const k of Object.keys(S.days)){if(!idx[k]&&S.days[k]&&S.days[k]._lm){delete S.days[k];gone++}}if(gone){view.saved=null;view.work=null;save()}}
-    await fsReadConfig();
+    FS.index=idx;FS.err=false;await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
-const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","qvc","pick","seeded","liveAll","defV2","mph","folder"];
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine"];
+const QVC_KEYS=["grades","teamGrade","slabs","heads","metric"];
+async function fsReadConfig(){
+  if(!FS.dir)return;
+  try{const fh=await FS.dir.getFileHandle("config.json");const f=await fh.getFile();if(f.lastModified===FS.cfgLM)return;FS.cfgLM=f.lastModified;
+    const c=JSON.parse(await f.text());SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe()}catch(e){}
+}
+async function fsWriteConfig(){
+  if(!FS.dir)return;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.pc;
+  try{const fh=await FS.dir.getFileHandle("config.json",{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(c,null,1));await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Settings saved on this PC, but not in the data folder")}
+  paintSync();
+}
 async function procRoot(p,create){return p==="DBM"?FS.dir:FS.dir.getDirectoryHandle(p,{create})}
 async function fsWriteKey(k,obj){
   if(!FS.dir)return;const {p,d}=unkey(k);
   try{const r=await procRoot(p,true);const y=await r.getDirectoryHandle(d.slice(0,4),{create:true});const m=await y.getDirectoryHandle(monthDir(d),{create:true});
-    const fh=await m.getFileHandle(d+".json",{create:true});const w=await fh.createWritable();const o={...obj};delete o._lm;await w.write(await encT(JSON.stringify(o)));await w.close();
+    const fh=await m.getFileHandle(d+".json",{create:true});const w=await fh.createWritable();const o={...obj};delete o._lm;await w.write(JSON.stringify(o));await w.close();
     FS.index[k]={h:fh};obj._lm=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Saved on this PC, but couldn't write to the data folder")}
   paintSync();
 }
@@ -687,31 +702,28 @@ async function fsDeleteKey(k){
   try{const r=await procRoot(p,false);const y=await r.getDirectoryHandle(d.slice(0,4));const m=await y.getDirectoryHandle(monthDir(d));await m.removeEntry(d+".json")}catch(e){}
   delete FS.index[k];
 }
-async function fsSyncUp(){if(!FS.dir)return;await fsScan();for(const k of Object.keys(S.days))if(!FS.index[k]&&!S.days[k]._lm)await fsWriteKey(k,S.days[k])}
+async function fsSyncUp(){if(!FS.dir)return;await fsScan();for(const k of Object.keys(S.days))if(!FS.index[k])await fsWriteKey(k,S.days[k])}
 async function fsSub(name,create){return FS.dir.getDirectoryHandle(name,{create})}
 async function fsWriteText(dirName,fname,text){
-  if(!/^ECL1:/.test(text))text=await encT(text);
   if(!FS.dir)return false;
   try{const sd=await fsSub(dirName,true);const fh=await sd.getFileHandle(fname,{create:true});const w=await fh.createWritable();await w.write(text);await w.close();return true}catch(e){return false}
 }
-async function fsReadText(dirName,fname){if(!FS.dir)return null;try{const sd=await fsSub(dirName,false);const fh=await sd.getFileHandle(fname);return await unlock(await (await fh.getFile()).text())}catch(e){return null}}
-const unlock=async t=>/^ECL1:/.test(String(t).trim())?decT(t):t;
+async function fsReadText(dirName,fname){if(!FS.dir)return null;try{const sd=await fsSub(dirName,false);const fh=await sd.getFileHandle(fname);return await (await fh.getFile()).text()}catch(e){return null}}
 async function fsList(dirName){const out=[];if(!FS.dir)return out;try{const sd=await fsSub(dirName,false);for await(const [n,h] of sd.entries())if(h.kind==="file")out.push(n)}catch(e){}return out}
 async function loadDay(d,p=view.proc){
   if(!d)return null;const k=dkey(d,p);
   if(FS.dir&&FS.index[k]){
     try{const f=await FS.index[k].h.getFile();const c=S.days[k];if(c&&c._lm===f.lastModified)return c;
-      const o=JSON.parse(await unlock(await f.text()));o._lm=f.lastModified;S.days[k]=o;save();return o}catch(e){}
+      const o=JSON.parse(await f.text());o._lm=f.lastModified;S.days[k]=o;save();return o}catch(e){}
   }
   return S.days[k]||null;
 }
 async function persistDay(d,obj){const k=dkey(d);S.days[k]=obj;await save(true);await fsWriteKey(k,obj);save()}
 
 /* ---------- history log ---------- */
-const ACTN={dump:"Dump",merge:"Merge",replace:"Replace",save:"Save",del:"Delete date",shift:"Shift hours",close:"Day complete",reopen:"Day reopened",restore:"Restore from bin",settings:"Settings saved",backup:"Auto backup",remove:"Remove person",reset:"Login moved",blocked:"Blocked login",pick:"Name picked"};
+const ACTN={dump:"Dump",merge:"Merge",replace:"Replace",save:"Save",del:"Delete date",shift:"Shift hours",close:"Day complete",reopen:"Day reopened",restore:"Restore from bin",settings:"Settings saved",backup:"Auto backup",remove:"Remove person"};
 async function logAct(a,d,n){
-  if(!["save","del","remove","reset","pick"].includes(a))return;
-  const e={at:Date.now(),pc:me.pc,nm:me.name||"",a,p:view.proc,d:d||"",n:n||""};
+  const e={at:Date.now(),pc:me.pc,a,p:view.proc,d:d||"",n:n||""};
   S.log=(S.log||[]).concat(e).slice(-600);save();
   if(FS.dir&&fsMode()==="readwrite"){const f="log_"+todayISO().slice(0,7)+".json";let arr=[];try{arr=JSON.parse(await fsReadText("_system",f)||"[]")}catch(x){}arr.push(e);await fsWriteText("_system",f,JSON.stringify(arr))}
 }
@@ -724,7 +736,7 @@ async function readLog(){
 /* ---------- recycle bin: replaced and deleted dates are kept 30 days ---------- */
 async function binPut(d,obj,why){
   if(!obj)return;const k=dkey(d),at=Date.now(),id=k.replace("@","_")+"__"+at;
-  const e={id,k,d,p:view.proc,why,at,pc:me.pc,nm:me.name||"",n:(obj.rows||[]).length};
+  const e={id,k,d,p:view.proc,why,at,pc:me.pc,n:(obj.rows||[]).length};
   S.bin=(S.bin||[]).filter(x=>at-x.at<30*864e5).concat({...e,obj:clone(obj)}).slice(-40);save();
   if(FS.dir)await fsWriteText("_bin",id+".json",JSON.stringify({...e,obj}));
 }
@@ -736,14 +748,14 @@ async function binList(){
 async function binGet(e){if(e.obj)return e.obj;try{const o=JSON.parse(await fsReadText("_bin",e.id+".json"));Object.assign(e,o);return o.obj}catch(x){return null}}
 
 /* ---------- view state & working copy ---------- */
-let view={proc:"DBM",date:null,team:"All",emp:"All",q:"",active:true,dumpOpen:false,work:null,saved:null,dirty:false,as:null,forceReplace:false,trial:false,pf:"All",prev:null,tray:false,tool:null,draft:null,cleared:false};
+let view={proc:"DBM",date:null,team:[],emp:[],q:"",active:true,dumpOpen:false,work:null,saved:null,dirty:false,as:null,forceReplace:false,trial:false,pf:[],prev:null,tray:false,tool:null,draft:null,cleared:false};
 const clone=o=>o?JSON.parse(JSON.stringify(o)):null;
 const cur=()=>view.work;
 const dates=(p=view.proc)=>[...new Set([...Object.keys(S.days),...Object.keys(FS.index)])].map(unkey).filter(x=>x.p===p).map(x=>x.d).sort().reverse();
 async function openDate(d){
   view.trial=false;view.cleared=false;view.date=d||null;view.saved=await loadDay(view.date);view.work=clone(view.saved);view.dirty=false;view.prev=null;view.draft=null;
   if(view.date){const ds=dates(),older=ds.filter(x=>x<view.date)[0];if(older)view.prev=await loadDay(older);
-    try{if(noLocal())throw 0;const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
+    try{const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
   renderAll();preloadRecent();
 }
 let preT=null;
@@ -757,7 +769,7 @@ function guardDirty(fn){
 }
 window.addEventListener("beforeunload",e=>{if(view.dirty&&!view.trial){e.preventDefault();e.returnValue=""}});
 let draftT=null;
-function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);if(noLocal())return;draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
+function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
 function dropDraft(){if(view.date)IDB.put("draft:"+dkey(view.date),null);view.draft=null}
 function paintDirty(){const b=$("#dirtyTag");if(b)b.hidden=!view.dirty;const s=$("#bSave");if(s){s.disabled=!view.dirty;s.classList.toggle("pulse",view.dirty)}}
 
@@ -796,235 +808,39 @@ function expired(){
   $("#lockDate").value=new Date(Date.now()+60*864e5).toISOString().slice(0,10);
   return true;
 }
-$("#lockGo").onclick=async()=>{if(!(await isMaster($("#lockPw").value))){$("#lockErr").textContent="Master password is wrong.";return}
+$("#lockGo").onclick=async()=>{if(!isMaster($("#lockPw").value)){$("#lockErr").textContent="Master password is wrong.";return}
   if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
   S.cfg.exp=$("#lockDate").value;await save(true);await fsWriteConfig();$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
 
-/* ===================== v12.0.7 · MSID login, locked settings, QVC, name finder ===================== */
-const ADMIN_MSID="ARANJA14",ADMIN_MC="LHTU05CG2122RJJ",FILE_KEY="Dwarkadesh14ar";
-const ROSTER=[];
-const roleFrom=r=>{r=String(r||"employee").toLowerCase();return r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee"};
-
-/* ---- locked files (AES-GCM). Light protection: stops people opening the file, not a vault ---- */
-const b64=u=>{let s="";for(const x of new Uint8Array(u))s+=String.fromCharCode(x);return btoa(s)},unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-let _fk=null;
-async function fkey(){if(_fk)return _fk;const m=await crypto.subtle.importKey("raw",new TextEncoder().encode(FILE_KEY),"PBKDF2",false,["deriveKey"]);return _fk=await crypto.subtle.deriveKey({name:"PBKDF2",salt:new TextEncoder().encode("eclipse-v1"),iterations:60000,hash:"SHA-256"},m,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
-async function encT(t){const iv=crypto.getRandomValues(new Uint8Array(12));return "ECL1:"+b64(iv)+":"+b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await fkey(),new TextEncoder().encode(t)))}
-async function decT(s){const p=String(s).trim().split(":");return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb(p[1])},await fkey(),unb(p[2])))}
-async function sha(t){try{return b64(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))}catch(e){return "h"+H(t)}}
-function applyShared(c){SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe()}
-async function fsReadConfig(force){
-  if(!FS.dir)return;
-  try{let fh,enc=1;try{fh=await FS.dir.getFileHandle("config.eclipse")}catch(e){enc=0;fh=await FS.dir.getFileHandle("config.json")}
-    const f=await fh.getFile();if(!force&&f.lastModified===FS.cfgLM)return;FS.cfgLM=f.lastModified;
-    applyShared(JSON.parse(enc?await decT(await f.text()):await f.text()))}catch(e){}
+/* ---------- PC login ---------- */
+function gate(){
+  const pc=dev.get(),known=pc&&isRegistered(pc);
+  if(known){const ux=userOf(pc);if(ux&&ux.until&&daysLeft(ux.until)<0){dev.set("");return gate()}}
+  $("#gate").hidden=false;$("#app").hidden=true;
+  $("#gateBody").innerHTML=known?`
+    <div class="pcbox"><small>This PC</small><b>${esc(pc)}</b></div>
+    <div style="font-size:12px;color:#8fe0d9">✓ Registered device · ${esc((ROLES.find(r=>r[0]===(isBuiltInAdmin(pc)?"admin":userOf(pc).role))||[])[1]||"")}</div>
+    <button class="cap amber" id="gLogin">Login</button>
+    <button class="lnk" id="gOther">Not this PC? Log in with another PC name</button>`:`
+    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Enter this PC's device name (Settings → System → About). Password is the last 4 characters of the device name.</p>
+    <input id="gPc" placeholder="Device name, e.g. LHTU05CG2122RJJ" value="${esc(pc)}" style="text-transform:uppercase" autocapitalize="characters" autocomplete="off" spellcheck="false">
+    <input id="gPw" type="password" placeholder="Password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+    <button class="cap amber" id="gGo">Login</button>
+    <div class="err" id="gErr" style="color:#ffb3ad"></div>`;
+  if(known){$("#gLogin").onclick=enter;$("#gOther").onclick=()=>{dev.set("");gate()};$("#gLogin").focus();return}
+  const go=()=>{
+    const p=$("#gPc").value.trim().toUpperCase().replace(/\..*$/,""),pw=$("#gPw").value.trim();
+    if(p.length<4){$("#gErr").textContent="Enter the device name.";return}
+    if(isMaster(pw)){view.masterLogin=true;dev.set(p);return enter()}
+    if(!isRegistered(p)){$("#gErr").innerHTML="<b>Access Denied.</b> PC "+esc(p)+" is not registered. Please contact Administration.";return}
+    {const ux=userOf(p);if(ux&&ux.until&&daysLeft(ux.until)<0){$("#gErr").innerHTML="<b>Access expired</b> for "+esc(p)+" on "+ux.until+". Please contact Administration.";return}}
+    if(pw.toUpperCase()!==p.slice(-4)){$("#gErr").textContent="Password is wrong. Use the last 4 characters of the device name.";return}
+    dev.set(p);enter();
+  };
+  $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};$("#gPc").focus();
 }
-async function fsWriteConfig(){
-  if(!FS.dir)return;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.pc;
-  try{const fh=await FS.dir.getFileHandle("config.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify(c)));await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false;
-    try{await FS.dir.removeEntry("config.json")}catch(e){}}catch(e){FS.err=true;toast("Settings saved on this PC, but not in the data folder")}
-  paintSync();
-}
-
-/* ---- per-user login records: one locked file per MSID in _auth (no two people overwrite each other) ---- */
-const DID=()=>{let d=LS.get("did","");if(!d){d=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now());LS.set("did",d)}return d};
-async function authGet(m){let a=null;S.auth=S.auth||{};
-  if(FS.dir){const t=await fsReadText("_auth",m+".eclipse");if(t){try{a=JSON.parse(await unlock(t))}catch(e){}}if(a){S.auth[m]=a;save()}else delete S.auth[m]}
-  else a=S.auth[m]||null;return a}
-async function authPut(m,a){S.auth=S.auth||{};S.auth[m]=a;await save(true);if(FS.dir&&!(await fsWriteText("_auth",m+".eclipse",await encT(JSON.stringify(a)))))toast("Saved on this PC only. Allow write access to the data folder.")}
-async function alertLog(m,t){const at=Date.now();S.log=(S.log||[]).concat({at,pc:m,a:"blocked",p:"",d:"",n:t}).slice(-600);save();if(FS.dir)await fsWriteText("_system","alert_"+at+"_"+m+".json",JSON.stringify({at,msid:m,t}))}
-
-/* ---------- MSID login ---------- */
-async function gateConnect(){if(!fsSupported()){toast("Use Chrome or Edge to connect the data folder.");return}try{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});const bad=await folderOK(h,false);if(bad){gateMsg=bad;return}FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);await fsReadConfig(true)}catch(e){}}
-let gateMsg="";
-async function gateAllow(){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true)}}catch(e){}}
-function gate(mode,msg){
-  mode=mode||"login";const setup=mode==="setup";$("#gate").hidden=false;$("#app").hidden=true;
-  const last=LS.get("lastmsid","")||dev.get()||"";
-  $("#gateBody").innerHTML=`<p style="color:#a9c0d8;margin:16px 0 0;text-align:left;font-size:13px;line-height:1.5">${setup?"Set or reset your password. Enter your MSID and this PC's device name (Settings → System → About). It must match the list.":"Log in with your MSID and your own password."}</p>
-   <input id="gM" placeholder="MSID" value="${esc(last)}" style="text-transform:uppercase" autocapitalize="characters" autocomplete="off" spellcheck="false">
-   ${setup?`<input id="gD" placeholder="Device name, e.g. LHTU05CG2122RJJ" style="text-transform:uppercase" autocapitalize="characters" autocomplete="off" spellcheck="false">`:""}
-   <input id="gPw" type="password" placeholder="${setup?"New password (min 4)":"Password"}" autocomplete="off" autocapitalize="off" spellcheck="false">
-   ${setup?`<input id="gPw2" type="password" placeholder="Repeat password" autocomplete="off" autocapitalize="off" spellcheck="false">`:""}
-   <button class="cap amber" id="gGo">${setup?"Save password & log in":"Login"}</button>
-   <button class="lnk" id="gAlt">${setup?"Back to login":"First time or forgot password? Set / reset it"}</button>
-   ${FS.dir?`<div style="font-size:12px;color:#8fe0d9;margin-top:10px">✓ Data folder connected</div>`:`<button class="lnk" id="gConn">${FS.handle?"Allow the data folder":"Connect the data folder (one time)"}</button>
-   <label class="lnk" style="display:block;cursor:pointer">Folder not working? Load settings file<input type="file" id="gFile" hidden></label>`}
-   <div class="err" id="gErr" style="color:#ffb3ad">${msg||""}</div>`;
-  $("#gAlt").onclick=()=>gate(setup?"login":"setup");
-  const gc=$("#gConn");if(gc)gc.onclick=async()=>{await(FS.handle?gateAllow():gateConnect());{const m=gateMsg;gateMsg="";gate(mode,FS.dir?"":(m||"Folder not connected."))}};
-  const gf=$("#gFile");if(gf)gf.onchange=async e=>{try{applyShared(JSON.parse(await decT(await e.target.files[0].text())));gate(mode,"Settings loaded.")}catch(x){$("#gErr").textContent="That settings file couldn't be opened."}};
-  $("#gGo").onclick=()=>gateGo(setup);$("#gateBody").onkeydown=e=>{if(e.key==="Enter")gateGo(setup)};
-  {const f=$(last?(setup?"#gD":"#gPw"):"#gM");if(f)f.focus()}
-}
-function doneLogin(m,adm,moved){LS.set("lastmsid",m);dev.set(m);if(adm)LS.set("admok",true);resolveMe();enter();if(moved)logAct("reset","","Login moved to a new PC")}
-async function gateGo(setup){
-  const err=t=>{$("#gErr").innerHTML=t},m=$("#gM").value.trim().toUpperCase().replace(/\s+/g,""),pw=$("#gPw").value;
-  if(m.length<2)return err("Enter your MSID.");
-  if(m===ADMIN_MSID){if(!(await isMaster(pw)))return err("Password is wrong.");return doneLogin(m,true)}
-  const u=userOf(m);
-  if(!u)return err(!FS.dir?"Connect the data folder first, then log in.":"<b>Access Denied.</b> MSID "+esc(m)+" is not registered. Please contact Administration.");
-  if(u.until&&daysLeft(u.until)<0)return err("<b>Access expired</b> on "+u.until+". Please contact Administration.");
-  if(setup){
-    const d=$("#gD").value.trim().toUpperCase().replace(/\..*$/,""),p2=$("#gPw2").value;
-    if(!FS.dir)return err("Connect the data folder first, so your password is saved for everyone.");
-    if(!u.mc)return err("No device name is saved for "+esc(m)+". Ask Administration to add it.");
-    if(d!==String(u.mc).toUpperCase())return err("Device name doesn't match the list. Check Settings → System → About.");
-    if(pw.length<4)return err("Password needs at least 4 characters.");if(pw!==p2)return err("The two passwords don't match.");
-    try{await FS.dir.requestPermission({mode:"readwrite"})}catch(e){}
-    const old=await authGet(m);
-    await authPut(m,{h:await sha(m+"|"+pw),did:DID(),at:Date.now(),nm:(old&&old.nm)||""});
-    return doneLogin(m,false,!!(old&&old.did!==DID()));
-  }
-  const a=await authGet(m);
-  if(!a)return err(FS.dir||S.auth&&S.auth[m]?"No password yet. Tap “First time or forgot password” to set one.":"Connect the data folder first, then log in.");
-  if(a.h!==await sha(m+"|"+pw))return err("Password is wrong.");
-  if(a.did!==DID()){alertLog(m,"Login tried from a different PC or browser");return err("<b>This MSID is already linked to another PC.</b> Use “First time or forgot password” with the device name to move it.")}
-  doneLogin(m);
-}
-
-/* ---------- QVC ---------- */
-const QVC0={util:{t1:99.89,t2:99,t3:90,a1:3000,a2:1500,a3:750},prod:{t1:145,t2:135,t3:125,a1:3000,a2:1500,a3:750}};
-const qvFrom=(q,p)=>{q=q||{};const o=q[p]||{},d=q._||{};return{util:{...QVC0.util,...(d.util||{}),...(o.util||{})},prod:{...QVC0.prod,...(d.prod||{}),...(o.prod||{})}}};
-const qv=p=>qvFrom(S.cfg.qvc,p);
-const money=n=>Number(n||0).toLocaleString("en-IN");
-const tierOf=(m,v)=>v>=m.t1?1:v>=m.t2?2:v>=m.t3?3:0;
-function qvcMap(){
-  const mo=view.date.slice(0,7),m=new Map();
-  for(const d of dates()){if(d.slice(0,7)!==mo)continue;const o=S.days[dkey(d)];if(!o)continue;
-    o.rows.forEach(r=>{const c=calc(r,o.tasks);if(c.prod<=0)return;const k=nameKey(r.name);if(!k)return;const x=m.get(k)||{n:r.name,E:0,P:0,H:0,done:0};x.E+=c.total;x.P+=c.prod;x.H+=c.hours;x.done++;m.set(k,x)})}
-  return m;
-}
-const qvS=x=>{const hpd=+S.cfg.hpd||8,done=x?x.done:0;return{E:x?x.E:0,P:x?x.P:0,H:x?x.H:0,up:x&&x.H>0?x.P/x.H*100:0,pp:x&&x.P>0?x.E/x.P*100:0,done,left:Math.max(0,(+S.cfg.wd||21)-done),hpd}};
-const qvApply=(proc,name)=>{const q=S.cfg.qvc||{},o=q[proc]||{};return (o.emp||{})[nameKey(name)]||o.apply||(q._||{}).apply||"both"};
-function qvcBlock(q,s,kind){
-  const m=q[kind],v=kind==="util"?s.up:s.pp,t=tierOf(m,v),amt=t?m["a"+t]:0,base=kind==="util"?s.P:s.E,den=kind==="util"?s.H:s.P,rem=s.left*s.hpd;
-  const rows=[1,2,3].map(i=>{const th=m["t"+i],ok=v>=th;let need="";
-    if(!ok){if(s.left>0){const x=(th*(den+rem)-100*base)/rem;need=x>(kind==="util"?100:250)?`<em class="dn">out of reach</em>`:`need <b>${f2(Math.max(0,x))}%</b> / day`}else need="month over"}
-    return `<div class="qrow ${ok?"ok":""}"><span>Tier ${i} · ${f2(th)}%</span><span>${money(m["a"+i])}</span><span>${ok?"✓ reached":need}</span></div>`}).join("");
-  return `<div class="qbox"><div class="qh"><b>${kind==="util"?"Utilisation":"Productivity"}</b><span class="qv">${f2(v)}%</span><span>${t?`Tier ${t} · <b>${money(amt)}</b>`:"No tier yet"}</span></div>${rows}</div>`;
-}
-function mpFind(mp,name){const k=nameKey(name);if(!k)return null;if(mp.has(k))return mp.get(k);const kt=k.split(" ");
-  for(const [kk,v] of mp){const xt=kk.split(" "),hit=kt.filter(w=>xt.includes(w)).length;if(hit>=2||(hit===1&&kt.length===1&&xt.length===1))return v}return null}
-function qvcHTML(){
-  if(!can("qvc")||view.trial||!view.date)return "";const D=cur();if(!D)return "";
-  const id=ident(),all=can("qvcall"),edit=can("qvcedit"),q=qv(view.proc),mp=qvcMap(),mo=fmtMonth(view.date.slice(0,7));let body="";
-  if(id.name){const x=mpFind(mp,id.name),ap=qvApply(view.proc,id.name),s=qvS(x);
-    if(ap==="off")body=`<div class="muted" style="font-size:12px">QVC is not applied to you in this process.</div>`;
-    else if(!x)body=`<div class="muted" style="font-size:12px">No QVC data for you yet this month. It appears after a saved day that has your work.</div>`;
-    else{let rank=0,n=0;mp.forEach(v=>{if(v.P>0){n++;if(v.E/v.P*100>s.pp+1e-9)rank++}});
-      const u=ap!=="prod",p=ap!=="util",tu=tierOf(q.util,s.up),tp=tierOf(q.prod,s.pp),tot=(u&&tu?q.util["a"+tu]:0)+(p&&tp?q.prod["a"+tp]:0);
-      body=`<div class="qsum"><span>${s.done} days done · <b>${s.left}</b> to go</span><span>Standing <b>${s.pp>0?(rank+1)+" / "+n:"—"}</b></span><span>Amount so far <b>${money(tot)}</b></span></div><div class="qgrid">${u?qvcBlock(q,s,"util"):""}${p?qvcBlock(q,s,"prod"):""}</div>`}}
-  else if(!all)return pickHTML()||`<div class="qcard"><b>🔒 QVC is locked</b><div class="muted" style="font-size:12px;margin-top:4px">Ask Admin to link your name.</div></div>`;
-  if(all)body+=`<details id="qvAll" style="margin-top:8px"><summary class="cap sm" style="display:inline-block;cursor:pointer">👥 Everyone's QVC (${scKeys().size})</summary><div id="qvAllB"></div></details>`;
-  return `<div class="qcard"><div class="qtop"><b>💰 QVC · ${esc(mo)} · ${esc(view.proc)}</b><span class="grow"></span>${edit?`<button class="cap sm" id="qvEdit">Set tiers & amounts</button>`:""}</div>${body}</div>`;
-}
-function untilFrom(x){if(x==null||x==="")return "";let d;if(typeof x==="number")d=new Date(Math.round((x-25569)*864e5));else{const m=String(x).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);d=m?new Date(Date.UTC(+m[3],+m[1]-1,+m[2])):new Date(String(x))}
-  return isNaN(d)||d.getUTCFullYear()>2100?"":d.toISOString().slice(0,10)}
-function previewNote(){return view.dirty&&!view.trial&&!canD("save")&&role()!=="admin"?`<div class="bar" style="margin:8px 0;font-size:13px">👀 <b>Preview on your PC only.</b>&nbsp;This is not saved. Use <b>Trial</b> to check your own data. Your SME saves the day for everyone.</div>`:""}
-const scKeys=()=>new Set(scopedRows().map(({r})=>nameKey(r.name)));
-function wireQvc(){
-  const b=$("#qvEdit");if(b)b.onclick=qvcEditor;const d=$("#qvAll");if(!d)return;
-  d.ontoggle=()=>{if(!d.open)return;const q=qv(view.proc),ok=scKeys();
-    const all=[...qvcMap().entries()].filter(([k])=>ok.has(k)).map(([k,x])=>{const s=qvS(x),ap=qvApply(view.proc,x.n),tu=ap!=="prod"?tierOf(q.util,s.up):0,tp=ap!=="util"?tierOf(q.prod,s.pp):0,au=tu?q.util["a"+tu]:0,ap2=tp?q.prod["a"+tp]:0;return{n:x.n,s,tu,tp,au,ap:ap2,t:au+ap2,off:ap==="off"}}).sort((a,b)=>b.t-a.t||b.s.pp-a.s.pp);
-    $("#qvAllB").innerHTML=`<input id="qvQ" placeholder="Search name" style="margin:6px 0;max-width:220px"><div class="utable" id="qvT" style="max-height:320px"></div>`;
-    const draw=()=>{const f=norm($("#qvQ").value),rs=(f?all.filter(r=>norm(r.n).includes(f)):all),sh=rs.slice(0,100);
-      $("#qvT").innerHTML=`<table class="perm"><thead><tr><th>Name</th><th>Util %</th><th>Tier</th><th>Amount</th><th>Prod %</th><th>Tier</th><th>Amount</th><th>Total</th></tr></thead><tbody>${sh.map(r=>r.off?`<tr><td>${esc(r.n)}</td><td colspan="7">QVC off</td></tr>`:`<tr><td>${esc(r.n)}</td><td>${f2(r.s.up)}</td><td>${r.tu||"—"}</td><td>${money(r.au)}</td><td>${f2(r.s.pp)}</td><td>${r.tp||"—"}</td><td>${money(r.ap)}</td><td><b>${money(r.t)}</b></td></tr>`).join("")}</tbody></table>${rs.length>100?`<div class="muted" style="padding:6px">Showing 100 of ${rs.length}. Search to find others.</div>`:""}`};
-    $("#qvQ").oninput=draw;draw()};
-}
-function qvcEditor(){
-  const buf=clone(S.cfg.qvc||{});let pk=view.proc;
-  const draw=()=>{const q=qvFrom(buf,pk),o=buf[pk]||{},inp=(m,k)=>`<input type="number" step="0.01" data-qm="${m}" data-qk="${k}" value="${q[m][k]}" style="width:84px">`;
-    modal(`<h3>QVC tiers & amounts</h3><div class="mrow"><select id="qvP">${["_",...procs().map(p=>p.k)].map(p=>`<option value="${esc(p)}" ${p===pk?"selected":""}>${p==="_"?"All processes (default)":esc(p)}</option>`).join("")}</select>
-     <select id="qvA">${[["",pk==="_"?"Both":"Same as default"],["both","Utilisation + Productivity"],["util","Utilisation only"],["prod","Productivity only"],["off","QVC off"]].filter(x=>pk!=="_"||x[0]).map(([v,n])=>`<option value="${v}" ${(o.apply||"")===v?"selected":""}>${n}</option>`).join("")}</select></div>
-     ${["util","prod"].map(m=>`<p style="margin:10px 0 4px"><b>${m==="util"?"Utilisation %":"Productivity %"}</b></p><table style="width:100%;border-spacing:4px"><tr><th></th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th></tr><tr><td>% from</td>${[1,2,3].map(i=>`<td>${inp(m,"t"+i)}</td>`).join("")}</tr><tr><td>Amount</td>${[1,2,3].map(i=>`<td>${inp(m,"a"+i)}</td>`).join("")}</tr></table>`).join("")}
-     <p style="margin:10px 0 4px"><b>Employee-wise</b> <span class="muted" style="font-size:12px">one per line: <code>NAME, both|util|prod|off</code></span></p><textarea id="qvE" rows="3" style="width:100%" placeholder="ABHISHEK M T, util">${esc(o.empTxt||"")}</textarea>
-     <div class="mrow"><button class="cap teal" id="qvOk">Save</button><button class="cap" data-close>Cancel</button></div>`);
-    $("#qvP").onchange=e=>{pk=e.target.value;draw()};
-    $("#qvA").onchange=e=>{(buf[pk]=buf[pk]||{}).apply=e.target.value};
-    $("#qvE").oninput=e=>{const o2=buf[pk]=buf[pk]||{};o2.empTxt=e.target.value;o2.emp={};e.target.value.split("\n").forEach(l=>{const [n,a]=l.split(",").map(x=>x.trim());if(n&&/^(both|util|prod|off)$/i.test(a||""))o2.emp[nameKey(n)]=a.toLowerCase()})};
-    $("#mcard").querySelectorAll("[data-qm]").forEach(el=>el.oninput=()=>{const o2=buf[pk]=buf[pk]||{},q2=qvFrom(buf,pk);o2.util=o2.util||{};o2.prod=o2.prod||{};["util","prod"].forEach(m=>{o2[m]={...q2[m],...o2[m]}});o2[el.dataset.qm][el.dataset.qk]=+el.value});
-    $("#qvOk").onclick=async()=>{try{if(FS.dir)await FS.dir.requestPermission({mode:"readwrite"})}catch(e){}
-      S.cfg.qvc=buf;if(AD)AD.qvc=clone(buf);await save(true);await fsWriteConfig();closeModal();renderMain();toast("QVC saved"+(FS.dir?" and shared":""))}};
-  draw();
-}
-
-async function registerBackup(){if(!FS.dir||typeof XLSX==="undefined")return;try{const rows=[["MSID","Code","Device name","Role","Name","Team","Valid till"],...(S.cfg.users||[]).map(u=>[u.pc,u.code||"",u.mc||"",ROLEN(u.role),u.name||"",u.team||"",u.until||""])];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),"Access");const buf=XLSX.write(wb,{type:"array",bookType:"xlsx"});const sd=await fsSub("_backup",true);const fh=await sd.getFileHandle("Eclipse_Access_Register.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(b64(buf)));await w.close();try{await sd.removeEntry("Eclipse_Access_Register.xlsx")}catch(e){}}catch(e){}}
-/* ---------- find my name (handles AR / RA mix-ups) ---------- */
-function lev(a,b){const d=[];for(let i=0;i<=a.length;i++){d[i]=[i];}for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
-function nameScore(q,n){const a=norm(q),b=norm(n);if(!a||!b)return 0;if(b.includes(a))return 1;if([...a].sort().join("")===[...b].sort().join(""))return .95;
-  let s=1-lev(a,b)/Math.max(a.length,b.length);String(n).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).forEach(w=>{if(w.length>1&&a.length>1)s=Math.max(s,(1-lev(a,w)/Math.max(a.length,w.length))*.95)});return s}
-function pickHTML(){
-  if(!can("pickname")||role()!=="employee"||view.as)return "";const id=ident();if(!id.pc||id.pc==="—")return "";
-  const done=S.auth&&S.auth[id.pc]&&S.auth[id.pc].nm;
-  if(done||(S.cfg.pick||{}).on===false)return `<div class="qcard" style="margin-top:10px"><b>🔒 Your data and QVC are locked</b><div class="muted" style="font-size:12px;margin-top:4px">${done?"Your name is linked as <b>"+esc(done)+"</b>, but it isn't in this date's data. If that is wrong, ask Admin to reset your login.":"Ask Admin to link your name."}</div></div>`;
-  return `<div class="qcard" style="margin-top:10px"><b>🔒 Pick your name first</b><div class="muted" style="font-size:12px;margin:4px 0">Type your name in any spelling (even letters mixed up). Your data and QVC then open for you only, and nobody else's. You can pick only once.</div>
-   <div class="mrow"><input id="pkQ" placeholder="Your name" autocomplete="off" spellcheck="false"></div><div id="pkL"></div></div>`;
-}
-function wirePick(){
-  const q=$("#pkQ"),D=cur();if(!q||!D)return;const names=[...new Set(D.rows.map(r=>r.name).filter(Boolean))];
-  q.oninput=()=>{const s=q.value.trim();if(s.length<2){$("#pkL").innerHTML="";return}
-    const m=names.map(n=>({n,s:nameScore(s,n)})).filter(x=>x.s>=.5).sort((a,b)=>b.s-a.s).slice(0,6);
-    $("#pkL").innerHTML=m.length?m.map(x=>`<button class="cap sm" data-pn="${esc(x.n)}" style="margin:4px 4px 0 0">${esc(x.n)}</button>`).join(""):`<div class="muted">No close match. Try fewer letters.</div>`;
-    $("#pkL").querySelectorAll("[data-pn]").forEach(b=>b.onclick=()=>ask(null,"Is this you?","Link <b>"+esc(b.dataset.pn)+"</b> to your login. This is logged.","Yes, this is me",()=>pickName(b.dataset.pn)))};
-}
-const claimF=n=>nameKey(n).replace(/ /g,"_")+".eclipse";
-async function pickName(n){const id=ident();if(!FS.dir){toast("Connect the data folder first");return}
-  const a=(await authGet(id.pc))||{};if(a.nm){toast("Name already linked. Ask Admin to reset your login.");return}
-  const t=await fsReadText("_claims",claimF(n));if(t){try{const c=JSON.parse(await unlock(t));if(c.m!==id.pc){toast("That name is already linked to another MSID. Contact Admin.");return}}catch(e){}}
-  try{await FS.dir.requestPermission({mode:"readwrite"})}catch(e){}
-  if(!(await fsWriteText("_claims",claimF(n),await encT(JSON.stringify({m:id.pc,at:Date.now()}))))){toast("Couldn't save. Allow write access to the data folder.");return}
-  a.nm=n;await authPut(id.pc,a);logAct("pick","",n);resolveMe();renderAll();toast("Linked to "+n)}
-
-/* ---------- Admin extras: Excel register, locked settings file, alerts ---------- */
-
-const claimDel=async n=>{try{const sd=await fsSub("_claims",false);await sd.removeEntry(claimF(n))}catch(e){}};
-async function adWho(){
-  const B=$("#adWhoB");if(!FS.dir){B.innerHTML=`<p class="ahelp">Connect the data folder first.</p>`;return}
-  B.innerHTML=`<p class="ahelp">Loading…</p>`;try{await FS.dir.requestPermission({mode:"readwrite"})}catch(e){}
-  const fl=(await fsList("_auth")).filter(n=>/\.eclipse$/.test(n)),rows=[];
-  for(let i=0;i<fl.length;i+=20)await Promise.all(fl.slice(i,i+20).map(async n=>{try{const a=JSON.parse(await unlock(await fsReadText("_auth",n)));rows.push({m:n.replace(/\.eclipse$/,""),a})}catch(e){}}));
-  rows.sort((x,y)=>(y.a.at||0)-(x.a.at||0));
-  B.innerHTML=`<input id="whQ" placeholder="Search MSID or name" style="margin:6px 0;max-width:240px"><div class="utable" id="whT" style="max-height:340px"></div><p class="ahelp">${rows.length} logins. Changes here work at once (no Save needed).</p>`;
-  const draw=()=>{const f=norm($("#whQ").value),rs=rows.filter(r=>!f||norm(r.m+((userOf(r.m)||{}).name||"")+(r.a.nm||"")).includes(f)).slice(0,100);
-    $("#whT").innerHTML=`<table class="perm"><thead><tr><th>MSID</th><th>Name in list</th><th>Name picked</th><th>Since</th><th></th></tr></thead><tbody>${rs.map(r=>`<tr><td>${esc(r.m)}</td><td>${esc((userOf(r.m)||{}).name||"—")}</td><td>${esc(r.a.nm||"—")}</td><td>${new Date(r.a.at||0).toLocaleDateString()}</td><td>${r.a.nm?`<button class="x" data-wu="${esc(r.m)}">Unlink name</button> `:""}<button class="x" data-wr="${esc(r.m)}">Reset login</button></td></tr>`).join("")}</tbody></table>`;
-    $("#whT").querySelectorAll("[data-wu]").forEach(b=>b.onclick=async()=>{const r=rows.find(x=>x.m===b.dataset.wu);await claimDel(r.a.nm);r.a.nm="";await authPut(r.m,r.a);toast("Name unlinked for "+r.m);draw()});
-    $("#whT").querySelectorAll("[data-wr]").forEach(b=>b.onclick=()=>ask(null,"Reset login for "+esc(b.dataset.wr)+"?","Password, PC link and picked name are cleared.","Reset",async()=>{const i=rows.findIndex(x=>x.m===b.dataset.wr),r=rows[i];if(r.a.nm)await claimDel(r.a.nm);if(S.auth)delete S.auth[r.m];try{const sd=await fsSub("_auth",false);await sd.removeEntry(r.m+".eclipse")}catch(e){}rows.splice(i,1);toast("Login reset");draw()},true))};
-  $("#whQ").oninput=draw;draw();
-}
-
-function mpwDialog(){
-  modal(`<h3>Change master password</h3><p class="ahelp">At least 10 characters with letters and numbers. Spaces are fine, so a sentence works.</p><input id="mp1" type="password" placeholder="New master password" autocomplete="off"><input id="mp2" type="password" placeholder="Repeat it" autocomplete="off"><div id="mpE" style="color:#c0392b;font-size:13px"></div><div class="mrow"><button class="cap teal" id="mpOk">Save</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#mpOk").onclick=async()=>{const a=$("#mp1").value,b=$("#mp2").value,e=t=>{$("#mpE").textContent=t};
-    if(a.length<10||!/[a-z]/i.test(a)||!/\d/.test(a))return e("Use 10 or more characters, with letters and numbers.");if(a!==b)return e("The two passwords don't match.");
-    const h=await sha("master|"+a);S.cfg.mph=h;if(AD)AD.mph=h;await save(true);try{if(FS.dir)await FS.dir.requestPermission({mode:"readwrite"})}catch(x){}await fsWriteConfig();
-    modal(`<h3>Master password changed</h3><p class="ahelp">It now works on every PC that uses the data folder. To also switch off the old default for the public link, paste this code between the quotes of <code>MPH_BAKED</code> in the HTML and upload it again.</p><textarea readonly rows="3" style="width:100%" onclick="this.select()">${h}</textarea><div class="mrow"><button class="cap" data-close>Done</button></div>`)};
-}
-function wireAdminX(){
-  $("#adminPg").insertAdjacentHTML("beforeend",`<section class="acard wide"><h4>🧭 Who logged in as whom</h4><p class="ahelp">Every MSID that has logged in, the name it picked, and when. Unlink a wrong name or reset a login from here.</p><button class="cap teal sm" id="adWho">Load list</button><div id="adWhoB"></div></section>`);$("#adWho").onclick=adWho;
-  $("#adDef").onclick=()=>ask(null,"Reset all access to defaults?","Every role goes back to the standard access and all per-user changes are removed. Names, tiers and users are not touched. Click Save & apply afterwards.","Reset",()=>{AD.perms=clone(DEFPERM);AD.users.forEach(u=>{delete u.ov});adChanged();openAdmin(AD.page||1);toast("Defaults restored. Click Save & apply.")},true);
-  $("#adQvc").onclick=qvcEditor;$("#adMpw").onclick=mpwDialog;$("#adFolder").oninput=e=>{AD.folder=e.target.value.trim()||"PCIS Data";adChanged()};
-  $("#adLockAll").onclick=()=>ask(null,"Lock all saved files?","Every saved date in the data folder is re-written in locked form. Old plain copies are replaced. This can take a minute for many dates.","Lock now",async()=>{if(!FS.dir){toast("Connect the data folder first");return}try{await FS.dir.requestPermission({mode:"readwrite"})}catch(e){}
-    const ks=Object.keys(FS.index);let n=0;for(const k of ks){const u=unkey(k),o=await loadDay(u.d,u.p);if(o){await fsWriteKey(k,o);n++}}toast(n+" files locked")});
-  $("#adXlsOut").onclick=()=>{const rows=[["MSID","Code","Device name","Role","Name","Team","Valid till"],...(AD.users||[]).map(u=>[u.pc,u.code||"",u.mc||"",ROLEN(u.role),u.name||"",u.team||"",u.until||""])];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),"Access");XLSX.writeFile(wb,"Eclipse_Access_Register_"+todayISO()+".xlsx")};
-  $("#adXlsIn").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const wb=XLSX.read(await f.arrayBuffer());const a=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1});let n=0;
-    a.slice(1).forEach(r=>{const pc=String(r[0]||"").trim().toUpperCase().replace(/\s+/g,"");if(pc.length<2||pc===ADMIN_MSID)return;const v={pc,code:String(r[1]||"").trim(),mc:String(r[2]||"").trim().toUpperCase(),role:roleFrom(r[3]),name:String(r[4]||"").trim(),team:String(r[5]||"").trim()};{const un=untilFrom(r[6]);if(un)v.until=un}const o=AD.users.find(u=>u.pc===pc);if(o)Object.assign(o,v);else AD.users.push(v);n++});
-    adChanged();openAdmin(1);toast(n+" rows imported. Click Save & apply.")}catch(x){toast("Couldn't read that file")}};
-  $("#adCfgOut").onclick=async()=>{const c={};SHARED.forEach(k=>c[k]=AD[k]!==undefined?AD[k]:S.cfg[k]);const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([await encT(JSON.stringify(c))],{type:"text/plain"}));a.download="Eclipse_Settings_"+todayISO()+".eclipse";a.click()};
-  $("#adCfgIn").onchange=async e=>{try{const c=JSON.parse(await decT(await e.target.files[0].text()));SHARED.forEach(k=>{if(c[k]!==undefined)AD[k]=c[k]});adChanged();openAdmin(1);toast("Settings loaded. Click Save & apply.")}catch(x){toast("That settings file couldn't be opened")}};
-  $("#adAlerts").onclick=async()=>{const fl=(await fsList("_system")).filter(n=>/^alert_/.test(n)).sort().slice(-30).reverse(),out=[];for(const n of fl){try{out.push(JSON.parse(await fsReadText("_system",n)))}catch(x){}}
-    modal(`<h3>Login alerts</h3>${out.length?out.map(e=>`<p style="margin:6px 0;font-size:13px"><b>${esc(e.msid)}</b> · ${new Date(e.at).toLocaleString()}<br>${esc(e.t)}</p>`).join(""):"<p>No alerts in the data folder.</p>"}<div class="mrow"><button class="cap" data-close>Close</button></div>`)};
-}
-const ADMX=()=>`<section class="acard wide"><h4>💰 QVC, privacy &amp; files</h4><div class="mrow" style="flex-wrap:wrap;gap:8px">
-  <button class="cap teal sm" id="adQvc">Edit QVC tiers &amp; amounts</button>
-  ${tgl("pick.on",(AD.pick||{}).on!==false,"Employees can find &amp; pick their own name")}
-  <button class="cap sm" id="adXlsOut">⬇ Access register (Excel)</button><label class="cap sm" style="cursor:pointer">⬆ Import register<input type="file" id="adXlsIn" accept=".xlsx,.xls,.csv" hidden></label>
-  <button class="cap sm" id="adCfgOut">⬇ Settings file (locked)</button><label class="cap sm" style="cursor:pointer">⬆ Load settings file<input type="file" id="adCfgIn" hidden></label>
-  <button class="cap sm" id="adAlerts">🚨 Login alerts</button><label class="cap sm" style="display:inline-flex;gap:6px;align-items:center">Data folder name <input id="adFolder" value="${esc(AD.folder||"PCIS Data")}" style="width:130px"></label><button class="cap sm" id="adMpw">🔑 Change master password</button><button class="cap sm" id="adDef">↺ Reset access to defaults</button><button class="cap amber sm" id="adLockAll">🔒 Lock all old files now</button></div>
-  <p class="ahelp">Live settings are saved in the data folder as a locked <code>config.eclipse</code>. If the folder won't connect, people can load the locked settings file by hand. The Excel register is a plain file, so keep it with you. Each MSID's password lives in its own locked file in <code>_auth</code>; ↺ in the table resets it.</p></section>`;
-
-function enter(){$("#gate").hidden=true;$("#app").hidden=false;boot()}
-$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;dev.set("");LS.set("admok",false);$("#app").hidden=true;gate()});
+function enter(){view.team=[];view.pf=[];view.emp=[];view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
+$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;$("#app").hidden=true;gate()});
 /* ---------- per-PC conveniences (only this browser) ---------- */
 const LS={get(k,d){try{const v=localStorage.getItem("eclipse_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("eclipse_"+k,JSON.stringify(v))}catch(e){}}};
 const COLS={time:1,dtd:1,hrs:1,cm:1};let PINS=LS.get("pins",[]);
@@ -1036,7 +852,7 @@ function renderRail(){
   if(!vis.some(p=>p.k===view.proc)&&vis.length)view.proc=(vis.find(p=>p.status==="live")||vis[0]).k;
   $("#rail").hidden=!can("rail");
   $("#rail").innerHTML=vis.map(p=>`<button class="cap ${p.status==="live"?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${esc(p.k)}">${esc(p.label||p.k)}<span class="tag">${p.status==="live"?"LIVE":p.status==="hidden"?"HIDDEN":"SOON"}</span></button>`).join("");
-  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;view.team="All";view.pf="All";view.emp="All";view.tool=null;renderRail();await openDate(dates()[0]||null)}));
+  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;view.team=[];view.pf=[];view.emp=[];view.tool=null;renderRail();await openDate(dates()[0]||null)}));
 }
 
 /* ---------- notice strip (Admin writes, scrolls left to right) ---------- */
@@ -1067,7 +883,7 @@ function setTop(){
   $("#expTxt").textContent="Valid till "+expiry();
   $("#btnAdmin").hidden=!(me.role==="admin"&&!view.as&&adminBtnOK());
   $("#btnBack").hidden=!view.as;
-  $("#btnHelp").hidden=!can("help");$("#btnTheme").hidden=!can("theme");
+  $("#btnHelp").hidden=!can("help");$("#btnQvc").hidden=!can("qvc");$("#btnTheme").hidden=!can("theme");
   const fb=$("#btnFolder");
   if(!fsSupported()||!can("folder"))fb.hidden=true;
   else if(FS.dir){fb.hidden=false;fb.textContent="📁 "+FS.dir.name;fb.title="Connected to the data folder"+(can("refresh")?" · click to refresh":"");fb.classList.add("on")}
@@ -1076,7 +892,7 @@ function setTop(){
   paintSync();renderNotice();
 }
 $("#btnFolder").onclick=()=>{if(FS.dir){if(can("refresh"))refreshFolder();return}FS.handle?fsAllow():fsConnect()};
-$("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;view.team="All";view.pf="All";view.emp="All";renderAll();toast("Back to Admin view");if(view.ret){const p=view.ret;view.ret=null;openAdmin(p)}});
+$("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;view.team=[];view.pf=[];view.emp=[];renderAll();toast("Back to Admin view")});
 $("#btnTheme").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");LS.set("theme",cur==="dark"?"light":"dark");applyTheme()};
 $("#btnHelp").onclick=showHelp;
 
@@ -1094,10 +910,10 @@ function inScope(r){
   return true;
 }
 function scopedRows(){const D=cur();if(!D)return[];return D.rows.map((r,i)=>({r,i})).filter(({r})=>inScope(r))}
-const pfOK=r=>view.pf==="All"||(r.proc||"")===view.pf,tmOK=r=>view.team==="All"||(r.team||"")===view.team;
+const pfOK=r=>!view.pf.length||view.pf.includes(r.proc||""),tmOK=r=>!view.team.length||view.team.includes(r.team||""),emOK=r=>!view.emp.length||view.emp.includes(r.name);
 const pinned=r=>can("pin")&&PINS.includes(nameKey(r.name));
 function rowsFiltered(){
-  const l=scopedRows().filter(({r})=>pfOK(r)&&tmOK(r)&&(view.emp==="All"||r.name===view.emp)&&(!view.q||norm(r.name).includes(norm(view.q))));
+  const l=scopedRows().filter(({r})=>pfOK(r)&&tmOK(r)&&emOK(r)&&(!view.q||norm(r.name).includes(norm(view.q))));
   return can("pin")?l.sort((a,b)=>(pinned(b.r)?1:0)-(pinned(a.r)?1:0)):l;
 }
 function visTasks(){const D=cur();if(!D)return[];if(!(view.active&&can("active")))return D.tasks;const rs=rowsFiltered().map(x=>x.r);const on=D.tasks.filter(t=>rs.some(r=>+r.c[t.k]>0));return on.length?on:D.tasks}
@@ -1109,11 +925,11 @@ function renderMain(){
     const gl=$("#goLive");if(gl)gl.onclick=async()=>{view.proc=procs().find(x=>x.status==="live"&&procVisible(x)).k;renderRail();await openDate(dates()[0]||null)};return}
   const D=cur(),sc=scopedRows(),locked=isLocked(view.date,view.saved);if(view.cleared)view.tray=false;
   const pfs=[...new Set(sc.map(x=>x.r.proc).filter(Boolean))].sort();
-  if(view.pf!=="All"&&!pfs.includes(view.pf))view.pf="All";
+  view.pf=view.pf.filter(x=>pfs.includes(x));
   const teams=[...new Set(sc.filter(({r})=>pfOK(r)).map(x=>x.r.team).filter(Boolean))].sort();
-  if(view.team!=="All"&&!teams.includes(view.team))view.team="All";
+  view.team=view.team.filter(x=>teams.includes(x));
   const empList=sc.filter(({r})=>pfOK(r)&&tmOK(r)).map(x=>x.r.name).sort();
-  if(view.emp!=="All"&&!empList.includes(view.emp))view.emp="All";
+  view.emp=view.emp.filter(x=>empList.includes(x));
   const needLink=D&&scope()!=="all"&&!sc.length,ds=dates(),di=ds.indexOf(view.date);
   const closed=view.saved&&view.saved.closed;
   $("#main").innerHTML=`
@@ -1148,14 +964,13 @@ function renderMain(){
     <button class="cap amber sm" id="dGo">Use pasted data</button>
     ${view.forceReplace||view.trialDump?`<button class="cap sm" id="dCancel">Cancel</button>`:""}
   </div>`:""}
-  ${D?(needLink?`<div class="empty"><h2>Nothing to show yet</h2><p>This PC isn't linked to ${scope()==="own"?"an employee name":"a team"}. Ask the Admin to link it in Access control.</p>${pickHTML()}</div>`:`
-  ${can("shift")&&!view.trial?shiftBar():""}${previewNote()}
+  ${D?(needLink?`<div class="empty"><h2>Nothing to show yet</h2><p>This PC isn't linked to ${scope()==="own"?"an employee name":"a team"}. Ask the Admin to link it in Access control.</p></div>`:`
+  ${can("shift")&&!view.trial?shiftBar():""}
   ${myCardHTML()}
-  ${qvcHTML()}
   <div class="bar fbar">
-    ${pfs.length>1||scope()==="all"?`<label class="fld"><span>Process</span><select id="fPf"><option>All</option>${pfs.map(t=>`<option ${t===view.pf?"selected":""}>${esc(t)}</option>`).join("")}</select></label>`:""}
-    ${teams.length>1||scope()==="all"?`<label class="fld"><span>Team / Manager</span><select id="fTeam"><option>All</option>${teams.map(t=>`<option ${t===view.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>`:""}
-    ${empList.length>1?`<label class="fld"><span>User Name</span><select id="fEmp"><option>All</option>${empList.map(n=>`<option ${n===view.emp?"selected":""}>${esc(n)}</option>`).join("")}</select></label>`:""}
+    ${pfs.length>1||scope()==="all"?msel("pf","Process",pfs):""}
+    ${teams.length>1||scope()==="all"?msel("team","Team / Manager",teams):""}
+    ${empList.length>1?msel("emp","User Name",[...new Set(empList)]):""}
     ${can("search")&&empList.length>1?`<label class="fld"><span>Search</span><input id="fQ" placeholder="Type a name" value="${esc(view.q)}"></label>`:""}
     ${can("active")?`<label class="chk"><input type="checkbox" id="fAct" ${view.active?"checked":""}> Only baskets with data</label>`:""}
   </div>
@@ -1168,7 +983,7 @@ function renderMain(){
   on("#trExit","onclick",()=>{view.trial=false;view.trialDump=false;view.dumpOpen=false;openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null)});
   on("#drRes","onclick",()=>{view.work=clone(view.draft.work);view.draft=null;view.dirty=true;renderMain();toast("Unsaved work restored. Click Save to keep it.")});
   on("#drDrop","onclick",()=>{dropDraft();renderMain()});
-  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{view.emp="All";view.team="All";view.pf="All";view.forceReplace=false;openDate(d)})});
+  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{view.emp=[];view.team=[];view.pf=[];view.forceReplace=false;openDate(d)})});
   on("#dPrev","onclick",()=>jumpDate(1));on("#dNext","onclick",()=>jumpDate(-1));
   on("#dToday","onclick",()=>{const t=todayISO();if(ds.includes(t))guardDirty(()=>openDate(t));else{toast("Today ("+fmtDate(t)+") has no data yet"+(can("dump")?". Use Dump to add it.":""));if(can("dump")){view.dumpDate=t;view.dumpOpen=true;view.forceReplace=false;view.trialDump=false;renderMain()}}});
   on("#bDump","onclick",()=>{const was=view.dumpOpen&&!view.forceReplace&&!view.trialDump;view.forceReplace=false;view.trialDump=false;view.dumpOpen=!was;renderMain()});
@@ -1180,12 +995,10 @@ function renderMain(){
   on("#bClose","onclick",closeDay);on("#bReopen","onclick",reopenDay);
   on("#bShare","onclick",()=>styledExport(view.trial?"Trial":view.date,true));
   on("#bTray","onclick",()=>{view.tray=!view.tray;renderMain()});
-  wireDump();wireTray();wireQvc();wirePick();
+  wireDump();wireTray();
   if(!D||needLink)return;
   wireShift();
-  on("#fPf","onchange",e=>{view.pf=e.target.value;view.team="All";view.emp="All";renderMain()});
-  on("#fTeam","onchange",e=>{view.team=e.target.value;view.emp="All";renderMain()});
-  on("#fEmp","onchange",e=>{view.emp=e.target.value;renderGrid()});
+  wireMsel();
   on("#fQ","oninput",e=>{view.q=e.target.value;renderGrid()});
   on("#fAct","onchange",e=>{view.active=e.target.checked;LS.set("active",view.active);renderGrid()});
   renderGrid();paintDirty();
@@ -1401,7 +1214,7 @@ function copyReport(){
   const D=cur(),list=rowsFiltered().map(x=>x.r),T=D.tasks,s=sumUp(list,T),t=tg(view.proc);
   const rk=list.map(r=>({r,c:calc(r,T)})).filter(x=>x.c.prod>0).sort((a,b)=>b.c.pct-a.c.pct);
   const lv=list.filter(r=>+r.lv>0&&+r.lv>=+r.full).map(r=>r.name);
-  const txt=[`${(procOf(view.proc)||{}).label||view.proc} productivity · ${view.trial?"Trial":fmtDate(view.date)}${view.team!=="All"?" · "+view.team:""}`,
+  const txt=[`${(procOf(view.proc)||{}).label||view.proc} productivity · ${view.trial?"Trial":fmtDate(view.date)}${view.team.length?" · "+view.team.join(", "):""}`,
     `Employees: ${list.length} · Team productivity: ${f2(s.pct)}% · Earned hrs: ${f2(s.tot)} · Downtime hrs: ${f2(s.dt)}`,
     `Below ${t.a}%: ${rk.filter(x=>x.c.pct<t.a).length}`,"",
     "Top 5:",...rk.slice(0,5).map((x,i)=>`${i+1}. ${x.r.name} – ${f2(x.c.pct)}%`),"",
@@ -1426,16 +1239,48 @@ document.addEventListener("keydown",e=>{
   if(e.altKey&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){e.preventDefault();jumpDate(e.key==="ArrowLeft"?1:-1)}
 },true);
 
+/* ---------- multi-select dropdown with checkboxes (Process, Team / Manager, User Name) ---------- */
+function msel(key,label,opts){
+  const sel=view[key],txt=!sel.length?"All":sel.length===1?sel[0]:sel.length+" selected";
+  return `<div class="fld"><span>${label}</span><div class="ms" data-ms="${key}"><button type="button" class="msb ${sel.length?"on":""}" title="${esc(sel.join(", "))}">${esc(txt)}<i>▾</i></button>
+    <div class="msp" hidden>${opts.length>8?`<input class="mss" placeholder="Search">`:""}
+      <label class="msi all"><input type="checkbox" data-all ${sel.length?"":"checked"}> <b>All</b></label>
+      <div class="msl">${opts.map(o=>`<label class="msi" data-t="${esc(norm(o))}"><input type="checkbox" value="${esc(o)}" ${sel.includes(o)?"checked":""}> ${esc(o)}</label>`).join("")}</div>
+      <div class="msf"><button type="button" class="cap sm" data-clr>Clear</button><button type="button" class="cap sm teal" data-ok>Done</button></div></div></div></div>`;
+}
+let msOpen=null;
+function closeMs(apply){
+  if(!msOpen)return;const box=msOpen,key=box.dataset.ms;msOpen=null;box.querySelector(".msp").hidden=true;
+  if(!apply)return;const v=[...box.querySelectorAll(".msl input:checked")].map(i=>i.value);
+  if(JSON.stringify(v)===JSON.stringify(view[key]))return;
+  view[key]=v;if(key==="pf"){view.team=view.team.filter(()=>true)}renderMain();
+  if(!$("#qvcPg").hidden)renderQvc();
+}
+function wireMsel(){
+  document.querySelectorAll(".ms").forEach(box=>{
+    const pan=box.querySelector(".msp"),all=box.querySelector("[data-all]"),items=()=>[...box.querySelectorAll(".msl input")];
+    box.querySelector(".msb").onclick=e=>{e.stopPropagation();if(msOpen===box)return closeMs(true);closeMs(true);msOpen=box;pan.hidden=false;const s=box.querySelector(".mss");if(s){s.value="";s.focus()}};
+    pan.onclick=e=>e.stopPropagation();
+    all.onchange=()=>{items().forEach(i=>i.checked=false);all.checked=true};
+    box.querySelector(".msl").onchange=()=>{all.checked=!items().some(i=>i.checked)};
+    const s=box.querySelector(".mss");if(s)s.oninput=()=>{const q=norm(s.value);box.querySelectorAll(".msl .msi").forEach(l=>l.hidden=q&&!l.dataset.t.includes(q))};
+    box.querySelector("[data-clr]").onclick=()=>{items().forEach(i=>i.checked=false);all.checked=true};
+    box.querySelector("[data-ok]").onclick=()=>closeMs(true);
+  });
+}
+document.addEventListener("click",()=>closeMs(true));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&msOpen)closeMs(false)},true);
+
 /* ---------- actions: Save / Erase / Reset / Delete / Remove / Day complete ---------- */
 async function doSave(silent){
-  if(!view.work)return;if(!canD("save")){toast("No access to save. Use Trial to check your own data.");return}
+  if(!canD("save")||!view.work)return;
   const go=async()=>{const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();paintDirty();logAct("save",view.date);renderGrid();toast("Saved "+fmtDate(view.date)+(FS.dir?" to the data folder ✓":" on this PC ✓"))};
   if(silent)return go();
   ask("save","Save "+fmtDate(view.date)+"?","The changes on screen become the saved data for this date"+(FS.dir?" and are written to the team data folder, so everyone sees them.":" on this PC."),"Save",go);
 }
 function resetDay(){
   ask("reset","Reset the screen?",(view.dirty?"Changes you haven't saved are thrown away. ":"")+(view.trial?"The trial data is cleared.":"The screen is cleared. Saved data for "+fmtDate(view.date)+" is <b>safe</b> — pick the date again to see it."),"Reset",()=>{
-    view.dirty=false;dropDraft();view.trial=false;view.trialDump=false;view.dumpOpen=false;view.forceReplace=false;view.work=null;view.saved=null;view.prev=null;view.cleared=true;view.team="All";view.pf="All";view.emp="All";view.q="";renderAll();toast("Screen cleared. Saved data is safe.")});
+    view.dirty=false;dropDraft();view.trial=false;view.trialDump=false;view.dumpOpen=false;view.forceReplace=false;view.work=null;view.saved=null;view.prev=null;view.cleared=true;view.team=[];view.pf=[];view.emp=[];view.q="";renderAll();toast("Screen cleared. Saved data is safe.")});
 }
 function deleteDate(){
   const d=view.date;if(!d)return;
@@ -1444,7 +1289,7 @@ function deleteDate(){
 }
 function removeEmp(i){
   const D=cur(),r=D&&D.rows[i];if(!r||!canD("remove"))return;
-  ask("remove","Remove "+esc(r.name)+"?","Their row is removed from "+fmtDate(view.date)+" on screen. "+(canD("save")?"Click <b>Save</b> to make it permanent.":""),"Remove",()=>{D.rows.splice(i,1);markDirty();if(view.emp===r.name)view.emp="All";renderMain();toast(r.name+" removed")});
+  ask("remove","Remove "+esc(r.name)+"?","Their row is removed from "+fmtDate(view.date)+" on screen. "+(canD("save")?"Click <b>Save</b> to make it permanent.":""),"Remove",()=>{D.rows.splice(i,1);markDirty();view.emp=view.emp.filter(n=>n!==r.name);renderMain();toast(r.name+" removed")});
 }
 function closeDay(){
   if(view.dirty){toast("Save your changes first");return}
@@ -1533,7 +1378,7 @@ async function dumpRows(rows,src,dt,meta){
     <div class="mrow"><button class="cap amber" id="pvYes">${trial?"Show trial":"Yes, insert"}</button><button class="cap" data-close>Cancel</button></div>`);
   $("#mcard").querySelectorAll("[data-usedate]").forEach(b=>b.onclick=()=>{closeModal();view.dumpDate=b.dataset.usedate;dumpRows(rows,src,b.dataset.usedate,meta)});
   $("#pvYes").onclick=()=>{
-    if(trial){closeModal();view.trial=true;view.trialDump=false;view.dumpOpen=false;view.work={tasks:P.tasks,rows:P.rows,src:"Trial · "+src};view.saved=null;view.dirty=false;view.prev=null;view.draft=null;view.team="All";view.pf="All";view.emp="All";view.q="";renderAll();toast("Trial ready. Nothing is saved.");return}
+    if(trial){closeModal();view.trial=true;view.trialDump=false;view.dumpOpen=false;view.work={tasks:P.tasks,rows:P.rows,src:"Trial · "+src};view.saved=null;view.dirty=false;view.prev=null;view.draft=null;view.team=[];view.pf=[];view.emp=[];view.q="";renderAll();toast("Trial ready. Nothing is saved.");return}
     const mode=old?($("#mcard").querySelector('input[name="dm"]:checked')||{}).value:"new";
     const commit=async()=>{
       let obj,added=0,upd=0;
@@ -1547,7 +1392,7 @@ async function dumpRows(rows,src,dt,meta){
         obj.src=(obj.src?obj.src+" + ":"")+src;
       }else{if(mode==="replace")await binPut(d,old,"Replaced");obj={tasks:P.tasks,rows:P.rows,src}}
       obj.at=Date.now();obj.pc=me.pc;if(meta&&meta.fh)obj.fh=meta.fh;
-      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;view.emp="All";view.team="All";view.pf="All";view.q="";await openDate(d);
+      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;view.emp=[];view.team=[];view.pf=[];view.q="";await openDate(d);
       toast(mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`Saved ${P.rows.length} employees into ${fmtDate(d)}${FS.dir?" and the data folder":""}`);
     };
     if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) moves to the recycle bin and this file takes its place, headings included.","Replace",commit,true);
@@ -1807,6 +1652,166 @@ function exportMonth(ym,arr){
   toast("Month summary exported");
 }
 
+/* ---------- $ QVC sheet: hidden icon for Admin / Manager / SME (switch in Admin: feature "qvc") ---------- */
+const QH0={name:"User Name",team:"Team / Manager",proc:"Process",grade:"Grade",pct:"%",tier:"Tier",num:"Number",amt:"Amount ₹",lock:"Lock"};
+const QSLAB0=()=>[{f:98,t:99,tier:"Tier 3",amt:0},{f:99,t:99.31,tier:"Tier 2",amt:0},{f:99.31,t:"",tier:"Tier 1",amt:0}];
+const QV={ym:null,cache:{},q:"",slabOpen:false,slabGrade:null};
+function qFresh(){return{cfg:{grades:["22","23","24"],teamGrade:"24",slabs:{"22":QSLAB0(),"23":QSLAB0(),"24":QSLAB0()},heads:{},metric:"util",at:0},months:{}}}
+function qFix(q){q=q||qFresh();q.cfg=Object.assign(qFresh().cfg,q.cfg||{});q.months=q.months||{};
+  q.cfg.grades=(q.cfg.grades||[]).map(String).filter(Boolean);if(!q.cfg.grades.length)q.cfg.grades=["22"];
+  q.cfg.grades.forEach(g=>{if(!Array.isArray(q.cfg.slabs[g]))q.cfg.slabs[g]=QSLAB0()});return q}
+const QD=()=>(S.qvc=qFix(S.qvc));
+const qh=k=>(QD().cfg.heads||{})[k]||QH0[k];
+/* merge two copies (this PC and the data folder): newest settings win, rows merge one by one */
+function qMerge(a,b){
+  a=qFix(clone(a));b=qFix(clone(b));const out=(b.cfg.at||0)>(a.cfg.at||0)?b:a,other=out===b?a:b;
+  Object.entries(other.months).forEach(([ym,m])=>{const o=out.months[ym]=out.months[ym]||{rows:{}};o.rows=o.rows||{};
+    Object.entries(m.rows||{}).forEach(([k,r])=>{if(!o.rows[k]||(r.at||0)>(o.rows[k].at||0))o.rows[k]=r});
+    if((m.lockAt||0)>(o.lockAt||0)){o.locked=m.locked;o.lockAt=m.lockAt;o.snap=m.snap}});
+  return out;
+}
+async function qLoad(){if(!FS.dir)return;try{const t=await fsReadText("_system","qvc.json");if(t){S.qvc=qMerge(QD(),JSON.parse(t));save()}}catch(e){}}
+let qT=null;
+function qSave(){clearTimeout(qT);qT=setTimeout(async()=>{save();if(FS.dir&&fsMode()==="readwrite"){let cur=null;try{cur=JSON.parse(await fsReadText("_system","qvc.json")||"null")}catch(e){}
+  if(cur)S.qvc=qMerge(QD(),cur);await fsWriteText("_system","qvc.json",JSON.stringify(S.qvc));save()}},600)}
+const qMonth=ym=>{const q=QD();return q.months[ym]=q.months[ym]||{rows:{}}};
+const qMetricName=()=>QD().cfg.metric==="prod"?"Productivity %":"Utilization %";
+function qPct(a){return QD().cfg.metric==="prod"?(a.prod>0?a.tot/a.prod*100:0):(a.hrs>0?a.prod/a.hrs*100:0)}
+function qSlab(g,p){const L=(QD().cfg.slabs[g]||[]).filter(s=>s.f!==""&&s.f!=null);
+  return L.find(s=>p>=+s.f&&(s.t===""||s.t==null||p<+s.t))||null}
+
+$("#btnQvc").onclick=()=>openQvc();
+async function openQvc(){
+  if(!can("qvc"))return;
+  $("#qvcPg").hidden=false;document.body.style.overflow="hidden";
+  $("#qvcPg").innerHTML=`<div class="apin"><p class="pvnote" style="padding:20px">Loading…</p></div>`;
+  await qLoad();
+  const ms=[...new Set(dates().map(d=>d.slice(0,7)))].sort().reverse();
+  QV.ym=QV.ym&&ms.includes(QV.ym)?QV.ym:(view.date?view.date.slice(0,7):ms[0]||todayISO().slice(0,7));
+  QV.cache={};await renderQvc();
+}
+function closeQvc(){$("#qvcPg").hidden=true;document.body.style.overflow="";renderMain()}
+async function qRows(ym){
+  if(!QV.cache[ym])QV.cache[ym]=await monthDays(ym);
+  const MD=QV.cache[ym],P={},opt={pf:new Set(),team:new Set(),emp:new Set()};
+  MD.forEach(({o})=>o.rows.filter(inScope).forEach(r=>{
+    if(r.proc)opt.pf.add(r.proc);if(pfOK(r)&&r.team)opt.team.add(r.team);if(pfOK(r)&&tmOK(r))opt.emp.add(r.name);
+    if(!(pfOK(r)&&tmOK(r)&&emOK(r)))return;
+    const c=calc(r,o.tasks),k=nameKey(r.name),p=P[k]=P[k]||{k,name:r.name,team:r.team||"",proc:r.proc||"",tot:0,prod:0,hrs:0,days:0};
+    p.tot+=c.total;if(c.prod>0){p.prod+=c.prod;p.days++}p.hrs+=Math.max(0,c.hours);if(r.team)p.team=r.team;if(r.proc)p.proc=r.proc}));
+  const list=Object.values(P).sort((a,b)=>a.name.localeCompare(b.name));
+  const all=list.reduce((a,p)=>({tot:a.tot+p.tot,prod:a.prod+p.prod,hrs:a.hrs+p.hrs}),{tot:0,prod:0,hrs:0});
+  return{MD,list,teamPct:qPct(all),opt:{pf:[...opt.pf].sort(),team:[...opt.team].sort(),emp:[...opt.emp].sort()}};
+}
+function qLine(p,M,teamPct){
+  const q=QD(),rec=M.rows[p.k]||{},grade=String(rec.grade||q.cfg.grades[0]),isTeam=grade===String(q.cfg.teamGrade);
+  const sn=(M.locked&&M.snap&&M.snap[p.k])||(rec.lock&&rec.snap)||null;
+  const pct=sn?sn.pct:(isTeam?teamPct:qPct(p)),sl=qSlab(grade,pct);
+  const autoAmt=sn?sn.auto:(sl?+sl.amt||0:0),tier=sn?sn.tier:(sl?sl.tier:"—");
+  const amt=rec.amt!==""&&rec.amt!=null?+rec.amt:autoAmt;
+  return{rec,grade,isTeam,pct,tier,autoAmt,amt,locked:!!(M.locked||rec.lock)};
+}
+async function renderQvc(){
+  if($("#qvcPg").hidden)return;if(!can("qvc"))return closeQvc();
+  const q=QD(),ym=QV.ym,M=qMonth(ym),{list,teamPct,opt}=await qRows(ym),SL=!!M.locked;
+  const ms=[...new Set(dates().map(d=>d.slice(0,7)).concat(ym))].sort().reverse();
+  const qq=norm(QV.q),rows=list.filter(p=>!qq||norm(p.name+" "+p.team).includes(qq));
+  const lines=rows.map(p=>({p,...qLine(p,M,teamPct)}));
+  const totAmt=lines.reduce((a,x)=>a+x.amt,0),tiers={};lines.forEach(x=>tiers[x.tier]=(tiers[x.tier]||0)+1);
+  const H=k=>SL?`<span>${esc(qh(k))}</span>`:`<input class="qhd" data-qh="${k}" value="${esc(qh(k))}" aria-label="Heading">`;
+  view.pf=view.pf.filter(x=>opt.pf.includes(x));
+  $("#qvcPg").innerHTML=`<div class="apin">
+    <div class="ahead"><div><div class="brand" style="font-size:18px"><span>$</span> QVC sheet</div><div class="exp" style="color:var(--muted)">${list.length} people · ${fmtMonth(ym)} · ${esc(qMetricName())} from the saved data · changes save by themselves${FS.dir?" to the data folder":" on this PC"}</div></div>
+      <div class="grow"></div>
+      <label class="fld"><span>Month</span><select id="qM">${ms.map(m=>`<option value="${m}" ${m===ym?"selected":""}>${fmtMonth(m)}</option>`).join("")}</select></label>
+      <button class="cap sm ${QV.slabOpen?"on teal":""}" id="qSlabBtn">Slab settings</button>
+      <button class="cap sm ${SL?"amber":""}" id="qLockAll">${SL?"🔒 Sheet locked":"🔓 Lock sheet"}</button>
+      <button class="cap sm teal" id="qExp">Export Excel</button>
+      <button class="cap sm" id="qClose">Close</button></div>
+    <div class="bar fbar" style="margin-top:10px">${msel("pf","Process",opt.pf)}${msel("team","Team / Manager",opt.team)}${msel("emp","User Name",opt.emp)}
+      <label class="fld"><span>Search</span><input id="qQ" placeholder="Type a name" value="${esc(QV.q)}"></label>
+      <label class="fld"><span>% used</span><select id="qMet" ${SL?"disabled":""}><option value="util" ${q.cfg.metric!=="prod"?"selected":""}>Utilization % (Prod hrs ÷ Hours)</option><option value="prod" ${q.cfg.metric==="prod"?"selected":""}>Productivity % (Earned ÷ Prod hrs)</option></select></label></div>
+    ${QV.slabOpen?qSlabHTML(SL):""}
+    <div class="kp" style="margin-top:10px"><span>People<b>${lines.length}</b></span><span>Total amount<b>₹ ${totAmt.toLocaleString("en-IN",{maximumFractionDigits:2})}</b></span><span>Grade ${esc(q.cfg.teamGrade||"—")} uses total<b>${f2(teamPct)}%</b></span>${Object.entries(tiers).map(([t,n])=>`<span>${esc(t)}<b>${n}</b></span>`).join("")}</div>
+    <div class="gridbox qgrid"><table><thead><tr><th style="text-align:left">${H("name")}</th><th>${H("team")}</th><th>${H("proc")}</th><th>${H("grade")}</th><th>${H("pct")}<small>${esc(qMetricName())}</small></th><th>${H("tier")}</th><th>${H("num")}</th><th>${H("amt")}</th><th>${H("lock")}</th></tr></thead><tbody>
+    ${lines.map(x=>{const lk=x.locked,dis=lk?"disabled":"";return `<tr data-k="${esc(x.p.k)}" class="${lk?"qlk":""}">
+      <td style="text-align:left"><b>${esc(x.p.name)}</b></td><td>${esc(x.p.team)}</td><td>${esc(x.p.proc)}</td>
+      <td><select data-qg ${dis}>${q.cfg.grades.map(g=>`<option ${g===x.grade?"selected":""}>${esc(g)}</option>`).join("")}${q.cfg.grades.includes(x.grade)?"":`<option selected>${esc(x.grade)}</option>`}</select></td>
+      <td><b class="${x.isTeam?"qteam":""}" title="${x.isTeam?"Uses the total of everyone on this sheet":""}">${f2(x.pct)}%</b>${x.isTeam?`<small class="qtag">total</small>`:""}</td>
+      <td><span class="qtier">${esc(x.tier)}</span></td>
+      <td><input data-qn value="${esc(x.rec.num??"")}" ${dis} placeholder="—"></td>
+      <td><input data-qa type="number" step="0.01" value="${x.rec.amt!==""&&x.rec.amt!=null?esc(x.rec.amt):""}" placeholder="${x.autoAmt}" class="${x.rec.amt!==""&&x.rec.amt!=null?"ovr":""}" ${dis}></td>
+      <td><button class="qlock" data-ql ${M.locked?"disabled":""} aria-label="Lock row">${x.rec.lock||M.locked?"🔒":"🔓"}</button></td></tr>`}).join("")||`<tr><td colspan="9" style="padding:20px;color:var(--muted)">No saved data for ${fmtMonth(ym)} with these filters.</td></tr>`}
+    </tbody></table></div>
+    <p class="ahelp" style="margin-top:8px">Tier and amount come from the slab of each grade. Type an amount to set it for one person (amber); clear it to go back to the slab. 🔒 freezes a row, “Lock sheet” freezes everyone.</p></div>`;
+  wireQvc(lines,teamPct);
+}
+function qSlabHTML(SL){
+  const q=QD(),g=QV.slabGrade&&q.cfg.grades.includes(QV.slabGrade)?QV.slabGrade:(QV.slabGrade=q.cfg.grades[0]),L=q.cfg.slabs[g],dis=SL?"disabled":"";
+  return `<div class="tray" style="margin-top:10px"><div class="calh"><b>Slab settings</b><span class="muted">${SL?"Unlock the sheet to change slabs.":"Changes apply straight away to unlocked rows."}</span></div>
+    <div class="mrow" style="margin-top:0"><label>Grades (comma separated)<input id="qGr" value="${esc(q.cfg.grades.join(", "))}" ${dis}></label>
+      <label>Grade that uses everyone's total<select id="qTG" ${dis}><option value="">None</option>${q.cfg.grades.map(x=>`<option ${x===String(q.cfg.teamGrade)?"selected":""}>${esc(x)}</option>`).join("")}</select></label></div>
+    <div class="ttabs" style="margin-top:8px">${q.cfg.grades.map(x=>`<button class="tt ${x===g?"on":""}" data-sg="${esc(x)}">Grade ${esc(x)}</button>`).join("")}</div>
+    <table class="mt wide qslab"><thead><tr><th>From %</th><th>To % (blank = and above)</th><th>Tier</th><th>Amount ₹</th><th></th></tr></thead><tbody>
+    ${L.map((s,i)=>`<tr><td><input type="number" step="0.01" data-sf="${i}" value="${esc(s.f)}" ${dis}></td><td><input type="number" step="0.01" data-st="${i}" value="${esc(s.t)}" ${dis}></td><td><input data-sn="${i}" value="${esc(s.tier)}" ${dis}></td><td><input type="number" step="0.01" data-sa="${i}" value="${esc(s.amt)}" ${dis}></td><td>${SL?"":`<button class="x" data-sd="${i}" aria-label="Delete slab">✕</button>`}</td></tr>`).join("")}</tbody></table>
+    ${SL?"":`<div class="mrow"><button class="cap sm" id="qSAdd">Add row</button><button class="cap sm" id="qSCopy">Copy grade ${esc(g)} slabs to all grades</button></div>`}</div>`;
+}
+function wireQvc(lines,teamPct){
+  const P=$("#qvcPg"),q=QD(),M=qMonth(QV.ym),cfgCh=()=>{q.cfg.at=Date.now();qSave()};
+  wireMsel();
+  $("#qClose").onclick=closeQvc;
+  $("#qM").onchange=e=>{QV.ym=e.target.value;renderQvc()};
+  $("#qQ").oninput=e=>{QV.q=e.target.value;clearTimeout(qT2);qT2=setTimeout(()=>{renderQvc().then(()=>{const i=$("#qQ");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}})},250)};
+  $("#qMet").onchange=e=>{q.cfg.metric=e.target.value;cfgCh();renderQvc()};
+  $("#qSlabBtn").onclick=()=>{QV.slabOpen=!QV.slabOpen;renderQvc()};
+  $("#qLockAll").onclick=()=>{
+    if(M.locked){ask(null,"Unlock the sheet?","Everyone's % and amount follow the data and slabs again.","Unlock",()=>{M.locked=false;delete M.snap;M.lockAt=Date.now();qSave();renderQvc()});return}
+    ask(null,"Lock "+fmtMonth(QV.ym)+"?","Every row is frozen with its current %, tier and amount.","Lock sheet",()=>{M.snap={};lines.forEach(x=>M.snap[x.p.k]={pct:x.pct,tier:x.tier,auto:x.autoAmt});M.locked=true;M.lockAt=Date.now();qSave();renderQvc()})};
+  $("#qExp").onclick=()=>qExport(lines);
+  P.querySelectorAll("[data-qh]").forEach(i=>i.onchange=()=>{q.cfg.heads[i.dataset.qh]=i.value.trim()||QH0[i.dataset.qh];cfgCh()});
+  const recOf=tr=>{const k=tr.dataset.k;const r=M.rows[k]=M.rows[k]||{};r.at=Date.now();return r};
+  P.querySelectorAll("[data-qg]").forEach(s=>s.onchange=()=>{recOf(s.closest("tr")).grade=s.value;qSave();renderQvc()});
+  P.querySelectorAll("[data-qn]").forEach(s=>s.onchange=()=>{recOf(s.closest("tr")).num=s.value.trim();qSave()});
+  P.querySelectorAll("[data-qa]").forEach(s=>s.onchange=()=>{const r=recOf(s.closest("tr"));if(s.value==="")delete r.amt;else r.amt=+s.value;qSave();renderQvc()});
+  P.querySelectorAll("[data-ql]").forEach(b=>b.onclick=()=>{const tr=b.closest("tr"),x=lines.find(l=>l.p.k===tr.dataset.k),r=recOf(tr);
+    if(r.lock){r.lock=false;delete r.snap}else{r.lock=true;r.snap={pct:x.pct,tier:x.tier,auto:x.autoAmt}}qSave();renderQvc()});
+  if(!QV.slabOpen)return;
+  P.querySelectorAll("[data-sg]").forEach(b=>b.onclick=()=>{QV.slabGrade=b.dataset.sg;renderQvc()});
+  const g=QV.slabGrade,L=()=>q.cfg.slabs[g];
+  const gr=$("#qGr");if(gr)gr.onchange=()=>{const v=[...new Set(gr.value.split(",").map(x=>x.trim()).filter(Boolean))];if(!v.length){toast("Keep at least one grade");return}q.cfg.grades=v;v.forEach(x=>{if(!q.cfg.slabs[x])q.cfg.slabs[x]=clone(q.cfg.slabs[g]||QSLAB0())});cfgCh();renderQvc()};
+  const tgs=$("#qTG");if(tgs)tgs.onchange=()=>{q.cfg.teamGrade=tgs.value;cfgCh();renderQvc()};
+  const num=v=>v===""?"":+v;
+  P.querySelectorAll("[data-sf],[data-st],[data-sn],[data-sa]").forEach(i=>i.onchange=()=>{const d=i.dataset,ix=+(d.sf??d.st??d.sn??d.sa),s=L()[ix];
+    if(d.sf!=null)s.f=num(i.value);else if(d.st!=null)s.t=num(i.value);else if(d.sn!=null)s.tier=i.value.trim();else s.amt=+i.value||0;cfgCh();renderQvc()});
+  P.querySelectorAll("[data-sd]").forEach(b=>b.onclick=()=>{L().splice(+b.dataset.sd,1);cfgCh();renderQvc()});
+  const ad=$("#qSAdd");if(ad)ad.onclick=()=>{const l=L(),last=l[l.length-1];l.push({f:last&&last.t!==""?last.t:"",t:"",tier:"Tier "+(l.length+1),amt:0});cfgCh();renderQvc()};
+  const cp=$("#qSCopy");if(cp)cp.onclick=()=>ask(null,"Copy grade "+esc(g)+" slabs?","Every other grade gets the same slab rows.","Copy",()=>{q.cfg.grades.forEach(x=>{if(x!==g)q.cfg.slabs[x]=clone(L())});cfgCh();renderQvc();toast("Slabs copied to all grades")});
+}
+let qT2=null;
+async function qExport(lines){
+  const head=["name","team","proc","grade","pct","tier","num","amt"].map(qh),ym=QV.ym,fname=`Eclipse_QVC_${view.proc}_${ym}`;
+  head[4]=qh("pct")+" ("+qMetricName()+")";
+  const data=lines.map(x=>[x.p.name,x.p.team,x.p.proc,x.grade,+f2(x.pct),x.tier,x.rec.num||"",+(+x.amt).toFixed(2)]);
+  const wm=S.cfg.wm!==false?"Confidential · "+me.pc+" · "+new Date().toLocaleString("en-IN"):"";
+  try{
+    if(!window.ExcelJS)throw 0;const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet("QVC "+fmtMonth(ym),{views:[{state:"frozen",ySplit:1}]});
+    const th={style:"thin",color:{argb:"FF7F93A8"}},B={top:th,left:th,bottom:th,right:th};
+    ws.addRow(head).eachCell(c=>{c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF1F4E79"}};c.border=B;c.alignment={horizontal:"center",vertical:"middle",wrapText:true}});
+    data.forEach(r=>ws.addRow(r).eachCell({includeEmpty:true},c=>{c.border=B}));
+    const n=data.length+1;ws.getColumn(5).numFmt="0.00";ws.getColumn(8).numFmt="#,##0.00";
+    const tr=ws.addRow(["Total","","","","","","",{formula:`SUM(H2:H${n})`,result:lines.reduce((a,x)=>a+x.amt,0)}]);tr.eachCell({includeEmpty:true},c=>{c.font={bold:true};c.border=B;c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFCE4D6"}}});
+    if(wm){ws.addRow([]);ws.addRow([wm]).getCell(1).font={italic:true,size:9,color:{argb:"FF7F93A8"}}}
+    [28,22,12,10,16,12,12,14].forEach((w,i)=>ws.getColumn(i+1).width=w);ws.autoFilter={from:{row:1,column:1},to:{row:n,column:8}};
+    saveBlob(new Blob([await wb.xlsx.writeBuffer()],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),fname+".xlsx");
+  }catch(e){
+    const out=[head,...data];if(wm)out.push([],[wm]);
+    try{const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(out);XLSX.utils.book_append_sheet(wb,ws,"QVC");XLSX.writeFile(wb,fname+".xlsx")}
+    catch(x){const csv=out.map(r=>r.map(v=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\r\n");saveBlob(new Blob(["﻿"+csv],{type:"text/csv"}),fname+".csv")}
+  }
+  toast("QVC sheet exported");
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#qvcPg").hidden&&$("#modal").hidden&&!msOpen)closeQvc()});
+
 const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
@@ -1907,10 +1912,10 @@ function openAdminLogin(){
    <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div>
    <label class="chk" style="padding:8px 0 0"><input type="checkbox" id="adRem" ${LS.get("adminpc",false)?"checked":""}> Remember this PC as the Admin PC (Admin button shows here)</label><div class="err" id="adErr"></div>
    <div class="mrow"><button class="cap amber" id="adGo">Open</button><button class="cap" data-close>Cancel</button></div>`);
-  $("#adPw").focus();const go=async()=>{if(!(await isMaster($("#adPw").value))){$("#adErr").textContent="Master password is wrong.";return}LS.set("adminpc",$("#adRem").checked);LS.set("admok",true);closeModal();setTop();openAdmin(1)};
+  $("#adPw").focus();const go=()=>{if(!isMaster($("#adPw").value)){$("#adErr").textContent="Master password is wrong.";return}LS.set("adminpc",$("#adRem").checked);closeModal();setTop();openAdmin(1)};
   $("#adGo").onclick=go;$("#adPw").onkeydown=e=>{if(e.key==="Enter")go()};
 }
-$("#btnAdmin").onclick=()=>LS.get("admok",false)&&me.role==="admin"?openAdmin(1):openAdminLogin();
+$("#btnAdmin").onclick=openAdminLogin;
 let brandClicks=[];
 document.querySelector(".top .brand").addEventListener("click",()=>{const t=Date.now();brandClicks=brandClicks.filter(x=>t-x<1500).concat(t);if(brandClicks.length>=3){brandClicks=[];if($("#adminPg").hidden)openAdminLogin()}});
 let AD=null,ADF={q:"",role:"",team:"",sel:new Set()};
@@ -1926,7 +1931,7 @@ function openAdmin(page){
   const P=$("#adminPg");
   P.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>openAdmin(+b.dataset.pg));
   $("#adClose").onclick=()=>{const close=()=>{AD=null;$("#adminPg").hidden=true;document.body.style.overflow=""};if(AD.changed){ask(null,"Close without saving?","Your Admin changes are not saved yet.","Close anyway",close,true)}else close()};
-  $("#adSave").onclick=async()=>{const pg=AD.page;delete AD.page;delete AD.changed;Object.assign(S.cfg,clone(AD));fixCfg();await save(true);await fsWriteConfig();registerBackup();logAct("settings");resolveMe();renderAll();toast("Settings saved"+(FS.dir?" and shared through the data folder":""));AD=clone(S.cfg);openAdmin(pg)};
+  $("#adSave").onclick=async()=>{const pg=AD.page;delete AD.page;delete AD.changed;Object.assign(S.cfg,clone(AD));fixCfg();await save(true);await fsWriteConfig();logAct("settings");resolveMe();renderAll();toast("Settings saved"+(FS.dir?" and shared through the data folder":""));AD=clone(S.cfg);openAdmin(pg)};
   /* generic binding: data-k="path" on inputs */
   P.querySelectorAll("[data-k]").forEach(el=>{el.addEventListener(el.type==="checkbox"?"change":"input",()=>{setPath(AD,el.dataset.k,el.type==="checkbox"?el.checked:el.type==="number"?(el.value===""?"":+el.value):el.value);adChanged();renderNoticePreview()})});
   if(AD.changed)$("#adDirty").hidden=false;
@@ -1945,7 +1950,6 @@ function adminPage1(){
     <span>PCs registered<b>${users.length+ALLOWED_PCS.length}</b></span><span>Data Entry<b>${cnt("entry")}</b></span><span>Managers<b>${cnt("manager")}</b></span><span>Employees<b>${cnt("employee")}</b></span>
     <span>Dates saved (${esc(view.proc)})<b>${ds.length}</b></span><span>Last date<b style="font-size:13px">${ds[0]?fmtDate(ds[0]).slice(0,11):"—"}</b></span><span>Last saved by<b style="font-size:13px">${last&&last.pc?esc(last.pc):"—"}</b></span><span>Login<b style="font-size:13px">${LOCK_ON?"ON":"OFF (testing)"}</b></span></div></section>
 
-  ${ADMX()}
   <section class="acard wide"><h4>🧪 Test the screen</h4>
     <p class="ahelp">See the tool exactly as someone else sees it. Nothing is saved. Use <b>Back to Admin</b> at the top to return.</p>
     <div class="mrow"><label>As a PC from the list<select id="asPc"><option value="">— pick a PC —</option>${users.map(u=>`<option value="${esc(u.pc)}">${esc(u.pc)} · ${esc(u.name||"")} · ${ROLEN(u.role)}</option>`).join("")}</select></label><button class="cap teal sm" id="asPcGo">View as this PC</button>
@@ -1968,13 +1972,12 @@ function adminPage1(){
       <select id="uT" style="max-width:170px"><option value="">All teams</option>${[...new Set(users.map(u=>u.team).filter(Boolean))].sort().map(t=>`<option ${ADF.team===t?"selected":""}>${esc(t)}</option>`).join("")}</select>
       <span class="muted" id="uSelN">0 selected</span>
       <select id="uSetRole" style="max-width:150px">${ROLES.slice(1).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select><button class="cap sm" id="uApplyRole">Apply role to selected</button>
-      <select id="uCopyFrom" style="max-width:190px"><option value="">Copy access from…</option>${(AD.users||[]).map((u,i)=>`<option value="${i}">${esc(u.pc)} · ${esc(u.name||"")}</option>`).join("")}</select><button class="cap sm" id="uCopy">Copy to selected</button>
       <input type="date" id="uSetTill" style="max-width:150px"><button class="cap sm" id="uApplyTill">Set valid till</button>
       <button class="cap sm" id="uResetSel" title="Remove custom access from the selected PCs">Reset custom</button>
       <button class="cap sm danger" id="uDelSel">Remove selected</button>
     </div>
     <div class="utable big" id="uTable"></div>
-    <div class="mrow"><label>Add users (one per line: <code>MSID, role, name, team, device name, code</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="rsahul1, entry, RAHUL S, TM-VINESH KUMAR, LHTU05CG2122ABC, RS1&#10;skumar2, manager, SANKETH, SANKETH, LHTU05CG2122XYZ, SK2"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
+    <div class="mrow"><label>Add PCs (one per line: <code>PC, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;LHTU05CG2122XYZ, manager, SANKETH, SANKETH&#10;LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
     <div class="err" id="uErr"></div></section>`;
 }
 function effPerm(u,f){if(u.role==="admin")return 1;if(u.ov&&u.ov[f]!=null)return u.ov[f];return (AD.perms[u.role]||{})[f]?1:0}
@@ -1989,26 +1992,25 @@ function pcTable(){
     return o==null?`<button class="pp inh ${d?"":"x"}" data-pu="${i}" data-f="${f}">${d?"✓":"✗"}</button>`:`<button class="pp ${o?"y":"n"}" data-pu="${i}" data-f="${f}">${o?"✓":"✗"}</button>`};
   const procCell=(u,i)=>PR.map(p=>{const def=(p.roles||{})[u.role]!==0&&p.status!=="hidden",on=u.role==="admin"?true:Array.isArray(u.procs)?u.procs.includes(p.k):def;
     return `<button class="pc2 ${on?"on":""} ${Array.isArray(u.procs)||u.role==="admin"?"":"inh"}" data-pp="${i}" data-p="${esc(p.k)}" ${u.role==="admin"?"disabled":""}>${esc(p.label||p.k)}</button>`}).join("")+(Array.isArray(u.procs)?`<button class="pc2 rst" data-ppr="${i}" title="Back to role default">↺</button>`:"");
-  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">MSID</th><th rowspan="2" class="s2">Name</th><th rowspan="2">Device name</th><th rowspan="2">Code</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
+  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">PC number</th><th rowspan="2" class="s2">Name</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
   const head2=`<tr>${FEAT.map(([f,n,s])=>`<th class="fh" title="${esc(n)}">${esc(s)}</th>`).join("")}</tr>`;
-  const adm=ALLOWED_PCS.map(p=>`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(p.toUpperCase())}</td><td class="s2">You (built in)</td><td class="mono">${ADMIN_MC}</td><td>—</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`).join("");
+  const adm=ALLOWED_PCS.map(p=>`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(p.toUpperCase())}</td><td class="s2">You (built in)</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`).join("");
   const body=rows.map(({u,i})=>`<tr class="${ADF.sel.has(u.pc)?"sel":""}"><td class="s0"><input type="checkbox" data-us="${esc(u.pc)}" ${ADF.sel.has(u.pc)?"checked":""}></td>
     <td class="s1 mono">${isCustom(u)?"⭐ ":""}${esc(u.pc)}</td>
     <td class="s2"><input data-un="${i}" value="${esc(u.name||"")}" placeholder="name"></td>
-    <td><input data-um="${i}" value="${esc(u.mc||"")}" placeholder="device name" style="min-width:150px;font-family:var(--f-num)"></td><td><input data-uc="${i}" value="${esc(u.code||"")}" placeholder="code" style="width:60px"></td>
     <td><input data-ut="${i}" value="${esc(u.team||"")}" placeholder="team"></td>
     <td><select data-ur="${i}">${ROLES.map(([k,n])=>`<option value="${k}" ${k===u.role?"selected":""}>${n}</option>`).join("")}</select></td>
     <td><input type="date" data-uu="${i}" value="${esc(u.until||"")}"></td>
     <td>${u.role==="admin"?"All":`<select data-usc="${i}"><option value="">Role (${({all:"All",team:"Team",own:"Own"})[AD.scope[u.role]]||"All"})</option>${[["all","All"],["team","Own team"],["own","Own row"]].map(([v,n])=>`<option value="${v}" ${u.scope===v?"selected":""}>${n}</option>`).join("")}</select>`}</td>
     <td class="pcs">${procCell(u,i)}</td>
     ${FEAT.map(([f])=>`<td>${pill(u,i,f)}</td>`).join("")}
-    <td><button class="x" data-rl="${i}" title="Reset login (password and PC link)">↺</button><button class="x" data-ud="${i}" aria-label="Remove ${esc(u.pc)}">✕</button></td></tr>`).join("");
+    <td><button class="x" data-ud="${i}" aria-label="Remove ${esc(u.pc)}">✕</button></td></tr>`).join("");
   $("#uTable").innerHTML=`<table><thead>${head1}${head2}</thead><tbody>${adm}${body||`<tr><td colspan="99" style="padding:16px;color:var(--muted)">${(AD.users||[]).length?"No PC matches the filter.":"No PCs yet. Add them below."}</td></tr>`}</tbody></table>`;
   $("#uCount").textContent=`· ${rows.length} of ${(AD.users||[]).length+ALLOWED_PCS.length} PCs shown`;
   $("#uSelN").textContent=ADF.sel.size+" selected";
 }
 function wireAdmin1(){
-  const P=$("#adminPg");pcTable();wireAdminX();
+  const P=$("#adminPg");pcTable();
   $("#asPcGo").onclick=()=>{const u=(AD.users||[]).find(x=>x.pc===$("#asPc").value);if(!u){toast("Pick a PC first");return}
     if(AD.changed){Object.assign(S.cfg,clone({...AD,page:undefined,changed:undefined}));fixCfg()}
     view.as={pc:u.pc,role:u.role,name:u.name||"",team:u.team||""};closeAdminForTest()};
@@ -2022,7 +2024,6 @@ function wireAdmin1(){
     const pu=t.closest("[data-pu]");if(pu){const u=AD.users[+pu.dataset.pu],f=pu.dataset.f;u.ov=u.ov||{};const o=u.ov[f];if(o==null)u.ov[f]=1;else if(o===1)u.ov[f]=0;else delete u.ov[f];if(!Object.keys(u.ov).length)delete u.ov;adChanged();pcTable();return}
     const pp=t.closest("[data-pp]");if(pp){const u=AD.users[+pp.dataset.pp],PR=AD.procs&&AD.procs.length?AD.procs:PROC0;if(!Array.isArray(u.procs))u.procs=PR.filter(p=>(p.roles||{})[u.role]!==0&&p.status!=="hidden").map(p=>p.k);const k=pp.dataset.p;u.procs=u.procs.includes(k)?u.procs.filter(x=>x!==k):u.procs.concat(k);adChanged();pcTable();return}
     const pr=t.closest("[data-ppr]");if(pr){delete AD.users[+pr.dataset.ppr].procs;adChanged();pcTable();return}
-    const rl=t.closest("[data-rl]");if(rl){const u=AD.users[+rl.dataset.rl];ask(null,"Reset login for "+esc(u.pc)+"?","Password and PC link are cleared. The user sets a new password using the device name.","Reset",async()=>{const ra=await authGet(u.pc);if(ra&&ra.nm&&FS.dir){try{const sd=await fsSub("_claims",false);await sd.removeEntry(claimF(ra.nm))}catch(e){}}if(S.auth){delete S.auth[u.pc];save()}if(FS.dir){try{const sd=await fsSub("_auth",false);await sd.removeEntry(u.pc+".eclipse")}catch(e){}}toast("Login reset for "+u.pc)},true);return}
     const ud=t.closest("[data-ud]");if(ud){const u=AD.users[+ud.dataset.ud];ask(null,"Remove "+esc(u.pc)+"?","This PC loses its role and custom access.","Remove",()=>{AD.users.splice(+ud.dataset.ud,1);ADF.sel.delete(u.pc);adChanged();pcTable()},true);return}
   };
   U.onchange=e=>{const t=e.target,d=t.dataset;
@@ -2032,20 +2033,18 @@ function wireAdmin1(){
     if(d.usc!=null){const u=AD.users[+d.usc];if(t.value)u.scope=t.value;else delete u.scope;adChanged();pcTable();return}
     if(d.uu!=null){const u=AD.users[+d.uu];if(t.value)u.until=t.value;else delete u.until;adChanged();return}
   };
-  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.um!=null){AD.users[+d.um].mc=t.value.trim().toUpperCase();adChanged()}if(d.uc!=null){AD.users[+d.uc].code=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
+  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
   const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(u.pc));
-  $("#uCopy").onclick=()=>{const s2=sel(),f=AD.users[+$("#uCopyFrom").value];if(!f||!s2.length){toast("Pick who to copy from, and tick users first");return}
-    s2.forEach(u=>{if(u===f)return;u.role=f.role;if(f.ov)u.ov=clone(f.ov);else delete u.ov;if(f.scope!==undefined)u.scope=f.scope;else delete u.scope;if(f.procs!==undefined)u.procs=clone(f.procs);else delete u.procs});adChanged();pcTable();toast("Access copied to "+s2.length+" users")};
   $("#uApplyRole").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>u.role=$("#uSetRole").value);adChanged();pcTable();toast(s.length+" PCs set to "+ROLEN($("#uSetRole").value))};
   $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
   $("#uResetSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{delete u.ov;delete u.scope;delete u.procs});adChanged();pcTable();toast("Custom access removed for "+s.length+" PCs")};
   $("#uDelSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}ask(null,"Remove "+s.length+" PCs?","They lose their role and custom access.","Remove",()=>{AD.users=AD.users.filter(u=>!ADF.sel.has(u.pc));ADF.sel.clear();adChanged();pcTable()},true)};
   $("#uAdd").onclick=()=>{const lines=$("#uBulk").value.split(/\n/).map(l=>l.split(",").map(x=>x.trim())).filter(a=>a[0]);let n=0;const bad=[];
-    lines.forEach(([pc,r,name,team,mc,code])=>{pc=(pc||"").toUpperCase().replace(/\s+/g,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
-      if(pc.length<2){bad.push(pc||"(blank)");return}const old=AD.users.find(u=>u.pc===pc);if(old)Object.assign(old,{role:r,name:name||old.name||"",team:team||old.team||"",mc:(mc||old.mc||"").toUpperCase(),code:code||old.code||""});else AD.users.push({pc,role:r,name:name||"",team:team||"",mc:(mc||"").toUpperCase(),code:code||""});n++});
+    lines.forEach(([pc,r,name,team])=>{pc=(pc||"").toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
+      if(pc.length<4){bad.push(pc||"(blank)");return}const old=AD.users.find(u=>u.pc===pc);if(old)Object.assign(old,{role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({pc,role:r,name:name||"",team:team||""});n++});
     $("#uBulk").value="";$("#uErr").textContent=bad.length?"Skipped: "+bad.join(", "):"";adChanged();openAdmin(1);toast(n+" PC"+(n===1?"":"s")+" added. Click Save & apply.")};
 }
-function closeAdminForTest(){view.ret=(AD&&AD.page)||1;$("#adminPg").hidden=true;document.body.style.overflow="";view.team="All";view.pf="All";view.emp="All";renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
+function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overflow="";view.team=[];view.pf=[];view.emp=[];renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
 
 /* ===== page 2: processes & screen ===== */
 function adminPage2(){
@@ -2148,14 +2147,14 @@ function adminPage3(){
     <p class="ahelp">Removes every saved date from <b>this PC's browser</b> only. The data folder and backups are not touched.</p>
     <div class="mrow"><button class="cap sm" id="wipe">Clear this PC's saved data</button></div><div id="wipeBox"></div></section>`;
 }
-async function backupObj(){const all={};if(FS.dir)for(const k of Object.keys(FS.index)){const u=unkey(k);await loadDay(u.d,u.p)}Object.keys(S.days).forEach(k=>{const o={...S.days[k]};delete o._lm;all[k]=o});return{app:"Alpha NextGen Eclipse",v:17,at:new Date().toISOString(),cfg:S.cfg,days:all}}
+async function backupObj(){const all={};if(FS.dir)for(const k of Object.keys(FS.index)){const u=unkey(k);await loadDay(u.d,u.p)}Object.keys(S.days).forEach(k=>{const o={...S.days[k]};delete o._lm;all[k]=o});return{app:"Alpha NextGen Eclipse",v:17,at:new Date().toISOString(),cfg:S.cfg,qvc:S.qvc||null,days:all}}
 function wireAdmin3(){
   const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};const P=$("#adminPg");
   on("#fsC",async()=>{await fsConnect();openAdmin(3)});on("#fsA",async()=>{await fsAllow();openAdmin(3)});
   on("#fsS",async()=>{await fsSyncUp();await fsWriteConfig();await fsScan();openAdmin(3);toast("Synced with the data folder")});
   on("#fsD",async()=>{await fsDisconnect();openAdmin(3)});
   on("#bkB",async()=>{const b=await backupObj();saveBlob(new Blob([JSON.stringify(b)],{type:"application/json"}),"Eclipse_Backup_"+todayISO()+".json");toast("Backup of "+Object.keys(b.days).length+" dates downloaded")});
-  $("#bkR").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=async()=>{let b;try{b=JSON.parse(await unlock(rd.result));if(!b.days)throw 0}catch(err){toast("That file isn't an Eclipse backup");return}
+  $("#bkR").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{let b;try{b=JSON.parse(rd.result);if(!b.days)throw 0}catch(err){toast("That file isn't an Eclipse backup");return}
     const ks=Object.keys(b.days),have=new Set(Object.keys(S.days).concat(Object.keys(FS.index))),clash=ks.filter(k=>have.has(k)).length;
     modal(`<h3>Restore backup?</h3><p class="pvnote">${ks.length} dates in the backup (${b.at?new Date(b.at).toLocaleString("en-IN"):""}). ${clash} of them already exist here.</p>
       <label class="chk" style="padding:4px 0"><input type="radio" name="rm" value="merge" checked> <b>Merge</b>: add missing dates, keep the ones already here</label>
@@ -2164,6 +2163,7 @@ function wireAdmin3(){
       <div class="mrow"><button class="cap amber" id="rmGo">Restore</button><button class="cap" data-close>Cancel</button></div>`);
     $("#rmGo").onclick=async()=>{const over=$("#mcard").querySelector('input[name="rm"]:checked').value==="over";let c=0;
       for(const [k,o] of Object.entries(b.days)){if(over||!have.has(k)){S.days[k]=o;await fsWriteKey(k,o);c++}}await save(true);
+      if(b.qvc){S.qvc=qMerge(QD(),b.qvc);qSave()}
       if($("#rmCfg").checked&&b.cfg){SHARED.forEach(k=>{if(b.cfg[k]!==undefined)S.cfg[k]=b.cfg[k]});fixCfg();await save(true);await fsWriteConfig();resolveMe()}
       AD=clone(S.cfg);closeModal();await openDate(view.date||dates()[0]||null);openAdmin(3);toast(c+" dates restored")}};rd.readAsText(f);e.target.value=""};
   P.querySelectorAll("[data-ah],[data-ahp]").forEach(el=>el.oninput=()=>{const k=el.dataset.ah||el.dataset.ahp;AD.aht=AD.aht||{};const m=AD.aht[k]=AD.aht[k]||{name:(P.querySelector(`[data-ah="${k}"]`)||{}).dataset.nm||k};
@@ -2182,7 +2182,7 @@ function wireAdmin3(){
 /* ---------- start ---------- */
 function fixCfg(){
   const c=S.cfg;c.users=Array.isArray(c.users)?c.users:[];
-  if(!c.defV2){c.perms={};c.defV2=1}c.perms=c.perms||{};ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
+  c.perms=c.perms||{};ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
   c.scope=Object.assign({},DEFSCOPE,c.scope||{});c.msg=Object.assign({},c.msg||{});c.lab=c.lab||{};c.fon=c.fon||{};
   /* older "screen parts" switches become global feature switches */
   if(c.ui){Object.entries(c.ui).forEach(([k,v])=>{if(v===false)c.fon[k]=false});delete c.ui}
@@ -2190,9 +2190,6 @@ function fixCfg(){
   c.procs.forEach(p=>{p.roles=Object.assign({entry:1,manager:1,employee:1},p.roles||{});p.label=p.label||p.k;p.status=p.status||"soon"});
   if(c.exp&&c.exp<"2027-03-31")c.exp=null;
   c.notice=c.notice||{on:false,text:"",type:"info",speed:25};c.tgt=c.tgt||{};c.aht=c.aht||{};
-  if(!c.liveAll){c.procs.forEach(p=>{if(p.status==="soon")p.status="live";if(p.k==="DBM"&&p.label==="DBM")p.label="PCIS"});c.liveAll=1}
-  c.folder=c.folder||"PCIS Data";c.qvc=c.qvc||{};c.pick=c.pick||{on:true};
-  if(!c.seeded){ROSTER.forEach(([m,code,mc])=>{if(!c.users.some(u=>u.pc===m))c.users.push({pc:m,role:"employee",name:"",team:"",code,mc})});c.seeded=1}
   (c.pcsAdd||[]).forEach(p=>{if(!c.users.some(u=>u.pc===p)&&!isBuiltInAdmin(p))c.users.push({pc:p,role:"employee",name:"",team:""})});c.pcsAdd=[];
 }
 async function autoBackup(){
@@ -2208,10 +2205,8 @@ async function checkUpdate(){
 let idleT=null,idleLast=0;
 function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||!m||$("#app").hidden)return;idleT=setTimeout(()=>{if(view.dirty)return idleReset();view.as=null;$("#app").hidden=true;gate();toast("Locked after "+m+" minutes idle")},m*6e4)}
 ["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
-async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();if(noLocal())S.days={};await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
-async function start(){if(expired())return;if(!LOCK_ON)return enter();
-  try{await fsInit()}catch(e){}
-  const p=dev.get(),u=userOf(p);if(p&&isRegistered(p)&&!(u&&u.until&&daysLeft(u.until)<0))return enter();gate()}
+async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
+function start(){if(expired())return;if(LOCK_ON)gate();else enter()}
 (async()=>{
   storeOK=await IDB.open();
   S=(await IDB.get("state"))||fresh();
