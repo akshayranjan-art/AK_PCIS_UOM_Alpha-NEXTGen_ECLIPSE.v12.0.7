@@ -466,7 +466,7 @@ const APP_EXPIRY  = "2027-03-31";            // tool stops after this date; mast
 const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
   "LHTU05CG2122RJJ",
 ];
-const PW_MASTER   = 179352185805796;         // hash of master password Dwarkadesh14#ar (caps and spaces ignored)
+const PW_MASTER   = 993447332186569;         // hash of master password Dwarkadesh14#ara (caps and spaces ignored)
 const ALLOWED_MSIDS = ["aranja14"];          // built-in Admin MSIDs (log in with the master password)
 const LOCK_ON     = true;                    // PC login is ON. Set to false only for testing
 /* ========================================================================= */
@@ -659,23 +659,55 @@ const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
 const fsSupported=()=>"showDirectoryPicker" in window;
 const fsMode=()=>"readwrite";   /* every PC writes its own password file entry */
 const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
+/* the picked folder can be OneDrive itself: the tool walks inside and finds the data folder by itself */
+const MARK="_eclipse_pcis.marker";FS.path=[];
+async function openPath(root,path){let d=root;for(const p of path||[])d=await d.getDirectoryHandle(p);return d}
+const hasFile=async(h,n)=>{try{await h.getFileHandle(n);return true}catch(e){return false}};
+const isData=async h=>(await hasFile(h,MARK))||(await hasFile(h,"config.json"));
+async function findData(h){
+  const want=String(S.cfg.folder||"PCIS_Productivity_Eclipse").trim().toLowerCase();
+  if(await isData(h))return [];
+  const q=[[h,[]]];let seen=0,named=null;
+  while(q.length&&seen<800){const [d,p]=q.shift();
+    try{for await(const [n,c] of d.entries()){if(c.kind!=="directory"||/^[.$~]/.test(n))continue;seen++;const np=p.concat(n);
+      if(await isData(c))return np;if(n.trim().toLowerCase()===want&&!named)named=np;
+      if(np.length<5&&!/^(appdata|node_modules|_bin|_system|_backup|\d{4})$/i.test(n))q.push([c,np])}}catch(e){}}
+  return named;
+}
+async function fsUse(root,path){
+  FS.handle=root;FS.path=path||[];FS.dir=await openPath(root,FS.path);await IDB.put("dirHandle",root);await IDB.put("dirPath",FS.path);
+  FS.cfgLM=0;FS.fbDone=false;FS.uxLM=0;await fsReadConfig();await usersSync(true);await fsScan();paintSync();
+}
 async function fsInit(){
   if(!fsSupported())return;
-  try{FS.handle=await IDB.get("dirHandle")}catch(e){FS.handle=null}
-  if(!FS.handle)return;
-  try{if(await FS.handle.queryPermission({mode:fsMode()})==="granted"){FS.dir=FS.handle;await fsScan()}}catch(e){}
+  if(!FS.handle){try{FS.handle=await IDB.get("dirHandle");FS.path=(await IDB.get("dirPath"))||[]}catch(e){FS.handle=null}}
+  if(!FS.handle||FS.dir)return;
+  try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted")await fsUse(FS.handle,FS.path)}catch(e){FS.dir=null}
 }
 async function fsAllow(){
   if(!FS.handle)return fsConnect();
-  try{if(await FS.handle.requestPermission({mode:fsMode()})==="granted"){FS.dir=FS.handle;await fsSyncUp();await fsScan();toast("Data folder connected");await openDate(view.date||dates()[0]||null)}else toast("Permission not given. Data stays on this PC only.")}catch(e){toast("Couldn't open the data folder")}
+  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await fsUse(FS.handle,FS.path);await fsSyncUp();toast("✓ Data folder connected");if(!$("#app").hidden)await openDate(view.date||dates()[0]||null)}else toast("Permission not given. Data stays on this PC only.")}catch(e){toast("Couldn't open the data folder")}
 }
 async function fsConnect(){
-  if(!fsSupported()){toast("This browser can't connect a folder. Use Chrome or Edge.");return}
-  try{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);
-    await fsReadConfig();await fsSyncUp();await fsScan();toast("Connected to folder “"+h.name+"”");await openDate(view.date||dates()[0]||null)}
-  catch(e){if(e&&e.name!=="AbortError")toast("Couldn't connect the folder")}
+  if(!fsSupported()){toast("This browser can't connect a folder. Use Chrome or Edge.");return false}
+  let h;try{h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"})}catch(e){if(e&&e.name!=="AbortError")toast("Couldn't open the folder window");return false}
+  toast("🔎 Looking for the data folder…");
+  let p=await findData(h);const adm=me.role==="admin"&&!$("#app").hidden;
+  if(!p){if(!adm){toast("The data folder is not inside the folder you chose. Choose “OneDrive - UnitedHealth Group”, or ask the Admin.");return false}p=[]}
+  try{await fsUse(h,p)}catch(e){toast("Couldn't open the data folder");return false}
+  if(adm&&!(await hasFile(FS.dir,MARK))){try{const fh=await FS.dir.getFileHandle(MARK,{create:true});const w=await fh.createWritable();await w.write("Alpha NextGen Eclipse data folder");await w.close()}catch(e){}}
+  if(adm){await fsSyncUp();await fsWriteConfig();await usersWriteXlsx()}
+  toast("✓ Connected · "+FS.dir.name);if(!$("#app").hidden)await openDate(view.date||dates()[0]||null);return true;
 }
-async function fsDisconnect(){FS.handle=null;FS.dir=null;FS.index={};await IDB.put("dirHandle",null);toast("Folder disconnected. Data stays on this PC.");renderAll()}
+/* Chrome asks “Allow on every visit” once; after that any click or key gives the permission back by itself */
+async function autoAllow(){
+  if(FS.dir||!FS.handle||autoAllow.busy)return;autoAllow.busy=true;
+  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await fsUse(FS.handle,FS.path);if(!$("#app").hidden){resolveMe();renderAll()}else if(!$("#gate").hidden){const n=$("#gFolder");if(n)n.outerHTML=`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`}}}catch(e){}
+  autoAllow.busy=false;paintSync();
+}
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gFolder,#btnFolder,#fsC,#fsA"))return;autoAllow()},true);
+document.addEventListener("keydown",e=>{if(!e.repeat)autoAllow()},true);
+async function fsDisconnect(){FS.handle=null;FS.dir=null;FS.path=[];FS.index={};await IDB.put("dirHandle",null);await IDB.put("dirPath",[]);toast("Folder disconnected. Data stays on this PC.");renderAll()}
 async function scanYears(dir,prefix,idx){
   for await(const [yn,yh] of dir.entries()){
     if(yh.kind!=="directory"||!/^\d{4}$/.test(yn))continue;
@@ -691,7 +723,7 @@ async function fsScan(){
     FS.index=idx;FS.err=false;await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
-const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV"];
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV","folder"];
 const QVC_KEYS=["grades","teamGrade","slabs","heads","metric"];
 async function fsReadConfig(){
   if(!FS.dir)return;
@@ -699,7 +731,7 @@ async function fsReadConfig(){
   try{const fh=await FS.dir.getFileHandle("config.json");const f=await fh.getFile();if(f.lastModified===FS.cfgLM)return false;
     try{c=decJ(await f.text())}catch(x){c=null}if(c){FS.cfgLM=f.lastModified;FS.fbDone=false}}catch(e){}
   if(!c){if(FS.fbDone)return false;FS.fbDone=true;try{c=decJ(await fsReadText("_system","settings_latest.json"))}catch(e){c=null}if(!c)return false}   /* config.json missing or broken: use the safety copy */
-  SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe();return true;
+  SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});S.cfg.seedV=+c.seedV||0;fixCfg();save();resolveMe();return true;
 }
 async function fsWriteConfig(){
   if(!FS.dir)return;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.pc;
@@ -1430,8 +1462,7 @@ async function pwsSet(msid,h,dev){
 const devId=()=>{let d=LS.get("devid","");if(!d){d="D"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);LS.set("devid",d)}return d};
 function remember(id,h){LS.set("session",{id,h:h||null,m:view.masterLogin?1:0,at:Date.now()})}
 async function gateFS(){
-  if(!FS.handle&&fsSupported()){try{FS.handle=await IDB.get("dirHandle")}catch(e){}}
-  if(FS.handle&&!FS.dir){try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+  await fsInit();
 }
 /* remembered login: open straight away on this PC until Log out (or the Admin resets / locks the user) */
 async function sessionOK(s){
@@ -1452,16 +1483,16 @@ async function sessionCheck(){
 }
 async function gateFolder(){
   try{
-    if(FS.handle&&!FS.dir){if(await FS.handle.requestPermission({mode:"readwrite"})==="granted")FS.dir=FS.handle}
-    else{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h)}
-    if(FS.dir){FS.cfgLM=0;await fsReadConfig();await pwsLoad();toast("Data folder connected")}
+    if(FS.handle&&!FS.dir){if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await fsUse(FS.handle,FS.path);toast("✓ Data folder connected")}}
+    else await fsConnect();
+    if(FS.dir)await pwsLoad();
   }catch(e){if(e&&e.name!=="AbortError")toast("Couldn't open the data folder")}
   gate();
 }
 async function gate(msg){
   $("#gate").hidden=false;$("#app").hidden=true;
   await gateFS();
-  const fl=!fsSupported()?"":FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<button class="lnk" id="gFolder">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"} (needed once on a new PC)</button>`;
+  const fl=!fsSupported()?"":FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<button class="lnk" id="gFolder">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"} — choose <b>OneDrive - UnitedHealth Group</b>, once per PC</button>`;
   $("#gateBody").innerHTML=`
     <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Log in with your <b>MSID</b> and your own password.</p>
     <input id="gId" placeholder="MSID (e.g. aranja14) or PC number" value="${esc(dev.get())}" autocapitalize="off" autocomplete="username" spellcheck="false">
@@ -1472,7 +1503,7 @@ async function gate(msg){
   const go=async()=>{
     const id=$("#gId").value.trim(),pw=$("#gPw").value,err=t=>$("#gErr").innerHTML=t;
     if(id.length<3){err("Enter your MSID or PC number.");return}
-    if(FS.handle&&!FS.dir){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+    if(FS.handle&&!FS.dir){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted")await fsUse(FS.handle,FS.path)}catch(e){}}
     if(isMaster(pw)){view.masterLogin=true;dev.set(id);remember(id);return enter()}
     if(isBuiltInAdmin(id)){err("Use the Admin password for this ID.");return}
     const u=userOf(id);
@@ -1918,6 +1949,68 @@ async function qExport(lines){
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#qvcPg").hidden&&$("#modal").hidden&&!msOpen)closeQvc()});
 
+/* ---------- Users Excel in the data folder: Eclipse_Users.xlsx ----------
+   Sheet "Users"  (visible): MSID | Code | Device name | Role | Name | Team | Valid till  — edit it in Excel, the tool reads it by itself
+   Sheet "Access" (very hidden, protected with the Admin password): who may do what — written by the tool */
+const UXF="Eclipse_Users.xlsx",UXPW="Dwarkadesh14#ara";FS.uxLM=0;
+const ROLEX={admin:"Admin",entry:"Data Entry",manager:"SME",employee:"Employee"};
+function roleFrom(v){v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("man")||v.startsWith("sme")||v.startsWith("tl")?"manager":"employee"}
+function dateFrom(v){
+  if(v instanceof Date&&!isNaN(v))return v.getFullYear()>=9000?"":new Date(v-v.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  v=String(v||"").trim();if(!v)return "";let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return +m[1]>=9000?"":`${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
+  m=v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;if(y>=9000)return "";const a=+m[1],b=+m[2],mo=a>12?b:a,d=a>12?a:b;return `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
+  const t=Date.parse(v);if(!isNaN(t)){const dt=new Date(t);return dt.getFullYear()>=9000?"":new Date(t-dt.getTimezoneOffset()*6e4).toISOString().slice(0,10)}return "";
+}
+function parseUserRows(rows){
+  rows=(rows||[]).filter(r=>r&&r.some(v=>String(v??"").trim()));if(!rows.length)return[];
+  const H=rows[0].map(h=>norm(h)),col=(...ks)=>H.findIndex(h=>ks.some(k=>h===k||h.startsWith(k)));
+  let c={msid:col("msid","userid"),opid:col("opid","code"),pc:col("devicename","device","pcnumber","pc","computer"),role:col("role"),name:col("name","employeename","username"),team:col("team"),till:col("validtill","valid","expiry")},body=rows.slice(1);
+  if(c.msid<0){c={msid:0,opid:1,pc:2,role:3,name:4,team:5,till:6};body=rows}
+  const g=(r,k)=>c[k]>=0?r[c[k]]:"",out=[],seen=new Set();
+  body.forEach(r=>{const msid=String(g(r,"msid")??"").trim().toLowerCase(),pc=String(g(r,"pc")??"").trim().toUpperCase().replace(/\..*$/,"");
+    if(!msid&&!pc)return;const k=msid||pc;if(seen.has(k)||isBuiltInAdmin(msid)||isBuiltInAdmin(pc))return;seen.add(k);
+    const u={msid,opid:String(g(r,"opid")??"").trim().toUpperCase(),pc,role:roleFrom(g(r,"role")),name:String(g(r,"name")??"").trim(),team:String(g(r,"team")??"").trim()},t=dateFrom(g(r,"till"));if(t)u.until=t;out.push(u)});
+  return out;
+}
+/* read the Excel (also when Excel has it open). Returns true when something changed */
+async function usersSync(force){
+  if(!FS.dir||typeof XLSX==="undefined")return false;
+  let fh;try{fh=await FS.dir.getFileHandle(UXF)}catch(e){if(me.role==="admin"&&!$("#app").hidden)await usersWriteXlsx();return false}
+  try{
+    const f=await fh.getFile();if(!force&&f.lastModified===FS.uxLM)return false;FS.uxLM=f.lastModified;
+    const wb=XLSX.read(await f.arrayBuffer(),{type:"array",cellDates:true});
+    const us=wb.Sheets["Users"]||wb.Sheets[wb.SheetNames[0]];const list=parseUserRows(XLSX.utils.sheet_to_json(us,{header:1,defval:"",raw:true}));
+    if(!list.length)return false;
+    const acc={};const as=wb.Sheets["Access"];
+    if(as)XLSX.utils.sheet_to_json(as,{header:1,defval:"",raw:true}).forEach(r=>{if(r[0]&&r[1]&&r[0]!=="Key"){try{acc[String(r[0])]=JSON.parse(String(r[1]))}catch(e){}}});
+    const old=S.cfg.users||[];
+    S.cfg.users=list.map(n=>{const o=old.find(u=>(n.msid&&u.msid===n.msid)||(n.pc&&u.pc===n.pc))||{},a=acc["u:"+(n.msid||n.pc)],u={...n};
+      ["ov","scope","procs"].forEach(k=>{const v=a?a[k]:o[k];if(v!=null&&v!=="")u[k]=v});return u});
+    if(acc.roles)S.cfg.perms=acc.roles;if(acc.scope)S.cfg.scope=acc.scope;if(acc.fon)S.cfg.fon=acc.fon;
+    S.cfg.seedV=Math.max(+S.cfg.seedV||0,2);fixCfg();save();resolveMe();return true;
+  }catch(e){return false}
+}
+async function usersXlsxBuffer(){
+  if(!window.ExcelJS)return null;const wb=new ExcelJS.Workbook();wb.creator="Alpha NextGen Eclipse";
+  const ws=wb.addWorksheet("Users",{views:[{state:"frozen",ySplit:1}]});
+  ws.columns=[{header:"MSID",key:"a",width:14},{header:"Code",key:"b",width:8},{header:"Device name",key:"c",width:22},{header:"Role",key:"d",width:13},{header:"Name",key:"e",width:30},{header:"Team",key:"f",width:14},{header:"Valid till",key:"g",width:12}];
+  const th={style:"thin",color:{argb:"FF7F93A8"}},B={top:th,left:th,bottom:th,right:th};
+  ws.getRow(1).eachCell(c=>{c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF1F4E79"}};c.border=B;c.alignment={horizontal:"center"}});
+  const md=d=>{const [y,m,dd]=d.split("-");return `${+m}/${+dd}/${y}`};
+  (S.cfg.users||[]).forEach(u=>ws.addRow([u.msid||"",u.opid||"",u.pc||"",ROLEX[u.role]||"Employee",u.name||"",u.team||"",u.until?md(u.until):"12/31/9999"]).eachCell({includeEmpty:true},c=>c.border=B));
+  for(let r=2;r<=Math.max(200,(S.cfg.users||[]).length+50);r++)ws.getCell(r,4).dataValidation={type:"list",allowBlank:true,formulae:['"Admin,Data Entry,SME,Employee"']};
+  const ac=wb.addWorksheet("Access");ac.state="veryHidden";
+  ac.addRow(["Key","Data"]);ac.addRow(["roles",JSON.stringify(S.cfg.perms)]);ac.addRow(["scope",JSON.stringify(S.cfg.scope)]);ac.addRow(["fon",JSON.stringify(S.cfg.fon||{})]);
+  (S.cfg.users||[]).forEach(u=>{const a={};["ov","scope","procs"].forEach(k=>{if(u[k]!=null)a[k]=u[k]});if(Object.keys(a).length)ac.addRow(["u:"+(u.msid||u.pc),JSON.stringify(a)])});
+  try{await ac.protect(UXPW,{selectLockedCells:false,selectUnlockedCells:false})}catch(e){}
+  return await wb.xlsx.writeBuffer();
+}
+async function usersWriteXlsx(){
+  if(!FS.dir)return false;const buf=await usersXlsxBuffer();if(!buf)return false;
+  try{const fh=await FS.dir.getFileHandle(UXF,{create:true});const w=await fh.createWritable();await w.write(buf);await w.close();FS.uxLM=(await fh.getFile()).lastModified;return true}
+  catch(e){toast("Couldn't write "+UXF+" (is it open in Excel on this PC?)");return false}
+}
+
 const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
@@ -2038,7 +2131,7 @@ function openAdmin(page){
   const P=$("#adminPg");
   P.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>openAdmin(+b.dataset.pg));
   $("#adClose").onclick=()=>{const close=()=>{AD=null;$("#adminPg").hidden=true;document.body.style.overflow=""};if(AD.changed){ask(null,"Close without saving?","Your Admin changes are not saved yet.","Close anyway",close,true)}else close()};
-  $("#adSave").onclick=async()=>{const pg=AD.page;delete AD.page;delete AD.changed;Object.assign(S.cfg,clone(AD));fixCfg();await save(true);await fsWriteConfig();logAct("settings");resolveMe();renderAll();toast("Settings saved"+(FS.dir?" and shared through the data folder":""));AD=clone(S.cfg);openAdmin(pg)};
+  $("#adSave").onclick=async()=>{const pg=AD.page;delete AD.page;delete AD.changed;Object.assign(S.cfg,clone(AD));fixCfg();await save(true);await fsWriteConfig();await usersWriteXlsx();logAct("settings");resolveMe();renderAll();toast("Settings saved"+(FS.dir?" and shared through the data folder":""));AD=clone(S.cfg);openAdmin(pg)};
   /* generic binding: data-k="path" on inputs */
   P.querySelectorAll("[data-k]").forEach(el=>{el.addEventListener(el.type==="checkbox"?"change":"input",()=>{setPath(AD,el.dataset.k,el.type==="checkbox"?el.checked:el.type==="number"?(el.value===""?"":+el.value):el.value);adChanged();renderNoticePreview()})});
   if(AD.changed)$("#adDirty").hidden=false;
@@ -2084,6 +2177,7 @@ function adminPage1(){
       <button class="cap sm danger" id="uDelSel">Remove selected</button>
     </div>
     <div class="utable big" id="uTable"></div>
+    <div class="mrow" style="align-items:center"><label class="cap teal sm" style="cursor:pointer;flex:none;min-width:0">📥 Import users from Excel<input type="file" id="uXls" accept=".xlsx,.xls,.xlsm,.csv" hidden></label><span class="ahelp" style="margin:0">Columns: <b>MSID, Code (OPID), Device name, Role, Name, Team, Valid till</b> — same as your Excel. Or copy the rows from Excel and paste them in the box below.</span></div>
     <div class="mrow"><label>Add people (one per line: <code>MSID, PC number, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="rahuls12, LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;sankem04, LHTU05CG2122XYZ, manager, SANKETH M S, TM-SANKETH M S&#10;abimet07, LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
     <div class="err" id="uErr"></div></section>`;
 }
@@ -2152,7 +2246,11 @@ function wireAdmin1(){
   $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
   $("#uResetSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{delete u.ov;delete u.scope;delete u.procs});adChanged();pcTable();toast("Custom access removed for "+s.length+" PCs")};
   $("#uDelSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}ask(null,"Remove "+s.length+" PCs?","They lose their role and custom access.","Remove",()=>{AD.users=AD.users.filter(u=>!ADF.sel.has(uid(u)));ADF.sel.clear();adChanged();pcTable()},true)};
-  $("#uAdd").onclick=()=>{const lines=$("#uBulk").value.split(/\n/).map(l=>l.split(",").map(x=>x.trim())).filter(a=>a[0]);let n=0;const bad=[];
+  $("#uXls").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+    if(typeof XLSX==="undefined"){toast("Excel reader didn't load. Copy the rows from Excel and paste them in the box instead.");return}
+    const rd=new FileReader();rd.onload=()=>{try{const wb=XLSX.read(rd.result,{type:"array",cellDates:true});const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:"",raw:false});userImport(rows)}catch(x){toast("Couldn't read that Excel file")}};rd.readAsArrayBuffer(f)};
+  $("#uAdd").onclick=()=>{if(/\t/.test($("#uBulk").value)||/msid/i.test($("#uBulk").value.split(/\n/)[0]||"")){userImport($("#uBulk").value.split(/\r?\n/).map(l=>l.split(/\t|,(?=\s*\S)/).map(x=>x.trim())));$("#uBulk").value="";return}
+    const lines=$("#uBulk").value.split(/\n/).map(l=>l.split(",").map(x=>x.trim())).filter(a=>a[0]);let n=0;const bad=[];
     const isRole=x=>/^(adm|ent|data|man|sme|emp)/i.test(x||"");
     lines.forEach(a=>{let msid="",pc="",r,name,team;
       if(isRole(a[1])){const f=a[0];if(/^lhtu|^[a-z]{2,}\d{2,}[a-z0-9]*$/i.test(f)&&f.length>=10)pc=f;else msid=f;[,r,name,team]=a}else[msid,pc,r,name,team]=a;
@@ -2225,9 +2323,16 @@ function adminPage3(){
   const allK=[...new Set([...Object.keys(M),...Object.keys(seen)])].sort((a,b)=>((M[a]||seen[a]).name||"").localeCompare((M[b]||seen[b]).name||""));
   return `
   <section class="acard"><h4>📁 Team data folder</h4>
-    <p class="ahelp">Pick a folder that OneDrive / SharePoint keeps in sync. Saves go to <code>Year\\Month\\date.json</code> (other processes in their own sub folder), settings to <code>config.json</code>, the bin to <code>_bin</code>, the log to <code>_system</code>.</p>
+    <p class="ahelp"><b>First time (Admin):</b> click Connect and choose the data folder itself — it gets marked. <b>Everyone else:</b> choose <b>OneDrive - UnitedHealth Group</b> and the tool finds the marked folder inside by itself, then Chrome asks <b>“Allow on every visit”</b> once.</p>
+    <div class="mrow"><label>Data folder name (used to find it)<input data-k="folder" value="${esc(AD.folder||"PCIS_Productivity_Eclipse")}"></label></div>
+    <p class="ahelp">Saves go to <code>Year\\Month\\date.json</code> (other processes in their own sub folder), settings to <code>config.json</code>, the bin to <code>_bin</code>, the log to <code>_system</code>.</p>
     <div class="fstat">${!fsSupported()?"⚠️ This browser can't connect folders. Use Chrome or Edge.":FS.dir?`✅ Connected: <b>${esc(FS.dir.name)}</b> · ${Object.keys(FS.index).length} dates in the folder`:FS.handle?`⏸️ Folder remembered, waiting for permission`:"Not connected — data is saved on this PC only"}</div>
     <div class="mrow">${fsSupported()?`<button class="cap teal sm" id="fsC">${FS.dir?"Change folder":"Connect folder"}</button>${FS.handle&&!FS.dir?`<button class="cap sm" id="fsA">Allow access</button>`:""}${FS.dir?`<button class="cap sm" id="fsS">Sync now</button><button class="cap sm" id="fsD">Disconnect</button>`:""}`:""}</div></section>
+
+  <section class="acard"><h4>📗 Users Excel (sync)</h4>
+    <p class="ahelp">The data folder keeps <code>Eclipse_Users.xlsx</code>. Sheet <b>Users</b> = MSID, Code, Device name, Role, Name, Team, Valid till — add or change people there in Excel and every PC picks it up by itself. Sheet <b>Access</b> (who may do what) is <b>very hidden</b> and locked with the Admin password; the tool writes it when you press Save & apply.</p>
+    <div class="fstat">${!FS.dir?"Connect the data folder first.":typeof XLSX==="undefined"||!window.ExcelJS?"⚠️ The Excel library didn't load (no internet?).":"✅ "+(S.cfg.users||[]).length+" users in sync with "+UXF}</div>
+    <div class="mrow"><button class="cap teal sm" id="uxR">Read Excel now</button><button class="cap sm" id="uxW">Write Excel now</button><button class="cap sm" id="uxD">Download Users Excel</button></div></section>
 
   <section class="acard"><h4>💾 Backup & restore</h4>
     <p class="ahelp">Backup downloads every saved date of every process (${Object.keys(S.days).length} on this PC) plus settings in one file.</p>
@@ -2271,6 +2376,9 @@ function wireAdmin3(){
   on("#fsC",async()=>{await fsConnect();openAdmin(3)});on("#fsA",async()=>{await fsAllow();openAdmin(3)});
   on("#fsS",async()=>{await fsSyncUp();await fsWriteConfig();await fsScan();openAdmin(3);toast("Synced with the data folder")});
   on("#fsD",async()=>{await fsDisconnect();openAdmin(3)});
+  on("#uxR",async()=>{FS.uxLM=0;const ok=await usersSync(true);AD=clone(S.cfg);openAdmin(3);toast(ok?"Users read from "+UXF+": "+S.cfg.users.length:"Nothing read. Is the Excel in the data folder?")});
+  on("#uxW",async()=>{const ok=await usersWriteXlsx();toast(ok?UXF+" written to the data folder":"Couldn't write the Excel")});
+  on("#uxD",async()=>{const b=await usersXlsxBuffer();if(!b){toast("Excel library didn't load");return}saveBlob(new Blob([b],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),UXF)});
   on("#bkB",async()=>{const b=await backupObj();saveBlob(new Blob([JSON.stringify(b)],{type:"application/json"}),"Eclipse_Backup_"+todayISO()+".json");toast("Backup of "+Object.keys(b.days).length+" dates downloaded")});
   $("#bkR").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{let b;try{b=JSON.parse(rd.result);if(!b.days)throw 0}catch(err){toast("That file isn't an Eclipse backup");return}
     const ks=Object.keys(b.days),have=new Set(Object.keys(S.days).concat(Object.keys(FS.index))),clash=ks.filter(k=>have.has(k)).length;
@@ -2300,6 +2408,7 @@ function wireAdmin3(){
 /* ---------- start ---------- */
 function fixCfg(){
   const c=S.cfg;c.users=Array.isArray(c.users)?c.users:[];
+  if(!c.users.length)c.seedV=0;   /* an empty user list is never wanted: bring the PCIS team back */
   /* one time: add the PCIS team and the new access (Data Entry = everything, others = view) */
   if((+c.seedV||0)<2){
     SEED_USERS.forEach(s=>{const o=c.users.find(u=>(u.msid&&u.msid===s.msid)||(u.pc&&u.pc===s.pc));if(o)Object.assign(o,{msid:s.msid,opid:s.opid,pc:s.pc,role:s.role,name:s.name,team:s.team});else c.users.push(clone(s))});
@@ -2330,7 +2439,7 @@ function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||
 ["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
 async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset();
   /* pick up Admin changes from the data folder straight away (OneDrive sync can take a minute) */
-  if(!window._cfgPoll)window._cfgPoll=setInterval(async()=>{if($("#app").hidden||!FS.dir)return;const ch=await fsReadConfig();if(ch){resolveMe();if(!view.dirty&&$("#adminPg").hidden&&$("#qvcPg").hidden&&!msOpen)renderAll()}sessionCheck()},40000);}
+  if(!window._cfgPoll)window._cfgPoll=setInterval(async()=>{if($("#app").hidden||!FS.dir)return;const ch=(await fsReadConfig())|(await usersSync());if(ch){resolveMe();if(!view.dirty&&$("#adminPg").hidden&&$("#qvcPg").hidden&&!msOpen)renderAll()}sessionCheck()},40000);}
 function start(){if(expired())return;if(LOCK_ON)tryAuto();else enter()}
 (async()=>{
   storeOK=await IDB.open();
@@ -2339,5 +2448,27 @@ function start(){if(expired())return;if(LOCK_ON)tryAuto();else enter()}
   S.cfg=Object.assign(fresh().cfg,S.cfg);S.days=S.days||{};fixCfg();
   start();
 })();
+
+/* import users from the Excel sheet (header row: MSID, Code/OPID, Device name, Role, Name, Team, Valid till) */
+function userImport(rows){
+  rows=(rows||[]).filter(r=>r&&r.some(v=>String(v).trim()));if(!rows.length){toast("Nothing to import");return}
+  const H=rows[0].map(h=>norm(h)),col=(...ks)=>H.findIndex(h=>ks.some(k=>h===k||h.startsWith(k)));
+  let c={msid:col("msid","userid","user"),opid:col("opid","code"),pc:col("devicename","device","pc","pcnumber","computer"),role:col("role"),name:col("name","employeename","username"),team:col("team","manager"),till:col("validtill","valid","expiry")};
+  let body=rows.slice(1);
+  if(c.msid<0){c={msid:0,opid:1,pc:2,role:3,name:4,team:5,till:6};body=rows}   /* no header: use your Excel's column order */
+  const roleOf=v=>{v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("man")||v.startsWith("sme")||v.startsWith("tl")?"manager":"employee"};
+  const dateOf=v=>{v=String(v||"").trim();if(!v)return "";let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return +m[1]>=9000?"":`${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
+    m=v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;if(y>=9000)return "";const a=+m[1],b=+m[2],mo=a>12?b:a,d=a>12?a:b;return `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
+    const t=Date.parse(v);if(!isNaN(t)){const dt=new Date(t);return dt.getFullYear()>=9000?"":new Date(t-dt.getTimezoneOffset()*6e4).toISOString().slice(0,10)}return ""};
+  const g=(r,k)=>c[k]>=0?String(r[c[k]]??"").trim():"";
+  let add=0,upd=0,seen=new Set();const bad=[];
+  body.forEach(r=>{const msid=g(r,"msid").toLowerCase(),pc=g(r,"pc").toUpperCase().replace(/\..*$/,"");
+    if(!msid&&!pc)return;if(seen.has(msid||pc))return;seen.add(msid||pc);
+    if(isBuiltInAdmin(msid)||isBuiltInAdmin(pc)){bad.push(msid||pc);return}
+    const rec={msid,opid:g(r,"opid").toUpperCase(),pc,role:roleOf(g(r,"role")),name:g(r,"name"),team:g(r,"team")},till=dateOf(g(r,"till"));
+    const o=AD.users.find(u=>(msid&&u.msid===msid)||(pc&&u.pc===pc));
+    if(o){Object.assign(o,rec);if(till)o.until=till;else delete o.until;upd++}else{if(till)rec.until=till;AD.users.push(rec);add++}});
+  adChanged();openAdmin(1);toast(`Imported: ${add} new, ${upd} updated${bad.length?" · skipped "+bad.join(", "):""}. Click Save & apply.`);
+}
 
 </script>
