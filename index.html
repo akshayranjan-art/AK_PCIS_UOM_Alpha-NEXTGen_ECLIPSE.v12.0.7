@@ -421,7 +421,7 @@ td.name{min-width:215px}
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v4.0.7 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v4.0.7 · build 18</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -526,7 +526,7 @@ const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
 /* ---------- build ---------- */
-const BUILD="17";
+const BUILD="18";
 
 /* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
 const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
@@ -585,8 +585,17 @@ const FEAT=[
  ["missing","Missing employee alert (dump)","Missing","Tools",[1,0,0]],
 ];
 const FK=Object.fromEntries(FEAT.map(f=>[f[0],f]));
-const DEFPERM=Object.fromEntries(ROLE3.map((r,i)=>[r,Object.fromEntries(FEAT.map(f=>[f[0],f[4][i]]))]));
-const DEFSCOPE={entry:"all",manager:"all",employee:"own"};
+/* defaults: Data Entry gets every option; Manager / SME and Employees get view access */
+const VIEW_ACT=["reset","share","refresh"],VIEW_OFF=["log","missing","qvc","mydash","trial","selfcalc"];
+const viewPerm=f=>{const d=FK[f];return d[3]==="Actions"?(VIEW_ACT.includes(f)?1:0):(VIEW_OFF.includes(f)?0:1)};
+const DEFPERM={entry:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?0:1])),manager:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?1:viewPerm(f[0])])),employee:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="mydash"?1:viewPerm(f[0])]))};
+const DEFSCOPE={entry:"all",manager:"all",employee:"all"};
+/* PCIS team: built into the file, so every PC and browser knows them (Admin changes are saved on top) */
+const SEED_USERS=[["ap21","PA5","LHTU05CG5321MJ9","manager","Ashwini P"],["atony","ATO","LHTU05CG5331DN2","employee","Abimelak Tony"],["rrume","RRU","LHTU05CG5331DPF","employee","RAKOKHRULU RUME"],["shariva2","SHA","LHTU05CG5243YCC","employee","Harivardhan S"],["snagapp1","4TV","LHTU05CG2322FC8","employee","Nagappa Naidu, Sivasankar"],["se31","X4M","LHTU05CG230322X","employee","Sindhu E"],["kudayku","KUD","LHTU05CG5321MK6","employee","Karthik Kumar"],["ksb1","KSB","LHTU05CG4244J31","employee","KAVYA SB"],["hv5","X3K","LHTU05CG6264WJZ","employee","HEMAVATHI V"],["ahp","AHP","LHTU05CG5321MKJ","employee","Anusha H P"],["rsiddara","AS6","LHTU05CG2122SJB","employee","Ramya S"],["shs6","SHS","LHTU05CG230322S","employee","SWAROOP HS"],["pto20","PTO","LHTU05CG5331DPT","employee","POOJA.T"],["ps119","PSO","LHTU05CG4244J5K","employee","Poorvika S"],["nv25","NVA","LHTU05CG5331DK5","employee","V Nandini"],["npongene","WJC","LHTU05CG5331DPZ","employee","Nukshimenla Pongener"],["skambl19","HK5","LHTU05CG2122T52","entry","Shreyash k"],["bsanabam","ZIO","LHTU05CG2122TCV","employee","Bonney Sanabam"],["nsubra10","NS5","LHTU05CG2122WHK","employee","Naresh Kumar S"],["mr53","KXN","LHTU05CG5331DPG","employee","Madhura R"],["jbommasa","JAB","LHTU05CG2122T58","employee","Jayashri B"],["mmagendr","MMA","LHTU05CG5321MK7","employee","ManojKumar M"],["tester","TST","DESKTOP","manager","Tester"]].map(([msid,opid,pc,role,name])=>({msid,opid,pc,role,name,team:msid==="tester"?"TEST":"PCIS"}));
+/* settings files in the data folder are stored scrambled, so they can't be read or edited by hand */
+const EKEY="Dwarkadesh14#ar·Eclipse";
+function encJ(o){const s=unescape(encodeURIComponent(JSON.stringify(o)));let x="";for(let i=0;i<s.length;i++)x+=String.fromCharCode(s.charCodeAt(i)^EKEY.charCodeAt(i%EKEY.length));return "ECLIPSE1:"+btoa(x)}
+function decJ(t){if(t==null||t==="")return null;t=String(t);if(!t.startsWith("ECLIPSE1:"))return JSON.parse(t);const x=atob(t.slice(9));let s="";for(let i=0;i<x.length;i++)s+=String.fromCharCode(x.charCodeAt(i)^EKEY.charCodeAt(i%EKEY.length));return JSON.parse(decodeURIComponent(escape(s)))}
 const MSGS=[["save","Save"],["reset","Reset"],["replace","Replace"],["del","Delete date"],["remove","Remove a person"],["shift","Shift hours"],["dayclose","Day complete"],["restore","Restore from bin"]];
 const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["Pend52","soon"],["PCRL","soon"],["Onbase","soon"],["NonPar","soon"]].map(([k,s])=>({k,label:k,status:s,roles:{entry:1,manager:1,employee:1}}));
 
@@ -682,16 +691,21 @@ async function fsScan(){
     FS.index=idx;FS.err=false;await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
-const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine"];
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV"];
 const QVC_KEYS=["grades","teamGrade","slabs","heads","metric"];
 async function fsReadConfig(){
   if(!FS.dir)return;
-  try{const fh=await FS.dir.getFileHandle("config.json");const f=await fh.getFile();if(f.lastModified===FS.cfgLM)return;FS.cfgLM=f.lastModified;
-    const c=JSON.parse(await f.text());SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe()}catch(e){}
+  let c=null;
+  try{const fh=await FS.dir.getFileHandle("config.json");const f=await fh.getFile();if(f.lastModified===FS.cfgLM)return false;
+    try{c=decJ(await f.text())}catch(x){c=null}if(c){FS.cfgLM=f.lastModified;FS.fbDone=false}}catch(e){}
+  if(!c){if(FS.fbDone)return false;FS.fbDone=true;try{c=decJ(await fsReadText("_system","settings_latest.json"))}catch(e){c=null}if(!c)return false}   /* config.json missing or broken: use the safety copy */
+  SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});fixCfg();save();resolveMe();return true;
 }
 async function fsWriteConfig(){
   if(!FS.dir)return;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.pc;
-  try{const fh=await FS.dir.getFileHandle("config.json",{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(c,null,1));await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Settings saved on this PC, but not in the data folder")}
+  const txt=encJ(c);
+  try{const fh=await FS.dir.getFileHandle("config.json",{create:true});const w=await fh.createWritable();await w.write(txt);await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false}catch(e){FS.err=true;toast("Settings saved on this PC, but not in the data folder")}
+  await fsWriteText("_system","settings_latest.json",txt);await fsWriteText("_system","settings_"+todayISO()+".json",txt);   /* safety copies, never deleted by the tool */
   paintSync();
 }
 async function procRoot(p,create){return p==="DBM"?FS.dir:FS.dir.getDirectoryHandle(p,{create})}
@@ -1407,10 +1421,34 @@ function readFile(f){
 /* ---------- login: MSID (own password) or PC number ---------- */
 const pwHash=(msid,pw)=>H(String(msid).toLowerCase()+"|"+String(pw),377);
 function pwsMerge(a,b){const o={...(a||{})};Object.entries(b||{}).forEach(([k,v])=>{if(!o[k]||(v&&v.at||0)>(o[k].at||0))o[k]=v});return o}
-async function pwsLoad(){let m=LS.get("pws",{});if(FS.dir){try{m=pwsMerge(m,JSON.parse(await fsReadText("_system","pw.json")||"{}"))}catch(e){}}LS.set("pws",m);return m}
-async function pwsSet(msid,h){
-  const k=String(msid).toLowerCase(),e={h:h||null,at:Date.now()};const m=pwsMerge(await pwsLoad(),{[k]:e});LS.set("pws",m);
-  if(FS.dir){let f={};try{f=JSON.parse(await fsReadText("_system","pw.json")||"{}")}catch(x){}await fsWriteText("_system","pw.json",JSON.stringify(pwsMerge(f,{[k]:e})))}
+async function pwsLoad(){let m=LS.get("pws",{});if(FS.dir){try{m=pwsMerge(m,decJ(await fsReadText("_system","pw.json"))||{})}catch(e){}}LS.set("pws",m);return m}
+/* dev = the browser this MSID is locked to (one user, one PC). null = not locked yet */
+async function pwsSet(msid,h,dev){
+  const k=String(msid).toLowerCase(),e={h:h||null,at:Date.now(),dev:dev||null};const m=pwsMerge(await pwsLoad(),{[k]:e});LS.set("pws",m);
+  if(FS.dir){let f={};try{f=decJ(await fsReadText("_system","pw.json"))||{}}catch(x){}await fsWriteText("_system","pw.json",encJ(pwsMerge(f,{[k]:e})))}
+}
+const devId=()=>{let d=LS.get("devid","");if(!d){d="D"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);LS.set("devid",d)}return d};
+function remember(id,h){LS.set("session",{id,h:h||null,m:view.masterLogin?1:0,at:Date.now()})}
+async function gateFS(){
+  if(!FS.handle&&fsSupported()){try{FS.handle=await IDB.get("dirHandle")}catch(e){}}
+  if(FS.handle&&!FS.dir){try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+}
+/* remembered login: open straight away on this PC until Log out (or the Admin resets / locks the user) */
+async function sessionOK(s){
+  if(!s||!s.id)return false;
+  if(s.m)return true;
+  const u=userOf(s.id);if(!u||(u.until&&daysLeft(u.until)<0))return false;
+  if(!u.msid)return true;
+  const e=(await pwsLoad())[u.msid];return !!(e&&e.h&&e.h===s.h&&(!e.dev||e.dev===devId()));
+}
+async function tryAuto(){
+  await gateFS();const s=LS.get("session",null);
+  if(await sessionOK(s)){view.masterLogin=!!s.m;dev.set(s.id);return enter()}
+  if(s)LS.set("session",null);gate();
+}
+async function sessionCheck(){
+  if(!LOCK_ON||$("#app").hidden)return;const s=LS.get("session",null);
+  if(!(await sessionOK(s))){LS.set("session",null);view.as=null;$("#app").hidden=true;gate("Your access was changed by the Admin. Please log in again.")}
 }
 async function gateFolder(){
   try{
@@ -1422,8 +1460,7 @@ async function gateFolder(){
 }
 async function gate(msg){
   $("#gate").hidden=false;$("#app").hidden=true;
-  if(!FS.handle&&fsSupported()){try{FS.handle=await IDB.get("dirHandle")}catch(e){}}
-  if(FS.handle&&!FS.dir){try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+  await gateFS();
   const fl=!fsSupported()?"":FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<button class="lnk" id="gFolder">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"} (needed once on a new PC)</button>`;
   $("#gateBody").innerHTML=`
     <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Log in with your <b>MSID</b> and your own password.</p>
@@ -1436,7 +1473,7 @@ async function gate(msg){
     const id=$("#gId").value.trim(),pw=$("#gPw").value,err=t=>$("#gErr").innerHTML=t;
     if(id.length<3){err("Enter your MSID or PC number.");return}
     if(FS.handle&&!FS.dir){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
-    if(isMaster(pw)){view.masterLogin=true;dev.set(id);return enter()}
+    if(isMaster(pw)){view.masterLogin=true;dev.set(id);remember(id);return enter()}
     if(isBuiltInAdmin(id)){err("Use the Admin password for this ID.");return}
     const u=userOf(id);
     if(!u){err("<b>Access Denied.</b> “"+esc(id)+"” is not registered. Please contact Administration.");return}
@@ -1446,8 +1483,11 @@ async function gate(msg){
       const e=(await pwsLoad())[u.msid];
       if(!e||!e.h){err("No password set yet. Click <b>First time, or forgot your password?</b>");return}
       if(e.h!==pwHash(u.msid,pw)){err("Password is wrong. Forgot it? Use the link below.");return}
+      if(e.dev&&e.dev!==devId()){err("<b>"+esc(u.msid)+"</b> is locked to its own PC. Log in from your PC, or ask the Admin to unlock it.");return}
+      if(!e.dev)await pwsSet(u.msid,e.h,devId());
+      view.masterLogin=false;dev.set(u.msid);remember(u.msid,e.h);return enter();
     }else if(pw.trim().toUpperCase()!==u.pc.slice(-4)){err("Password is wrong. Use the last 4 characters of the PC number.");return}
-    view.masterLogin=false;dev.set(u.msid||u.pc);enter();
+    view.masterLogin=false;dev.set(u.pc);remember(u.pc);enter();
   };
   $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};
   $("#gSet").onclick=gateSetPw;
@@ -1473,7 +1513,9 @@ function gateSetPw(){
     if(pc!==u.pc){err("The PC number doesn't match the one registered for this MSID.");return}
     if(p1.length<4){err("Make the password at least 4 characters.");return}
     if(p1!==p2){err("The two passwords don't match.");return}
-    await pwsSet(id,pwHash(id,p1));dev.set(id);
+    const old=(await pwsLoad())[id];
+    if(old&&old.dev&&old.dev!==devId()){err("This MSID is locked to another PC. Ask the Admin to unlock it first.");return}
+    await pwsSet(id,pwHash(id,p1),devId());dev.set(id);
     gate(`<span style="color:#8fe0d9">Password saved${FS.dir?"":" on this PC (connect the data folder so it works on every PC)"}. Log in now.</span>`);
   };
   $("#sGo").onclick=go;$("#sP2").onkeydown=e=>{if(e.key==="Enter")go()};
@@ -1486,10 +1528,10 @@ function changePw(){
     <div class="err" id="cpE"></div><div class="mrow"><button class="cap amber" id="cpGo">Change password</button><button class="cap" data-close>Cancel</button></div>`);
   $("#cpGo").onclick=async()=>{const e=(await pwsLoad())[id],o=$("#cpO").value,n=$("#cpN").value,er=t=>$("#cpE").textContent=t;
     if(!e||e.h!==pwHash(id,o)){er("Current password is wrong.");return}if(n.length<4){er("Make the new password at least 4 characters.");return}if(n!==$("#cpN2").value){er("The two new passwords don't match.");return}
-    await pwsSet(id,pwHash(id,n));closeModal();toast("Password changed")};
+    const h=pwHash(id,n);await pwsSet(id,h,e.dev||devId());remember(id,h);closeModal();toast("Password changed")};
 }
 function enter(){view.team=[];view.pf=[];view.emp=[];view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
-$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;$("#app").hidden=true;gate()});
+$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;LS.set("session",null);$("#app").hidden=true;gate()});
 $("#btnPw").onclick=changePw;
 
 function findRow(rows,re,max=40){for(let r=0;r<Math.min(rows.length,max);r++){const c=(rows[r]||[]).findIndex(v=>re.test(clean(v)));if(c>=0)return{r,c}}return null}
@@ -1734,10 +1776,10 @@ function qMerge(a,b){
     if((m.lockAt||0)>(o.lockAt||0)){o.locked=m.locked;o.lockAt=m.lockAt;o.snap=m.snap}});
   return out;
 }
-async function qLoad(){if(!FS.dir)return;try{const t=await fsReadText("_system","qvc.json");if(t){S.qvc=qMerge(QD(),JSON.parse(t));save()}}catch(e){}}
+async function qLoad(){if(!FS.dir)return;try{const t=await fsReadText("_system","qvc.json");if(t){S.qvc=qMerge(QD(),decJ(t));save()}}catch(e){}}
 let qT=null;
-function qSave(){clearTimeout(qT);qT=setTimeout(async()=>{save();if(FS.dir&&fsMode()==="readwrite"){let cur=null;try{cur=JSON.parse(await fsReadText("_system","qvc.json")||"null")}catch(e){}
-  if(cur)S.qvc=qMerge(QD(),cur);await fsWriteText("_system","qvc.json",JSON.stringify(S.qvc));save()}},600)}
+function qSave(){clearTimeout(qT);qT=setTimeout(async()=>{save();if(FS.dir&&fsMode()==="readwrite"){let cur=null;try{cur=decJ(await fsReadText("_system","qvc.json"))}catch(e){}
+  if(cur)S.qvc=qMerge(QD(),cur);await fsWriteText("_system","qvc.json",encJ(S.qvc));save()}},600)}
 const qMonth=ym=>{const q=QD();return q.months[ym]=q.months[ym]||{rows:{}}};
 const qMetricName=()=>QD().cfg.metric==="prod"?"Productivity %":"Utilization %";
 function qPct(a){return QD().cfg.metric==="prod"?(a.prod>0?a.tot/a.prod*100:0):(a.hrs>0?a.prod/a.hrs*100:0)}
@@ -1972,6 +2014,7 @@ function exportDates(ds){
 /* Admin button shows only on the Admin PC (remembered in this browser), unless switched off in Admin */
 const adminBtnOK=()=>S.cfg.adminMine===false||LS.get("adminpc",false)||(LOCK_ON&&isBuiltInAdmin(me.pc));
 function openAdminLogin(){
+  if(me.role==="admin"&&!view.as&&(view.masterLogin||isBuiltInAdmin(dev.get()))){LS.set("adminpc",true);setTop();return openAdmin(1)}   /* Admin is already logged in: no second password */
   modal(`<h3>Admin</h3><p style="color:var(--muted);margin:0">Enter the master password.</p>
    <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div>
    <label class="chk" style="padding:8px 0 0"><input type="checkbox" id="adRem" ${LS.get("adminpc",false)?"checked":""}> Remember this PC as the Admin PC (Admin button shows here)</label><div class="err" id="adErr"></div>
@@ -2057,13 +2100,14 @@ function pcTable(){
     return o==null?`<button class="pp inh ${d?"":"x"}" data-pu="${i}" data-f="${f}">${d?"✓":"✗"}</button>`:`<button class="pp ${o?"y":"n"}" data-pu="${i}" data-f="${f}">${o?"✓":"✗"}</button>`};
   const procCell=(u,i)=>PR.map(p=>{const def=(p.roles||{})[u.role]!==0&&p.status!=="hidden",on=u.role==="admin"?true:Array.isArray(u.procs)?u.procs.includes(p.k):def;
     return `<button class="pc2 ${on?"on":""} ${Array.isArray(u.procs)||u.role==="admin"?"":"inh"}" data-pp="${i}" data-p="${esc(p.k)}" ${u.role==="admin"?"disabled":""}>${esc(p.label||p.k)}</button>`}).join("")+(Array.isArray(u.procs)?`<button class="pc2 rst" data-ppr="${i}" title="Back to role default">↺</button>`:"");
-  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">MSID</th><th rowspan="2" class="s2">Name</th><th rowspan="2">PC number</th><th rowspan="2">Password</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
+  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">MSID</th><th rowspan="2" class="s2">Name</th><th rowspan="2">OPID</th><th rowspan="2">PC number</th><th rowspan="2">Password</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
   const head2=`<tr>${FEAT.map(([f,n,s])=>`<th class="fh" title="${esc(n)}">${esc(s)}</th>`).join("")}</tr>`;
-  const adm=`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(ALLOWED_MSIDS.join(", "))}</td><td class="s2">You (built in)</td><td class="mono">${esc(ALLOWED_PCS.join(", ").toUpperCase())}</td><td>Admin password</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`;
-  const pwCell=(u,i)=>!u.msid?`<span class="muted">PC last 4</span>`:(ADF.pws&&ADF.pws[u.msid]&&ADF.pws[u.msid].h)?`<span class="okb">✓ set</span> <button class="cap sm" data-urs="${i}" title="User sets a new one with MSID + PC number">Reset</button>`:`<span class="muted">not set yet</span>`;
+  const adm=`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(ALLOWED_MSIDS.join(", "))}</td><td class="s2">You (built in)</td><td>—</td><td class="mono">${esc(ALLOWED_PCS.join(", ").toUpperCase())}</td><td>Admin password</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`;
+  const pwCell=(u,i)=>!u.msid?`<span class="muted">PC last 4</span>`:(ADF.pws&&ADF.pws[u.msid]&&ADF.pws[u.msid].h)?`<span class="okb">✓ set</span>${ADF.pws[u.msid].dev?` <button class="cap sm" data-uul="${i}" title="Locked to one PC. Unlock to let them log in on another PC">🔒 Unlock PC</button>`:""} <button class="cap sm" data-urs="${i}" title="User sets a new one with MSID + PC number">Reset</button>`:`<span class="muted">not set yet</span>`;
   const body=rows.map(({u,i})=>`<tr class="${ADF.sel.has(uid(u))?"sel":""}"><td class="s0"><input type="checkbox" data-us="${esc(uid(u))}" ${ADF.sel.has(uid(u))?"checked":""}></td>
     <td class="s1"><div class="nmw">${isCustom(u)?"⭐":""}<input class="mono" data-um="${i}" value="${esc(u.msid||"")}" placeholder="msid"></div></td>
     <td class="s2"><input data-un="${i}" value="${esc(u.name||"")}" placeholder="name"></td>
+    <td><input class="mono" data-uo="${i}" value="${esc(u.opid||"")}" placeholder="OPID" style="min-width:60px;width:70px"></td>
     <td><input class="mono" data-upc="${i}" value="${esc(u.pc||"")}" placeholder="PC number" style="min-width:140px"></td><td>${pwCell(u,i)}</td>
     <td><input data-ut="${i}" value="${esc(u.team||"")}" placeholder="team"></td>
     <td><select data-ur="${i}">${ROLES.map(([k,n])=>`<option value="${k}" ${k===u.role?"selected":""}>${n}</option>`).join("")}</select></td>
@@ -2090,6 +2134,7 @@ function wireAdmin1(){
   U.onclick=e=>{const t=e.target;
     const pu=t.closest("[data-pu]");if(pu){const u=AD.users[+pu.dataset.pu],f=pu.dataset.f;u.ov=u.ov||{};const o=u.ov[f];if(o==null)u.ov[f]=1;else if(o===1)u.ov[f]=0;else delete u.ov[f];if(!Object.keys(u.ov).length)delete u.ov;adChanged();pcTable();return}
     const pp=t.closest("[data-pp]");if(pp){const u=AD.users[+pp.dataset.pp],PR=AD.procs&&AD.procs.length?AD.procs:PROC0;if(!Array.isArray(u.procs))u.procs=PR.filter(p=>(p.roles||{})[u.role]!==0&&p.status!=="hidden").map(p=>p.k);const k=pp.dataset.p;u.procs=u.procs.includes(k)?u.procs.filter(x=>x!==k):u.procs.concat(k);adChanged();pcTable();return}
+    const ul=t.closest("[data-uul]");if(ul){const u=AD.users[+ul.dataset.uul];ask(null,"Unlock "+esc(u.msid)+" from its PC?","They keep their password. The next PC they log in on becomes their PC.","Unlock",async()=>{const e=(await pwsLoad())[u.msid];await pwsSet(u.msid,e&&e.h,null);ADF.pws=await pwsLoad();pcTable();toast(u.msid+" unlocked")});return}
     const rs=t.closest("[data-urs]");if(rs){const u=AD.users[+rs.dataset.urs];ask(null,"Reset the password of "+esc(u.msid)+"?","They set a new one on the login screen with their MSID and PC number (“First time, or forgot your password?”).","Reset password",async()=>{await pwsSet(u.msid,null);ADF.pws=await pwsLoad();pcTable();toast("Password reset for "+u.msid)},true);return}
     const pr=t.closest("[data-ppr]");if(pr){delete AD.users[+pr.dataset.ppr].procs;adChanged();pcTable();return}
     const ud=t.closest("[data-ud]");if(ud){const u=AD.users[+ud.dataset.ud];ask(null,"Remove "+esc(uid(u))+"?","This PC loses its role and custom access.","Remove",()=>{AD.users.splice(+ud.dataset.ud,1);ADF.sel.delete(uid(u));adChanged();pcTable()},true);return}
@@ -2101,7 +2146,7 @@ function wireAdmin1(){
     if(d.usc!=null){const u=AD.users[+d.usc];if(t.value)u.scope=t.value;else delete u.scope;adChanged();pcTable();return}
     if(d.uu!=null){const u=AD.users[+d.uu];if(t.value)u.until=t.value;else delete u.until;adChanged();return}
   };
-  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.um!=null){AD.users[+d.um].msid=t.value.trim().toLowerCase();adChanged()}if(d.upc!=null){AD.users[+d.upc].pc=t.value.trim().toUpperCase().replace(/\..*$/,"");adChanged()}if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
+  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.um!=null){AD.users[+d.um].msid=t.value.trim().toLowerCase();adChanged()}if(d.uo!=null){AD.users[+d.uo].opid=t.value.trim().toUpperCase();adChanged()}if(d.upc!=null){AD.users[+d.upc].pc=t.value.trim().toUpperCase().replace(/\..*$/,"");adChanged()}if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
   const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(uid(u)));
   $("#uApplyRole").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>u.role=$("#uSetRole").value);adChanged();pcTable();toast(s.length+" PCs set to "+ROLEN($("#uSetRole").value))};
   $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
@@ -2255,6 +2300,11 @@ function wireAdmin3(){
 /* ---------- start ---------- */
 function fixCfg(){
   const c=S.cfg;c.users=Array.isArray(c.users)?c.users:[];
+  /* one time: add the PCIS team and the new access (Data Entry = everything, others = view) */
+  if((+c.seedV||0)<2){
+    SEED_USERS.forEach(s=>{const o=c.users.find(u=>(u.msid&&u.msid===s.msid)||(u.pc&&u.pc===s.pc));if(o)Object.assign(o,{msid:s.msid,opid:s.opid,pc:s.pc,role:s.role,name:s.name,team:s.team});else c.users.push(clone(s))});
+    c.perms=clone(DEFPERM);c.scope=clone(DEFSCOPE);c.users.forEach(u=>{delete u.ov;delete u.scope});c.seedV=2;
+  }
   c.perms=c.perms||{};ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
   c.scope=Object.assign({},DEFSCOPE,c.scope||{});c.msg=Object.assign({},c.msg||{});c.lab=c.lab||{};c.fon=c.fon||{};
   /* older "screen parts" switches become global feature switches */
@@ -2278,8 +2328,10 @@ async function checkUpdate(){
 let idleT=null,idleLast=0;
 function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||!m||$("#app").hidden)return;idleT=setTimeout(()=>{if(view.dirty)return idleReset();view.as=null;$("#app").hidden=true;gate();toast("Locked after "+m+" minutes idle")},m*6e4)}
 ["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
-async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset()}
-function start(){if(expired())return;if(LOCK_ON)gate();else enter()}
+async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset();
+  /* pick up Admin changes from the data folder straight away (OneDrive sync can take a minute) */
+  if(!window._cfgPoll)window._cfgPoll=setInterval(async()=>{if($("#app").hidden||!FS.dir)return;const ch=await fsReadConfig();if(ch){resolveMe();if(!view.dirty&&$("#adminPg").hidden&&$("#qvcPg").hidden&&!msOpen)renderAll()}sessionCheck()},40000);}
+function start(){if(expired())return;if(LOCK_ON)tryAuto();else enter()}
 (async()=>{
   storeOK=await IDB.open();
   S=(await IDB.get("state"))||fresh();
