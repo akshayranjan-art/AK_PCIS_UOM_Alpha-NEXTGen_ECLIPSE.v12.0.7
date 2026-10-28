@@ -412,13 +412,16 @@ td.name{min-width:215px}
 .modal{z-index:75}
 .msi input{min-width:0!important;padding:0!important;width:15px!important;height:15px;flex:none;margin:0}
 
+.gnote{color:#8fe0d9;font-size:12px;margin:12px 0 0}
+.gate .lnk{display:block;margin-left:auto;margin-right:auto}
+
 </style>
 
 <section id="app" hidden>
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v12.0.7 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v4.0.7 · build 17.1</span><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -428,6 +431,7 @@ td.name{min-width:215px}
       <button class="cap ghost sm ico" id="btnHelp" title="Help" aria-label="Help">?</button>
       <button class="cap ghost sm ico" id="btnTheme" title="Light / dark" aria-label="Light or dark theme"><span class="moon"></span></button>
       <button class="cap ghost sm" id="btnAdmin">Admin</button>
+      <button class="cap ghost sm" id="btnPw" hidden>Password</button>
       <button class="cap ghost sm" id="btnOut">Log out</button>
     </div>
   </header>
@@ -443,7 +447,7 @@ td.name{min-width:215px}
 
 <div id="gate" class="gate" hidden><div class="lcard">
   <div class="brand" style="font-size:24px">Alpha NextGen <span>Eclipse</span></div>
-  <span class="ver" style="margin-top:8px">v12.0.7 · PRODUCTION CONSOLE</span>
+  <span class="ver" style="margin-top:8px">v4.0.7 · PRODUCTION CONSOLE</span>
   <div id="gateBody"></div>
 </div></div>
 
@@ -462,7 +466,8 @@ const APP_EXPIRY  = "2027-03-31";            // tool stops after this date; mast
 const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
   "LHTU05CG2122RJJ",
 ];
-const PW_MASTER   = 5662684247018612;        // hash of master password (caps and spaces ignored)
+const PW_MASTER   = 179352185805796;         // hash of master password Dwarkadesh14#ar (caps and spaces ignored)
+const ALLOWED_MSIDS = ["aranja14"];          // built-in Admin MSIDs (log in with the master password)
 const LOCK_ON     = true;                    // PC login is ON. Set to false only for testing
 /* ========================================================================= */
 
@@ -588,7 +593,7 @@ const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["
 let me={pc:"",role:"admin",name:"",team:""};
 const role=()=>view.as?view.as.role:me.role;
 const ident=()=>view.as||me;
-const userOf=pc=>(S.cfg.users||[]).find(u=>u.pc===pc);
+const userOf=id=>{if(!id)return null;const L=String(id).trim().toLowerCase(),U=String(id).trim().toUpperCase();return (S.cfg.users||[]).find(u=>(u.msid&&u.msid===L)||(u.pc&&u.pc===U))||null};
 const identUser=()=>{const id=ident();return id.pc?userOf(id.pc):null};
 const featOn=f=>(S.cfg.fon||{})[f]!==false;
 function can(f){
@@ -600,12 +605,12 @@ function can(f){
 const uiOn=can;
 function scope(){if(role()==="admin")return "all";const u=identUser();if(u&&u.scope)return u.scope;return S.cfg.scope[role()]||"all"}
 const msgOn=k=>S.cfg.msg[k]!==false;
-const isBuiltInAdmin=pc=>ALLOWED_PCS.map(p=>p.toUpperCase()).includes(pc);
+const isBuiltInAdmin=id=>{const s=String(id||"").trim();return ALLOWED_PCS.map(p=>p.toUpperCase()).includes(s.toUpperCase())||ALLOWED_MSIDS.map(m=>m.toLowerCase()).includes(s.toLowerCase())};
 const isRegistered=pc=>isBuiltInAdmin(pc)||!!userOf(pc);
 function resolveMe(){
   if(!LOCK_ON){me={pc:"TESTING",role:"admin",name:"",team:""};return}
-  const pc=dev.get(),u=userOf(pc);
-  me=isBuiltInAdmin(pc)?{pc,role:"admin",name:"",team:""}:u?{pc,role:u.role,name:u.name||"",team:u.team||""}:{pc,role:"employee",name:"",team:""};
+  const id=dev.get(),u=userOf(id),isM=/^[a-z]/i.test(id)&&!ALLOWED_PCS.some(p=>p.toUpperCase()===id.toUpperCase())&&!(u&&u.pc===id.toUpperCase());
+  me=isBuiltInAdmin(id)?{pc:id,msid:isM?id.toLowerCase():"",role:"admin",name:"",team:""}:u?{pc:u.pc||u.msid,msid:u.msid||"",role:u.role,name:u.name||"",team:u.team||""}:{pc:id,msid:"",role:"employee",name:"",team:""};
   if(view.masterLogin)me.role="admin";
 }
 
@@ -643,7 +648,7 @@ function ask(key,title,body,okText,fn,danger){
 /* ---------- data folder (OneDrive / SharePoint synced folder) ---------- */
 const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
 const fsSupported=()=>"showDirectoryPicker" in window;
-const fsMode=()=>(["save","dump","shift","dayclose","undo","replace","del","qvc"].some(can)||role()==="admin")?"readwrite":"read";
+const fsMode=()=>"readwrite";   /* every PC writes its own password file entry */
 const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
 async function fsInit(){
   if(!fsSupported())return;
@@ -812,35 +817,6 @@ $("#lockGo").onclick=async()=>{if(!isMaster($("#lockPw").value)){$("#lockErr").t
   if(daysLeft($("#lockDate").value)<0){$("#lockErr").textContent="Pick a future date.";return}
   S.cfg.exp=$("#lockDate").value;await save(true);await fsWriteConfig();$("#lockPw").value="";$("#lockErr").textContent="";$("#lock").hidden=true;start()};
 
-/* ---------- PC login ---------- */
-function gate(){
-  const pc=dev.get(),known=pc&&isRegistered(pc);
-  if(known){const ux=userOf(pc);if(ux&&ux.until&&daysLeft(ux.until)<0){dev.set("");return gate()}}
-  $("#gate").hidden=false;$("#app").hidden=true;
-  $("#gateBody").innerHTML=known?`
-    <div class="pcbox"><small>This PC</small><b>${esc(pc)}</b></div>
-    <div style="font-size:12px;color:#8fe0d9">✓ Registered device · ${esc((ROLES.find(r=>r[0]===(isBuiltInAdmin(pc)?"admin":userOf(pc).role))||[])[1]||"")}</div>
-    <button class="cap amber" id="gLogin">Login</button>
-    <button class="lnk" id="gOther">Not this PC? Log in with another PC name</button>`:`
-    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Enter this PC's device name (Settings → System → About). Password is the last 4 characters of the device name.</p>
-    <input id="gPc" placeholder="Device name, e.g. LHTU05CG2122RJJ" value="${esc(pc)}" style="text-transform:uppercase" autocapitalize="characters" autocomplete="off" spellcheck="false">
-    <input id="gPw" type="password" placeholder="Password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
-    <button class="cap amber" id="gGo">Login</button>
-    <div class="err" id="gErr" style="color:#ffb3ad"></div>`;
-  if(known){$("#gLogin").onclick=enter;$("#gOther").onclick=()=>{dev.set("");gate()};$("#gLogin").focus();return}
-  const go=()=>{
-    const p=$("#gPc").value.trim().toUpperCase().replace(/\..*$/,""),pw=$("#gPw").value.trim();
-    if(p.length<4){$("#gErr").textContent="Enter the device name.";return}
-    if(isMaster(pw)){view.masterLogin=true;dev.set(p);return enter()}
-    if(!isRegistered(p)){$("#gErr").innerHTML="<b>Access Denied.</b> PC "+esc(p)+" is not registered. Please contact Administration.";return}
-    {const ux=userOf(p);if(ux&&ux.until&&daysLeft(ux.until)<0){$("#gErr").innerHTML="<b>Access expired</b> for "+esc(p)+" on "+ux.until+". Please contact Administration.";return}}
-    if(pw.toUpperCase()!==p.slice(-4)){$("#gErr").textContent="Password is wrong. Use the last 4 characters of the device name.";return}
-    dev.set(p);enter();
-  };
-  $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};$("#gPc").focus();
-}
-function enter(){view.team=[];view.pf=[];view.emp=[];view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
-$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;$("#app").hidden=true;gate()});
 /* ---------- per-PC conveniences (only this browser) ---------- */
 const LS={get(k,d){try{const v=localStorage.getItem("eclipse_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("eclipse_"+k,JSON.stringify(v))}catch(e){}}};
 const COLS={time:1,dtd:1,hrs:1,cm:1};let PINS=LS.get("pins",[]);
@@ -878,12 +854,12 @@ function paintSync(){
 window.addEventListener("online",paintSync);window.addEventListener("offline",paintSync);
 function setTop(){
   const id=ident();
-  $("#pcChip").textContent=view.as?"VIEWING AS "+(view.as.pc&&view.as.pc!=="—"?view.as.pc+" · ":"")+((ROLES.find(r=>r[0]===view.as.role)||[])[1]||"").toUpperCase():(me.pc||"")+" · "+((ROLES.find(r=>r[0]===me.role)||[])[1]||"");
+  $("#pcChip").textContent=view.as?"VIEWING AS "+(view.as.pc&&view.as.pc!=="—"?view.as.pc+" · ":"")+((ROLES.find(r=>r[0]===view.as.role)||[])[1]||"").toUpperCase():(me.msid||me.pc||"")+" · "+((ROLES.find(r=>r[0]===me.role)||[])[1]||"");
   $("#pcChip").className="chip "+(view.as?"mgr":"view");
   $("#expTxt").textContent="Valid till "+expiry();
   $("#btnAdmin").hidden=!(me.role==="admin"&&!view.as&&adminBtnOK());
   $("#btnBack").hidden=!view.as;
-  $("#btnHelp").hidden=!can("help");$("#btnQvc").hidden=!can("qvc");$("#btnTheme").hidden=!can("theme");
+  $("#btnPw").hidden=!(LOCK_ON&&me.msid&&!view.as&&!isBuiltInAdmin(me.msid)&&!view.masterLogin);$("#btnHelp").hidden=!can("help");$("#btnQvc").hidden=!can("qvc");$("#btnTheme").hidden=!can("theme");
   const fb=$("#btnFolder");
   if(!fsSupported()||!can("folder"))fb.hidden=true;
   else if(FS.dir){fb.hidden=false;fb.textContent="📁 "+FS.dir.name;fb.title="Connected to the data folder"+(can("refresh")?" · click to refresh":"");fb.classList.add("on")}
@@ -1428,6 +1404,94 @@ function readFile(f){
   rd.readAsArrayBuffer(f);
 }
 
+/* ---------- login: MSID (own password) or PC number ---------- */
+const pwHash=(msid,pw)=>H(String(msid).toLowerCase()+"|"+String(pw),377);
+function pwsMerge(a,b){const o={...(a||{})};Object.entries(b||{}).forEach(([k,v])=>{if(!o[k]||(v&&v.at||0)>(o[k].at||0))o[k]=v});return o}
+async function pwsLoad(){let m=LS.get("pws",{});if(FS.dir){try{m=pwsMerge(m,JSON.parse(await fsReadText("_system","pw.json")||"{}"))}catch(e){}}LS.set("pws",m);return m}
+async function pwsSet(msid,h){
+  const k=String(msid).toLowerCase(),e={h:h||null,at:Date.now()};const m=pwsMerge(await pwsLoad(),{[k]:e});LS.set("pws",m);
+  if(FS.dir){let f={};try{f=JSON.parse(await fsReadText("_system","pw.json")||"{}")}catch(x){}await fsWriteText("_system","pw.json",JSON.stringify(pwsMerge(f,{[k]:e})))}
+}
+async function gateFolder(){
+  try{
+    if(FS.handle&&!FS.dir){if(await FS.handle.requestPermission({mode:"readwrite"})==="granted")FS.dir=FS.handle}
+    else{const h=await window.showDirectoryPicker({id:"eclipse-data",mode:"readwrite"});FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h)}
+    if(FS.dir){FS.cfgLM=0;await fsReadConfig();await pwsLoad();toast("Data folder connected")}
+  }catch(e){if(e&&e.name!=="AbortError")toast("Couldn't open the data folder")}
+  gate();
+}
+async function gate(msg){
+  $("#gate").hidden=false;$("#app").hidden=true;
+  if(!FS.handle&&fsSupported()){try{FS.handle=await IDB.get("dirHandle")}catch(e){}}
+  if(FS.handle&&!FS.dir){try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+  const fl=!fsSupported()?"":FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<button class="lnk" id="gFolder">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"} (needed once on a new PC)</button>`;
+  $("#gateBody").innerHTML=`
+    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Log in with your <b>MSID</b> and your own password.</p>
+    <input id="gId" placeholder="MSID (e.g. aranja14) or PC number" value="${esc(dev.get())}" autocapitalize="off" autocomplete="username" spellcheck="false">
+    <input id="gPw" type="password" placeholder="Password" autocapitalize="off" autocorrect="off" autocomplete="current-password" spellcheck="false">
+    <button class="cap amber" id="gGo">Login</button>
+    <div class="err" id="gErr" style="color:#ffb3ad">${msg||""}</div>
+    <button class="lnk" id="gSet">First time, or forgot your password?</button>${fl}`;
+  const go=async()=>{
+    const id=$("#gId").value.trim(),pw=$("#gPw").value,err=t=>$("#gErr").innerHTML=t;
+    if(id.length<3){err("Enter your MSID or PC number.");return}
+    if(FS.handle&&!FS.dir){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;FS.cfgLM=0;await fsReadConfig()}}catch(e){}}
+    if(isMaster(pw)){view.masterLogin=true;dev.set(id);return enter()}
+    if(isBuiltInAdmin(id)){err("Use the Admin password for this ID.");return}
+    const u=userOf(id);
+    if(!u){err("<b>Access Denied.</b> “"+esc(id)+"” is not registered. Please contact Administration.");return}
+    if(u.until&&daysLeft(u.until)<0){err("<b>Access expired</b> for "+esc(id)+" on "+u.until+". Please contact Administration.");return}
+    if(u.msid){
+      if(id.toLowerCase()!==u.msid){err("Please log in with your MSID: <b>"+esc(u.msid)+"</b>");return}
+      const e=(await pwsLoad())[u.msid];
+      if(!e||!e.h){err("No password set yet. Click <b>First time, or forgot your password?</b>");return}
+      if(e.h!==pwHash(u.msid,pw)){err("Password is wrong. Forgot it? Use the link below.");return}
+    }else if(pw.trim().toUpperCase()!==u.pc.slice(-4)){err("Password is wrong. Use the last 4 characters of the PC number.");return}
+    view.masterLogin=false;dev.set(u.msid||u.pc);enter();
+  };
+  $("#gGo").onclick=go;$("#gPw").onkeydown=e=>{if(e.key==="Enter")go()};
+  $("#gSet").onclick=gateSetPw;
+  const gf=$("#gFolder");if(gf)gf.onclick=gateFolder;
+  ($("#gId").value?$("#gPw"):$("#gId")).focus();
+}
+function gateSetPw(){
+  $("#gateBody").innerHTML=`
+    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5"><b>Set your password.</b> Type your MSID and the PC number that the Admin registered for you, then make your own password.</p>
+    <input id="sId" placeholder="MSID" value="${esc(/^[a-z]/i.test(dev.get())&&!/^LHTU/i.test(dev.get())?dev.get():"")}" autocapitalize="off" spellcheck="false">
+    <input id="sPc" placeholder="Your PC number (e.g. LHTU05CG2122ABC)" style="text-transform:uppercase" autocapitalize="characters" spellcheck="false">
+    <input id="sP1" type="password" placeholder="New password (at least 4 characters)" autocomplete="new-password">
+    <input id="sP2" type="password" placeholder="Type it again" autocomplete="new-password">
+    <button class="cap amber" id="sGo">Save password</button>
+    <div class="err" id="sErr" style="color:#ffb3ad"></div>
+    <button class="lnk" id="sBack">Back to login</button>`;
+  const go=async()=>{
+    const id=$("#sId").value.trim().toLowerCase(),pc=$("#sPc").value.trim().toUpperCase().replace(/\..*$/,""),p1=$("#sP1").value,p2=$("#sP2").value,err=t=>$("#sErr").innerHTML=t;
+    const u=userOf(id);
+    if(!u||u.msid!==id){err("This MSID is not registered. Please contact Administration.");return}
+    if(u.until&&daysLeft(u.until)<0){err("Access expired on "+u.until+". Please contact Administration.");return}
+    if(!u.pc){err("Your PC number isn't registered yet. Ask the Admin to add it.");return}
+    if(pc!==u.pc){err("The PC number doesn't match the one registered for this MSID.");return}
+    if(p1.length<4){err("Make the password at least 4 characters.");return}
+    if(p1!==p2){err("The two passwords don't match.");return}
+    await pwsSet(id,pwHash(id,p1));dev.set(id);
+    gate(`<span style="color:#8fe0d9">Password saved${FS.dir?"":" on this PC (connect the data folder so it works on every PC)"}. Log in now.</span>`);
+  };
+  $("#sGo").onclick=go;$("#sP2").onkeydown=e=>{if(e.key==="Enter")go()};
+  $("#sBack").onclick=()=>gate();$("#sId").value?$("#sPc").focus():$("#sId").focus();
+}
+function changePw(){
+  const id=me.msid;if(!id)return;
+  modal(`<h3>Change password</h3><p class="pvnote">MSID <b>${esc(id)}</b></p>
+    <div class="mrow" style="flex-direction:column;align-items:stretch"><input id="cpO" type="password" placeholder="Current password"><input id="cpN" type="password" placeholder="New password (at least 4 characters)"><input id="cpN2" type="password" placeholder="Type it again"></div>
+    <div class="err" id="cpE"></div><div class="mrow"><button class="cap amber" id="cpGo">Change password</button><button class="cap" data-close>Cancel</button></div>`);
+  $("#cpGo").onclick=async()=>{const e=(await pwsLoad())[id],o=$("#cpO").value,n=$("#cpN").value,er=t=>$("#cpE").textContent=t;
+    if(!e||e.h!==pwHash(id,o)){er("Current password is wrong.");return}if(n.length<4){er("Make the new password at least 4 characters.");return}if(n!==$("#cpN2").value){er("The two new passwords don't match.");return}
+    await pwsSet(id,pwHash(id,n));closeModal();toast("Password changed")};
+}
+function enter(){view.team=[];view.pf=[];view.emp=[];view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
+$("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;$("#app").hidden=true;gate()});
+$("#btnPw").onclick=changePw;
+
 function findRow(rows,re,max=40){for(let r=0;r<Math.min(rows.length,max);r++){const c=(rows[r]||[]).findIndex(v=>re.test(clean(v)));if(c>=0)return{r,c}}return null}
 function sheetKind(rows){
   const fn=findRow(rows,/^first\s*name$/i);
@@ -1816,7 +1880,7 @@ const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
 async function buildStyled(d){
   const D=view.work,rowsX=rowsFiltered().map(x=>x.r),T=visTasks(),X=window.ExcelJS;
-  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v12.0.7";
+  const wb=new X.Workbook();wb.creator="Alpha NextGen Eclipse v4.0.7";
   const name=fmtD(d).slice(0,11);
   const ws=wb.addWorksheet(name,{views:[{state:"frozen",xSplit:2,ySplit:3}]});
   const th={style:"thin",color:{argb:"FF7F93A8"}},BOX={top:th,left:th,bottom:th,right:th};
@@ -1952,7 +2016,7 @@ function adminPage1(){
 
   <section class="acard wide"><h4>🧪 Test the screen</h4>
     <p class="ahelp">See the tool exactly as someone else sees it. Nothing is saved. Use <b>Back to Admin</b> at the top to return.</p>
-    <div class="mrow"><label>As a PC from the list<select id="asPc"><option value="">— pick a PC —</option>${users.map(u=>`<option value="${esc(u.pc)}">${esc(u.pc)} · ${esc(u.name||"")} · ${ROLEN(u.role)}</option>`).join("")}</select></label><button class="cap teal sm" id="asPcGo">View as this PC</button>
+    <div class="mrow"><label>As a PC from the list<select id="asPc"><option value="">— pick a PC —</option>${users.map(u=>`<option value="${esc(uid(u))}">${esc(uid(u))} · ${esc(u.name||"")} · ${ROLEN(u.role)}</option>`).join("")}</select></label><button class="cap teal sm" id="asPcGo">View as this PC</button>
     <span style="width:18px"></span>
     <label>Or as a role<select id="asRole">${ROLES.slice(1).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select></label><label>Name (own row)<input id="asName" placeholder="ABIMELAK TONY"></label><label>Team (own team)<input id="asTeam" placeholder="TM-VINESH KUMAR"></label><button class="cap sm" id="asGo">View as role</button></div>
     ${LOCK_ON?"":`<p class="ahelp">Login is <b>OFF</b> while testing, so PC rules apply only in this test view. Turn login on later in the file: <code>LOCK_ON = true</code>.</p>`}</section>
@@ -1964,10 +2028,10 @@ function adminPage1(){
       <tr class="scope"><td><b>What they can see</b></td><td></td><td>Everything</td>${ROLE3.map(r=>`<td><select data-sc="${r}">${[["all","Everyone"],["team","Own team"],["own","Own row"]].map(([v,n])=>`<option value="${v}" ${AD.scope[r]===v?"selected":""}>${n}</option>`).join("")}</select></td>`).join("")}</tr>
     </tbody></table></div></section>
 
-  <section class="acard wide"><h4>👥 Every PC, every access <span class="muted" id="uCount"></span></h4>
+  <section class="acard wide"><h4>👥 Every user, every access <span class="muted" id="uCount"></span></h4>
     <p class="ahelp">Click a box to change it for that PC only: <span class="pp inh">✓</span> = role default (faded) → <span class="pp y">✓</span> allow → <span class="pp n">✗</span> block → back to default. ⭐ = this PC has custom access. Hover a column heading to see the full name.</p>
     <div class="mrow ubar">
-      <input id="uQ" placeholder="Search PC or name" value="${esc(ADF.q)}" style="max-width:190px">
+      <input id="uQ" placeholder="Search MSID, PC or name" value="${esc(ADF.q)}" style="max-width:190px">
       <select id="uR" style="max-width:150px"><option value="">All roles</option>${ROLES.slice(1).map(([k,n])=>`<option value="${k}" ${ADF.role===k?"selected":""}>${n}</option>`).join("")}</select>
       <select id="uT" style="max-width:170px"><option value="">All teams</option>${[...new Set(users.map(u=>u.team).filter(Boolean))].sort().map(t=>`<option ${ADF.team===t?"selected":""}>${esc(t)}</option>`).join("")}</select>
       <span class="muted" id="uSelN">0 selected</span>
@@ -1977,14 +2041,15 @@ function adminPage1(){
       <button class="cap sm danger" id="uDelSel">Remove selected</button>
     </div>
     <div class="utable big" id="uTable"></div>
-    <div class="mrow"><label>Add PCs (one per line: <code>PC, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;LHTU05CG2122XYZ, manager, SANKETH, SANKETH&#10;LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
+    <div class="mrow"><label>Add people (one per line: <code>MSID, PC number, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="rahuls12, LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;sankem04, LHTU05CG2122XYZ, manager, SANKETH M S, TM-SANKETH M S&#10;abimet07, LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
     <div class="err" id="uErr"></div></section>`;
 }
 function effPerm(u,f){if(u.role==="admin")return 1;if(u.ov&&u.ov[f]!=null)return u.ov[f];return (AD.perms[u.role]||{})[f]?1:0}
+const uid=u=>u.msid||u.pc||"";
 const isCustom=u=>(u.ov&&Object.keys(u.ov).length)||u.scope||Array.isArray(u.procs);
 function userRows(){
   const q=norm(ADF.q);
-  return (AD.users||[]).map((u,i)=>({u,i})).filter(({u})=>(!q||norm(u.pc+" "+(u.name||"")).includes(q))&&(!ADF.role||u.role===ADF.role)&&(!ADF.team||u.team===ADF.team));
+  return (AD.users||[]).map((u,i)=>({u,i})).filter(({u})=>(!q||norm((u.msid||"")+" "+(u.pc||"")+" "+(u.name||"")).includes(q))&&(!ADF.role||u.role===ADF.role)&&(!ADF.team||u.team===ADF.team));
 }
 function pcTable(){
   const rows=userRows(),PR=(AD.procs&&AD.procs.length?AD.procs:PROC0);
@@ -1992,12 +2057,14 @@ function pcTable(){
     return o==null?`<button class="pp inh ${d?"":"x"}" data-pu="${i}" data-f="${f}">${d?"✓":"✗"}</button>`:`<button class="pp ${o?"y":"n"}" data-pu="${i}" data-f="${f}">${o?"✓":"✗"}</button>`};
   const procCell=(u,i)=>PR.map(p=>{const def=(p.roles||{})[u.role]!==0&&p.status!=="hidden",on=u.role==="admin"?true:Array.isArray(u.procs)?u.procs.includes(p.k):def;
     return `<button class="pc2 ${on?"on":""} ${Array.isArray(u.procs)||u.role==="admin"?"":"inh"}" data-pp="${i}" data-p="${esc(p.k)}" ${u.role==="admin"?"disabled":""}>${esc(p.label||p.k)}</button>`}).join("")+(Array.isArray(u.procs)?`<button class="pc2 rst" data-ppr="${i}" title="Back to role default">↺</button>`:"");
-  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">PC number</th><th rowspan="2" class="s2">Name</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
+  const head1=`<tr><th rowspan="2" class="s0"><input type="checkbox" id="uAll"></th><th rowspan="2" class="s1">MSID</th><th rowspan="2" class="s2">Name</th><th rowspan="2">PC number</th><th rowspan="2">Password</th><th rowspan="2">Team</th><th rowspan="2">Role</th><th rowspan="2">Valid till</th><th rowspan="2">Sees</th><th rowspan="2">Processes</th>${GROUPS.map(g=>`<th colspan="${FEAT.filter(f=>f[3]===g).length}" class="gh">${g==="Tools"?"▼ Tools":g}</th>`).join("")}<th rowspan="2"></th></tr>`;
   const head2=`<tr>${FEAT.map(([f,n,s])=>`<th class="fh" title="${esc(n)}">${esc(s)}</th>`).join("")}</tr>`;
-  const adm=ALLOWED_PCS.map(p=>`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(p.toUpperCase())}</td><td class="s2">You (built in)</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`).join("");
-  const body=rows.map(({u,i})=>`<tr class="${ADF.sel.has(u.pc)?"sel":""}"><td class="s0"><input type="checkbox" data-us="${esc(u.pc)}" ${ADF.sel.has(u.pc)?"checked":""}></td>
-    <td class="s1 mono">${isCustom(u)?"⭐ ":""}${esc(u.pc)}</td>
+  const adm=`<tr class="lock"><td class="s0"></td><td class="s1 mono">${esc(ALLOWED_MSIDS.join(", "))}</td><td class="s2">You (built in)</td><td class="mono">${esc(ALLOWED_PCS.join(", ").toUpperCase())}</td><td>Admin password</td><td>—</td><td>Admin</td><td>—</td><td>All</td><td>All</td>${FEAT.map(()=>`<td><span class="pp y lk">✓</span></td>`).join("")}<td>🔒</td></tr>`;
+  const pwCell=(u,i)=>!u.msid?`<span class="muted">PC last 4</span>`:(ADF.pws&&ADF.pws[u.msid]&&ADF.pws[u.msid].h)?`<span class="okb">✓ set</span> <button class="cap sm" data-urs="${i}" title="User sets a new one with MSID + PC number">Reset</button>`:`<span class="muted">not set yet</span>`;
+  const body=rows.map(({u,i})=>`<tr class="${ADF.sel.has(uid(u))?"sel":""}"><td class="s0"><input type="checkbox" data-us="${esc(uid(u))}" ${ADF.sel.has(uid(u))?"checked":""}></td>
+    <td class="s1"><div class="nmw">${isCustom(u)?"⭐":""}<input class="mono" data-um="${i}" value="${esc(u.msid||"")}" placeholder="msid"></div></td>
     <td class="s2"><input data-un="${i}" value="${esc(u.name||"")}" placeholder="name"></td>
+    <td><input class="mono" data-upc="${i}" value="${esc(u.pc||"")}" placeholder="PC number" style="min-width:140px"></td><td>${pwCell(u,i)}</td>
     <td><input data-ut="${i}" value="${esc(u.team||"")}" placeholder="team"></td>
     <td><select data-ur="${i}">${ROLES.map(([k,n])=>`<option value="${k}" ${k===u.role?"selected":""}>${n}</option>`).join("")}</select></td>
     <td><input type="date" data-uu="${i}" value="${esc(u.until||"")}"></td>
@@ -2010,10 +2077,10 @@ function pcTable(){
   $("#uSelN").textContent=ADF.sel.size+" selected";
 }
 function wireAdmin1(){
-  const P=$("#adminPg");pcTable();
-  $("#asPcGo").onclick=()=>{const u=(AD.users||[]).find(x=>x.pc===$("#asPc").value);if(!u){toast("Pick a PC first");return}
+  const P=$("#adminPg");pcTable();pwsLoad().then(m=>{ADF.pws=m;if($("#uTable"))pcTable()});
+  $("#asPcGo").onclick=()=>{const u=(AD.users||[]).find(x=>uid(x)===$("#asPc").value);if(!u){toast("Pick a PC first");return}
     if(AD.changed){Object.assign(S.cfg,clone({...AD,page:undefined,changed:undefined}));fixCfg()}
-    view.as={pc:u.pc,role:u.role,name:u.name||"",team:u.team||""};closeAdminForTest()};
+    view.as={pc:uid(u),role:u.role,name:u.name||"",team:u.team||""};closeAdminForTest()};
   $("#asGo").onclick=()=>{view.as={pc:"—",role:$("#asRole").value,name:$("#asName").value.trim(),team:$("#asTeam").value.trim()};closeAdminForTest()};
   P.querySelectorAll("[data-pf]").forEach(c=>c.onchange=()=>{const [r,f]=c.dataset.pf.split(":");AD.perms[r][f]=c.checked?1:0;adChanged();pcTable()});
   P.querySelectorAll("[data-fon]").forEach(c=>c.onchange=()=>{AD.fon=AD.fon||{};if(c.checked)delete AD.fon[c.dataset.fon];else AD.fon[c.dataset.fon]=false;adChanged()});
@@ -2023,25 +2090,31 @@ function wireAdmin1(){
   U.onclick=e=>{const t=e.target;
     const pu=t.closest("[data-pu]");if(pu){const u=AD.users[+pu.dataset.pu],f=pu.dataset.f;u.ov=u.ov||{};const o=u.ov[f];if(o==null)u.ov[f]=1;else if(o===1)u.ov[f]=0;else delete u.ov[f];if(!Object.keys(u.ov).length)delete u.ov;adChanged();pcTable();return}
     const pp=t.closest("[data-pp]");if(pp){const u=AD.users[+pp.dataset.pp],PR=AD.procs&&AD.procs.length?AD.procs:PROC0;if(!Array.isArray(u.procs))u.procs=PR.filter(p=>(p.roles||{})[u.role]!==0&&p.status!=="hidden").map(p=>p.k);const k=pp.dataset.p;u.procs=u.procs.includes(k)?u.procs.filter(x=>x!==k):u.procs.concat(k);adChanged();pcTable();return}
+    const rs=t.closest("[data-urs]");if(rs){const u=AD.users[+rs.dataset.urs];ask(null,"Reset the password of "+esc(u.msid)+"?","They set a new one on the login screen with their MSID and PC number (“First time, or forgot your password?”).","Reset password",async()=>{await pwsSet(u.msid,null);ADF.pws=await pwsLoad();pcTable();toast("Password reset for "+u.msid)},true);return}
     const pr=t.closest("[data-ppr]");if(pr){delete AD.users[+pr.dataset.ppr].procs;adChanged();pcTable();return}
-    const ud=t.closest("[data-ud]");if(ud){const u=AD.users[+ud.dataset.ud];ask(null,"Remove "+esc(u.pc)+"?","This PC loses its role and custom access.","Remove",()=>{AD.users.splice(+ud.dataset.ud,1);ADF.sel.delete(u.pc);adChanged();pcTable()},true);return}
+    const ud=t.closest("[data-ud]");if(ud){const u=AD.users[+ud.dataset.ud];ask(null,"Remove "+esc(uid(u))+"?","This PC loses its role and custom access.","Remove",()=>{AD.users.splice(+ud.dataset.ud,1);ADF.sel.delete(uid(u));adChanged();pcTable()},true);return}
   };
   U.onchange=e=>{const t=e.target,d=t.dataset;
-    if(t.id==="uAll"){userRows().forEach(({u})=>t.checked?ADF.sel.add(u.pc):ADF.sel.delete(u.pc));pcTable();return}
+    if(t.id==="uAll"){userRows().forEach(({u})=>t.checked?ADF.sel.add(uid(u)):ADF.sel.delete(uid(u)));pcTable();return}
     if(d.us!=null){t.checked?ADF.sel.add(d.us):ADF.sel.delete(d.us);t.closest("tr").classList.toggle("sel",t.checked);$("#uSelN").textContent=ADF.sel.size+" selected";return}
     if(d.ur!=null){AD.users[+d.ur].role=t.value;adChanged();pcTable();return}
     if(d.usc!=null){const u=AD.users[+d.usc];if(t.value)u.scope=t.value;else delete u.scope;adChanged();pcTable();return}
     if(d.uu!=null){const u=AD.users[+d.uu];if(t.value)u.until=t.value;else delete u.until;adChanged();return}
   };
-  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
-  const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(u.pc));
+  U.oninput=e=>{const t=e.target,d=t.dataset;if(d.um!=null){AD.users[+d.um].msid=t.value.trim().toLowerCase();adChanged()}if(d.upc!=null){AD.users[+d.upc].pc=t.value.trim().toUpperCase().replace(/\..*$/,"");adChanged()}if(d.un!=null){AD.users[+d.un].name=t.value.trim();adChanged()}if(d.ut!=null){AD.users[+d.ut].team=t.value.trim();adChanged()}};
+  const sel=()=>(AD.users||[]).filter(u=>ADF.sel.has(uid(u)));
   $("#uApplyRole").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>u.role=$("#uSetRole").value);adChanged();pcTable();toast(s.length+" PCs set to "+ROLEN($("#uSetRole").value))};
   $("#uApplyTill").onclick=()=>{const s=sel(),v=$("#uSetTill").value;if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{if(v)u.until=v;else delete u.until});adChanged();pcTable();toast(v?"Valid till "+v+" for "+s.length+" PCs":"Valid till cleared")};
   $("#uResetSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}s.forEach(u=>{delete u.ov;delete u.scope;delete u.procs});adChanged();pcTable();toast("Custom access removed for "+s.length+" PCs")};
-  $("#uDelSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}ask(null,"Remove "+s.length+" PCs?","They lose their role and custom access.","Remove",()=>{AD.users=AD.users.filter(u=>!ADF.sel.has(u.pc));ADF.sel.clear();adChanged();pcTable()},true)};
+  $("#uDelSel").onclick=()=>{const s=sel();if(!s.length){toast("Tick some PCs first");return}ask(null,"Remove "+s.length+" PCs?","They lose their role and custom access.","Remove",()=>{AD.users=AD.users.filter(u=>!ADF.sel.has(uid(u)));ADF.sel.clear();adChanged();pcTable()},true)};
   $("#uAdd").onclick=()=>{const lines=$("#uBulk").value.split(/\n/).map(l=>l.split(",").map(x=>x.trim())).filter(a=>a[0]);let n=0;const bad=[];
-    lines.forEach(([pc,r,name,team])=>{pc=(pc||"").toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
-      if(pc.length<4){bad.push(pc||"(blank)");return}const old=AD.users.find(u=>u.pc===pc);if(old)Object.assign(old,{role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({pc,role:r,name:name||"",team:team||""});n++});
+    const isRole=x=>/^(adm|ent|data|man|sme|emp)/i.test(x||"");
+    lines.forEach(a=>{let msid="",pc="",r,name,team;
+      if(isRole(a[1])){const f=a[0];if(/^lhtu|^[a-z]{2,}\d{2,}[a-z0-9]*$/i.test(f)&&f.length>=10)pc=f;else msid=f;[,r,name,team]=a}else[msid,pc,r,name,team]=a;
+      msid=(msid||"").trim().toLowerCase();pc=(pc||"").trim().toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
+      if(msid.length<3&&pc.length<4){bad.push(a.join(" ")||"(blank)");return}
+      const old=AD.users.find(u=>(msid&&u.msid===msid)||(pc&&u.pc===pc));
+      if(old)Object.assign(old,{msid:msid||old.msid||"",pc:pc||old.pc||"",role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({msid,pc,role:r,name:name||"",team:team||""});n++});
     $("#uBulk").value="";$("#uErr").textContent=bad.length?"Skipped: "+bad.join(", "):"";adChanged();openAdmin(1);toast(n+" PC"+(n===1?"":"s")+" added. Click Save & apply.")};
 }
 function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overflow="";view.team=[];view.pf=[];view.emp=[];renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
