@@ -415,6 +415,12 @@ td.name{min-width:215px}
 .gnote{color:#8fe0d9;font-size:12px;margin:12px 0 0}
 .gate .lnk{display:block;margin-left:auto;margin-right:auto}
 
+.cap.rose{background:#fde4e4;color:#b42318;box-shadow:0 2px 0 #f2b8b5,0 4px 10px #b4231818,inset 0 1px 0 #ffffff70}
+.cap.rose:active{box-shadow:0 0 0 #f2b8b5,inset 0 3px 8px #00000025}
+.deflock{min-width:36px;height:31px}.deflock.on{background:var(--teal-soft);color:var(--teal)}
+.gneed{margin:16px 0 0;padding:12px 14px;border-radius:14px;background:#0e8f8a26;border:1px solid #2bb5ae66;text-align:left;font-size:12.5px;color:#cfe9e7;line-height:1.5}
+.gneed b{display:block;color:#fff;font-size:13px}.gneed span{display:block}.gneed .cap{width:100%}
+
 </style>
 
 <section id="app" hidden>
@@ -541,11 +547,12 @@ const FEAT=[
  ["heads","Edit headings and AHT","Heads","Actions",[0,0,0]],
  ["del","Delete a date","Delete","Actions",[0,0,0]],
  ["share","Share / Excel","Share","Actions",[1,1,1]],
+ ["mini","Quick Excel (Process, Name, Productivity %)","Quick","Actions",[1,1,1]],
  ["refresh","Refresh from data folder","Refresh","Actions",[1,1,1]],
  ["shift","Change shift hours (100%)","Shift","Actions",[0,1,0]],
  ["trial","Trial dump (nothing saved)","Trial","Actions",[1,1,1]],
  ["leave","Quick leave buttons (L, ½)","Leave","Actions",[1,0,0]],
- ["dayclose","Mark day complete","Day ✓","Actions",[1,0,0]],
+ ["dayclose","Master Save (day complete, locks the date)","M.Save","Actions",[1,0,0]],
  ["unlock","Change locked or old dates","Unlock","Actions",[0,0,0]],
  ["undo","Recycle bin (undo)","Bin","Actions",[1,0,0]],
  ["rail","Process buttons (DBM, CPA…)","Procs","Screen",[1,1,1]],
@@ -586,7 +593,7 @@ const FEAT=[
 ];
 const FK=Object.fromEntries(FEAT.map(f=>[f[0],f]));
 /* defaults: Data Entry gets every option; Manager / SME and Employees get view access */
-const VIEW_ACT=["reset","share","refresh"],VIEW_OFF=["log","missing","qvc","mydash","trial","selfcalc"];
+const VIEW_ACT=["reset","share","mini","refresh"],VIEW_OFF=["log","missing","qvc","mydash","trial","selfcalc"];
 const viewPerm=f=>{const d=FK[f];return d[3]==="Actions"?(VIEW_ACT.includes(f)?1:0):(VIEW_OFF.includes(f)?0:1)};
 const DEFPERM={entry:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?0:1])),manager:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?1:viewPerm(f[0])])),employee:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="mydash"?1:viewPerm(f[0])]))};
 const DEFSCOPE={entry:"all",manager:"all",employee:"all"};
@@ -663,10 +670,10 @@ const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
 const MARK="_eclipse_pcis.marker";FS.path=[];
 async function openPath(root,path){let d=root;for(const p of path||[])d=await d.getDirectoryHandle(p);return d}
 const hasFile=async(h,n)=>{try{await h.getFileHandle(n);return true}catch(e){return false}};
-const isData=async h=>(await hasFile(h,MARK))||(await hasFile(h,"config.json"));
+const isData=async h=>(await hasFile(h,MARK))||(await hasFile(h,"config.json"))||(await hasFile(h,"Eclipse_Users.xlsx"));
 async function findData(h){
   const want=String(S.cfg.folder||"PCIS_Productivity_Eclipse").trim().toLowerCase();
-  if(await isData(h))return [];
+  if(await isData(h)||h.name.trim().toLowerCase()===want)return [];
   const q=[[h,[]]];let seen=0,named=null;
   while(q.length&&seen<800){const [d,p]=q.shift();
     try{for await(const [n,c] of d.entries()){if(c.kind!=="directory"||/^[.$~]/.test(n))continue;seen++;const np=p.concat(n);
@@ -702,7 +709,7 @@ async function fsConnect(){
 /* Chrome asks “Allow on every visit” once; after that any click or key gives the permission back by itself */
 async function autoAllow(){
   if(FS.dir||!FS.handle||autoAllow.busy)return;autoAllow.busy=true;
-  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await fsUse(FS.handle,FS.path);if(!$("#app").hidden){resolveMe();renderAll()}else if(!$("#gate").hidden){const n=$("#gFolder");if(n)n.outerHTML=`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`}}}catch(e){}
+  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await fsUse(FS.handle,FS.path);if(!$("#app").hidden){resolveMe();renderAll()}else if(!$("#gate").hidden){tryAuto()}}}catch(e){}
   autoAllow.busy=false;paintSync();
 }
 document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gFolder,#btnFolder,#fsC,#fsA"))return;autoAllow()},true);
@@ -874,7 +881,7 @@ function renderRail(){
   if(!vis.some(p=>p.k===view.proc)&&vis.length)view.proc=(vis.find(p=>p.status==="live")||vis[0]).k;
   $("#rail").hidden=!can("rail");
   $("#rail").innerHTML=vis.map(p=>`<button class="cap ${p.status==="live"?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${esc(p.k)}">${esc(p.label||p.k)}<span class="tag">${p.status==="live"?"LIVE":p.status==="hidden"?"HIDDEN":"SOON"}</span></button>`).join("");
-  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;view.team=[];view.pf=[];view.emp=[];view.tool=null;renderRail();await openDate(dates()[0]||null)}));
+  $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;resetFilters();view.tool=null;renderRail();await openDate(dates()[0]||null)}));
 }
 
 /* ---------- notice strip (Admin writes, scrolls left to right) ---------- */
@@ -914,7 +921,7 @@ function setTop(){
   paintSync();renderNotice();
 }
 $("#btnFolder").onclick=()=>{if(FS.dir){if(can("refresh"))refreshFolder();return}FS.handle?fsAllow():fsConnect()};
-$("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;view.team=[];view.pf=[];view.emp=[];renderAll();toast("Back to Admin view")});
+$("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;resetFilters();renderAll();toast("Back to Admin view")});
 $("#btnTheme").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");LS.set("theme",cur==="dark"?"light":"dark");applyTheme()};
 $("#btnHelp").onclick=showHelp;
 
@@ -969,10 +976,11 @@ function renderMain(){
     ${D&&!view.trial?B("bReplace","Replace","replace",view.forceReplace?"on":"","Clear this date's saved data and load a new file in its place"):""}
     ${D?B("bSave","Save","save","amber","Make the changes on screen permanent (Ctrl+S)"):""}
     ${D?B("bReset","Reset","reset","","Clear the screen. Saved data stays safe — pick the date again to see it"):""}
-    ${D&&!closed?B("bClose","Day ✓","dayclose","","Mark this date complete. It locks for everyone except Admin"):""}
+    ${D&&!closed?B("bClose","Master Save","dayclose","","Master Save: mark this date complete. It locks for everyone except Admin"):""}
     ${D&&closed&&(role()==="admin"||can("unlock"))&&!view.trial?`<button class="cap sm" id="bReopen" title="Unlock this date again">Reopen</button>`:""}
     ${D&&!view.trial?B("bDel","Delete","del","danger","Delete this date (kept 30 days in the recycle bin)"):""}
     ${D?B("bShare","Share / Excel","share","teal","Share or download this view as an Excel file with formulas"):""}
+    ${D?B("bMini","Quick Excel","mini","rose","Small Excel: Process, User Name, Productivity % only"):""}
     ${can("tray")&&D?`<button class="cap sm ico ${view.tray?"on":""}" id="bTray" title="Tools: calendar, summaries, charts">${view.tray?"▲":"▼"} Tools</button>`:""}
   </div>
   ${view.tray&&can("tray")&&D?trayHTML():""}
@@ -991,7 +999,7 @@ function renderMain(){
   ${myCardHTML()}
   <div class="bar fbar">
     ${pfs.length>1||scope()==="all"?msel("pf","Process",pfs):""}
-    ${teams.length>1||scope()==="all"?msel("team","Team / Manager",teams):""}
+    ${teams.length>1||scope()==="all"?msel("team","Team / Manager",teams):""}${defBtn()}
     ${empList.length>1?msel("emp","User Name",[...new Set(empList)]):""}
     ${can("search")&&empList.length>1?`<label class="fld"><span>Search</span><input id="fQ" placeholder="Type a name" value="${esc(view.q)}"></label>`:""}
     ${can("active")?`<label class="chk"><input type="checkbox" id="fAct" ${view.active?"checked":""}> Only baskets with data</label>`:""}
@@ -1005,7 +1013,7 @@ function renderMain(){
   on("#trExit","onclick",()=>{view.trial=false;view.trialDump=false;view.dumpOpen=false;openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null)});
   on("#drRes","onclick",()=>{view.work=clone(view.draft.work);view.draft=null;view.dirty=true;renderMain();toast("Unsaved work restored. Click Save to keep it.")});
   on("#drDrop","onclick",()=>{dropDraft();renderMain()});
-  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{view.emp=[];view.team=[];view.pf=[];view.forceReplace=false;openDate(d)})});
+  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{resetFilters();view.forceReplace=false;openDate(d)})});
   on("#dPrev","onclick",()=>jumpDate(1));on("#dNext","onclick",()=>jumpDate(-1));
   on("#dToday","onclick",()=>{const t=todayISO();if(ds.includes(t))guardDirty(()=>openDate(t));else{toast("Today ("+fmtDate(t)+") has no data yet"+(can("dump")?". Use Dump to add it.":""));if(can("dump")){view.dumpDate=t;view.dumpOpen=true;view.forceReplace=false;view.trialDump=false;renderMain()}}});
   on("#bDump","onclick",()=>{const was=view.dumpOpen&&!view.forceReplace&&!view.trialDump;view.forceReplace=false;view.trialDump=false;view.dumpOpen=!was;renderMain()});
@@ -1016,11 +1024,12 @@ function renderMain(){
   on("#bSave","onclick",()=>doSave());on("#bReset","onclick",resetDay);on("#bDel","onclick",deleteDate);
   on("#bClose","onclick",closeDay);on("#bReopen","onclick",reopenDay);
   on("#bShare","onclick",()=>styledExport(view.trial?"Trial":view.date,true));
+  on("#bMini","onclick",quickExcel);
   on("#bTray","onclick",()=>{view.tray=!view.tray;renderMain()});
   wireDump();wireTray();
   if(!D||needLink)return;
   wireShift();
-  wireMsel();
+  wireMsel();wireDefBtn();
   on("#fQ","oninput",e=>{view.q=e.target.value;renderGrid()});
   on("#fAct","onchange",e=>{view.active=e.target.checked;LS.set("active",view.active);renderGrid()});
   renderGrid();paintDirty();
@@ -1124,6 +1133,7 @@ function renderGrid(){
   $("#gb").onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph)renderGrid()};
   $("#gb").onclick=gridClick;
   $("#gb").onkeydown=gridKey;
+  $("#gb").onpaste=gridPaste;
   wireHover($("#gb"));
 }
 function pctCell(c,r,pp,fl){
@@ -1247,7 +1257,7 @@ function copyReport(){
 }
 function printView(){$("#pwm").textContent=S.cfg.wm!==false?"Confidential · "+(me.pc||"")+" · "+new Date().toLocaleString("en-IN"):"";window.print()}
 function showHelp(){
-  const H=[["Dump","Load a new date from the portal report (.xls) or the productivity sheet."],["Trial","Try any file. You see the result, nothing is saved."],["Replace","Swap a saved date for a new file. The old one goes to the recycle bin."],["Save","Keep the changes on screen (Ctrl+S)."],["Reset","Clear the screen and any unsaved changes. Saved data is safe; pick the date again to see it."],["Day ✓","Mark the date complete. It locks for everyone except Admin."],["Delete","Remove a date. It stays 30 days in the recycle bin."],["Share / Excel","Excel file with borders and live formulas."],["▼ Tools","Calendar, month and week views, top 5, team summary, heatmap, baskets, attendance, goal, downtime, calculator, bin and log."],["‹ › Today","Jump to the older or newer date, or today."],["Only baskets with data","Tick it to hide work baskets with no count (remembered on your PC)."],["☆ / ⌁","Pin a person to the top / open their history."],["L / ½","Full day leave / half day for that row."],["⚠","Something looks wrong in that row (hover to see why)."],["Keys","Enter = next row, Shift+Enter = row above, Ctrl+S = save, Ctrl+F = search, Alt+‹ › = date, Esc = close."]];
+  const H=[["Dump","Load a new date from the portal report (.xls) or the productivity sheet."],["Trial","Try any file. You see the result, nothing is saved."],["Replace","Swap a saved date for a new file. The old one goes to the recycle bin."],["Save","Keep the changes on screen (Ctrl+S)."],["Reset","Clear the screen and any unsaved changes. Saved data is safe; pick the date again to see it."],["Master Save","Mark the date complete. It locks for everyone except Admin."],["Quick Excel","Small Excel with Process, User Name and Productivity % only, for mail."],["Paste","Copy many cells from Excel and paste (Ctrl+V) into a grid box: it fills the boxes to the right and below."],["Delete","Remove a date. It stays 30 days in the recycle bin."],["Share / Excel","Excel file with borders and live formulas."],["▼ Tools","Calendar, month and week views, top 5, team summary, heatmap, baskets, attendance, goal, downtime, calculator, bin and log."],["‹ › Today","Jump to the older or newer date, or today."],["Only baskets with data","Tick it to hide work baskets with no count (remembered on your PC)."],["☆ / ⌁","Pin a person to the top / open their history."],["L / ½","Full day leave / half day for that row."],["⚠","Something looks wrong in that row (hover to see why)."],["Keys","Enter = next row, Shift+Enter = row above, Ctrl+S = save, Ctrl+F = search, Alt+‹ › = date, Esc = close."]];
   modal(`<h3>Help</h3><div class="pvw" style="max-height:60vh"><table><tbody>${H.map(([a,b])=>`<tr><td style="font-family:var(--f-body);font-weight:600;white-space:nowrap">${a}</td><td style="text-align:left;font-family:var(--f-body)">${b}</td></tr>`).join("")}</tbody></table></div><div class="mrow"><button class="cap teal" data-close>Got it</button></div>`);
 }
 
@@ -1293,6 +1303,55 @@ function wireMsel(){
 document.addEventListener("click",()=>closeMs(true));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&msOpen)closeMs(false)},true);
 
+/* default filters per PC and process: 🔒 next to Team / Manager */
+const defKey=()=>"deff_"+view.proc;
+function applyDefFilters(){const d=LS.get(defKey(),null);if(d){view.pf=(d.pf||[]).slice();view.team=(d.team||[]).slice();view.emp=(d.emp||[]).slice()}}
+function resetFilters(){view.team=[];view.pf=[];view.emp=[];applyDefFilters()}
+function defBtn(){const d=LS.get(defKey(),null);return `<div class="fld"><span>Default</span><button type="button" class="cap sm ico deflock ${d?"on":""}" id="bDefF" title="${d?"Default filters saved. Click to clear":"Save these filters as my default"}">${d?"🔒":"🔓"}</button></div>`}
+function wireDefBtn(){const b=$("#bDefF");if(!b)return;b.onclick=()=>{const d=LS.get(defKey(),null),now={pf:view.pf,team:view.team,emp:view.emp},empty=!view.pf.length&&!view.team.length&&!view.emp.length;
+  if(d&&(empty||JSON.stringify(d)===JSON.stringify(now))){LS.set(defKey(),null);toast("Default filters cleared");}
+  else{if(empty){toast("Pick a process, team or name first, then press 🔓");return}LS.set(defKey(),now);toast("Saved as your default · opens like this every time")}renderMain()}}
+
+/* paste a block from Excel (many columns / rows) into the grid: fills to the right and down from the box you click */
+function gridPaste(e){
+  const el=e.target;if(el.tagName!=="INPUT"||!canD("edit"))return;
+  if(!(el.dataset.c||el.dataset.d||el.dataset.f||el.dataset.cm))return;
+  const txt=(e.clipboardData||window.clipboardData).getData("text");if(!/[\t\n]/.test(txt.replace(/\r?\n$/,"")))return;
+  e.preventDefault();
+  const rows=txt.replace(/\r/g,"").replace(/\n$/,"").split("\n").map(l=>l.split("\t"));
+  const cells=tr=>[...tr.querySelectorAll("input[data-c],input[data-d],input[data-f],input[data-cm]")];
+  let tr=el.closest("tr");const start=cells(tr).indexOf(el);let n=0;
+  for(const r of rows){if(!tr)break;const ins=cells(tr);
+    r.forEach((v,j)=>{const inp=ins[start+j];if(!inp)return;v=String(v).trim();if(!inp.dataset.cm)v=v.replace(/[,%\s]/g,"");inp.value=v;onCell({target:inp});n++});
+    tr=tr.nextElementSibling;}
+  toast(n+" cells pasted");
+}
+/* Quick Excel: only Process, User Name, Productivity % (rows on screen) */
+async function quickExcel(){
+  const D=cur();if(!D)return;const list=rowsFiltered().map(x=>x.r).map(r=>({r,c:calc(r,D.tasks)}));
+  const nm=view.trial?"Trial":view.date,fname=`Productivity_${view.proc}_${nm}.xlsx`;
+  const data=list.map(x=>[x.r.proc||"",x.r.name,+(x.c.pct/100).toFixed(4)]);
+  try{
+    if(!window.ExcelJS)throw 0;const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet(String(nm).slice(0,28));
+    const th={style:"thin",color:{argb:"FF5F6B7A"}},B={top:th,left:th,bottom:th,right:th},F=c=>({type:"pattern",pattern:"solid",fgColor:{argb:"FF"+c}});
+    ws.columns=[{width:14},{width:34},{width:16}];
+    const h=ws.addRow(["Process","User Name","Productivity%"]);h.height=24;h.eachCell(c=>{c.fill=F("F47B20");c.font={bold:true,size:12,color:{argb:"FF14243A"}};c.border=B;c.alignment={horizontal:"center",vertical:"middle"}});
+    data.forEach(r=>{const x=ws.addRow(r);x.height=20;
+      const a=x.getCell(1),b=x.getCell(2),c=x.getCell(3);
+      a.fill=F("D9D9D9");a.font={size:11};b.fill=F("1F5FBF");b.font={bold:true,size:11,color:{argb:"FFFFFFFF"}};c.numFmt="0.00%";c.font={size:11};
+      [a,b,c].forEach(z=>{z.border=B;z.alignment={horizontal:"center",vertical:"middle"}})});
+    const blob=new Blob([await wb.xlsx.writeBuffer()],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const file=new File([blob],fname,{type:blob.type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:fname});return}catch(e){if(e&&e.name==="AbortError")return}}
+    saveBlob(blob,fname);toast("Quick Excel downloaded");
+  }catch(e){
+    const out=[["Process","User Name","Productivity%"],...data.map(r=>[r[0],r[1],(r[2]*100).toFixed(2)+"%"])];
+    try{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(out),"Productivity");XLSX.writeFile(wb,fname)}
+    catch(x){saveBlob(new Blob(["﻿"+out.map(r=>r.map(v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v).join(",")).join("\r\n")],{type:"text/csv"}),fname.replace(/xlsx$/,"csv"))}
+    toast("Quick Excel downloaded");
+  }
+}
+
 /* ---------- actions: Save / Erase / Reset / Delete / Remove / Day complete ---------- */
 async function doSave(silent){
   if(!canD("save")||!view.work)return;
@@ -1302,7 +1361,7 @@ async function doSave(silent){
 }
 function resetDay(){
   ask("reset","Reset the screen?",(view.dirty?"Changes you haven't saved are thrown away. ":"")+(view.trial?"The trial data is cleared.":"The screen is cleared. Saved data for "+fmtDate(view.date)+" is <b>safe</b> — pick the date again to see it."),"Reset",()=>{
-    view.dirty=false;dropDraft();view.trial=false;view.trialDump=false;view.dumpOpen=false;view.forceReplace=false;view.work=null;view.saved=null;view.prev=null;view.cleared=true;view.team=[];view.pf=[];view.emp=[];view.q="";renderAll();toast("Screen cleared. Saved data is safe.")});
+    view.dirty=false;dropDraft();view.trial=false;view.trialDump=false;view.dumpOpen=false;view.forceReplace=false;view.work=null;view.saved=null;view.prev=null;view.cleared=true;resetFilters();view.q="";renderAll();toast("Screen cleared. Saved data is safe.")});
 }
 function deleteDate(){
   const d=view.date;if(!d)return;
@@ -1400,7 +1459,7 @@ async function dumpRows(rows,src,dt,meta){
     <div class="mrow"><button class="cap amber" id="pvYes">${trial?"Show trial":"Yes, insert"}</button><button class="cap" data-close>Cancel</button></div>`);
   $("#mcard").querySelectorAll("[data-usedate]").forEach(b=>b.onclick=()=>{closeModal();view.dumpDate=b.dataset.usedate;dumpRows(rows,src,b.dataset.usedate,meta)});
   $("#pvYes").onclick=()=>{
-    if(trial){closeModal();view.trial=true;view.trialDump=false;view.dumpOpen=false;view.work={tasks:P.tasks,rows:P.rows,src:"Trial · "+src};view.saved=null;view.dirty=false;view.prev=null;view.draft=null;view.team=[];view.pf=[];view.emp=[];view.q="";renderAll();toast("Trial ready. Nothing is saved.");return}
+    if(trial){closeModal();view.trial=true;view.trialDump=false;view.dumpOpen=false;view.work={tasks:P.tasks,rows:P.rows,src:"Trial · "+src};view.saved=null;view.dirty=false;view.prev=null;view.draft=null;resetFilters();view.q="";renderAll();toast("Trial ready. Nothing is saved.");return}
     const mode=old?($("#mcard").querySelector('input[name="dm"]:checked')||{}).value:"new";
     const commit=async()=>{
       let obj,added=0,upd=0;
@@ -1414,7 +1473,7 @@ async function dumpRows(rows,src,dt,meta){
         obj.src=(obj.src?obj.src+" + ":"")+src;
       }else{if(mode==="replace")await binPut(d,old,"Replaced");obj={tasks:P.tasks,rows:P.rows,src}}
       obj.at=Date.now();obj.pc=me.pc;if(meta&&meta.fh)obj.fh=meta.fh;
-      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;view.emp=[];view.team=[];view.pf=[];view.q="";await openDate(d);
+      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;resetFilters();view.q="";await openDate(d);
       toast(mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`Saved ${P.rows.length} employees into ${fmtDate(d)}${FS.dir?" and the data folder":""}`);
     };
     if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) moves to the recycle bin and this file takes its place, headings included.","Replace",commit,true);
@@ -1474,6 +1533,7 @@ async function sessionOK(s){
 }
 async function tryAuto(){
   await gateFS();const s=LS.get("session",null);
+  if(LOCK_ON&&fsSupported()&&!FS.dir)return gate();   /* no data folder = no entry, even with a saved login */
   if(await sessionOK(s)){view.masterLogin=!!s.m;dev.set(s.id);return enter()}
   if(s)LS.set("session",null);gate();
 }
@@ -1487,23 +1547,25 @@ async function gateFolder(){
     else await fsConnect();
     if(FS.dir)await pwsLoad();
   }catch(e){if(e&&e.name!=="AbortError")toast("Couldn't open the data folder")}
-  gate();
+  tryAuto();
 }
 async function gate(msg){
   $("#gate").hidden=false;$("#app").hidden=true;
   await gateFS();
-  const fl=!fsSupported()?"":FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<button class="lnk" id="gFolder">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"} — choose <b>OneDrive - UnitedHealth Group</b>, once per PC</button>`;
+  const fl=!fsSupported()?`<p class="gnote" style="color:#ffb3ad">Open this tool in Chrome or Edge — the data folder needs it.</p>`:FS.dir?`<p class="gnote">📁 ${esc(FS.dir.name)} connected</p>`:`<div class="gneed"><b>Step 1 · Connect the data folder</b><span>Login works only after this. Choose <b>OneDrive - UnitedHealth Group</b>, then <b>Allow on every visit</b>.</span><button class="cap teal" id="gFolder" style="margin-top:8px">${FS.handle?"📁 Allow the data folder":"📁 Connect the data folder"}</button></div>`;
   $("#gateBody").innerHTML=`
-    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">Log in with your <b>MSID</b> and your own password.</p>
+    ${FS.dir?"":fl}
+    <p style="color:#a9c0d8;margin:18px 0 0;text-align:left;font-size:13px;line-height:1.5">${FS.dir?"":"<b>Step 2 · </b>"}Log in with your <b>MSID</b> and your own password.</p>
     <input id="gId" placeholder="MSID (e.g. aranja14) or PC number" value="${esc(dev.get())}" autocapitalize="off" autocomplete="username" spellcheck="false">
     <input id="gPw" type="password" placeholder="Password" autocapitalize="off" autocorrect="off" autocomplete="current-password" spellcheck="false">
     <button class="cap amber" id="gGo">Login</button>
     <div class="err" id="gErr" style="color:#ffb3ad">${msg||""}</div>
-    <button class="lnk" id="gSet">First time, or forgot your password?</button>${fl}`;
+    <button class="lnk" id="gSet">First time, or forgot your password?</button>${FS.dir?fl:""}`;
   const go=async()=>{
     const id=$("#gId").value.trim(),pw=$("#gPw").value,err=t=>$("#gErr").innerHTML=t;
     if(id.length<3){err("Enter your MSID or PC number.");return}
     if(FS.handle&&!FS.dir){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted")await fsUse(FS.handle,FS.path)}catch(e){}}
+    if(LOCK_ON&&fsSupported()&&!FS.dir){err("Connect the data folder first (Step 1 above). Without it the tool doesn't open.");return}
     if(isMaster(pw)){view.masterLogin=true;dev.set(id);remember(id);return enter()}
     if(isBuiltInAdmin(id)){err("Use the Admin password for this ID.");return}
     const u=userOf(id);
@@ -1561,7 +1623,7 @@ function changePw(){
     if(!e||e.h!==pwHash(id,o)){er("Current password is wrong.");return}if(n.length<4){er("Make the new password at least 4 characters.");return}if(n!==$("#cpN2").value){er("The two new passwords don't match.");return}
     const h=pwHash(id,n);await pwsSet(id,h,e.dev||devId());remember(id,h);closeModal();toast("Password changed")};
 }
-function enter(){view.team=[];view.pf=[];view.emp=[];view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
+function enter(){resetFilters();view.q="";$("#gate").hidden=true;$("#app").hidden=false;boot()}
 $("#btnOut").onclick=()=>guardDirty(()=>{if(!LOCK_ON){toast("Login is switched off while testing");return}view.masterLogin=false;view.as=null;LS.set("session",null);$("#app").hidden=true;gate()});
 $("#btnPw").onclick=changePw;
 
@@ -2260,7 +2322,7 @@ function wireAdmin1(){
       if(old)Object.assign(old,{msid:msid||old.msid||"",pc:pc||old.pc||"",role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({msid,pc,role:r,name:name||"",team:team||""});n++});
     $("#uBulk").value="";$("#uErr").textContent=bad.length?"Skipped: "+bad.join(", "):"";adChanged();openAdmin(1);toast(n+" PC"+(n===1?"":"s")+" added. Click Save & apply.")};
 }
-function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overflow="";view.team=[];view.pf=[];view.emp=[];renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
+function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overflow="";resetFilters();renderAll();toast("Viewing as "+ROLEN(view.as.role)+(AD.changed?" (with your unsaved Admin changes)":""))}
 
 /* ===== page 2: processes & screen ===== */
 function adminPage2(){
