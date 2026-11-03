@@ -421,13 +421,230 @@ td.name{min-width:215px}
 .gneed{margin:16px 0 0;padding:12px 14px;border-radius:14px;background:#0e8f8a26;border:1px solid #2bb5ae66;text-align:left;font-size:12.5px;color:#cfe9e7;line-height:1.5}
 .gneed b{display:block;color:#fff;font-size:13px}.gneed span{display:block}.gneed .cap{width:100%}
 
+/* ===== build 19: one process, bigger text, compact, firm borders ===== */
+body{font-size:15px}
+.top{padding-block:5px;border-bottom:3px solid var(--amber)}
+.ptag{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:#fff;border-radius:999px;padding:3px 4px 3px 12px;font:700 13px var(--f-disp);letter-spacing:.04em;box-shadow:inset 0 0 0 1px #ffffff40}
+.ptag i{font-style:normal;font-size:9.5px;background:#ffffff30;border-radius:999px;padding:2px 7px;letter-spacing:.1em}
+.wrap{padding-block:8px 14px;gap:6px}
+.bar{padding:5px 10px;gap:8px;border-radius:10px;border:1px solid #b9c6d6}
+.cap.sm{font-size:13.5px;padding:5px 12px}
+.fld span{font-size:10.5px}
+.fld select,.fld input{font-size:14px;padding:5px 9px}
+.msb{font-size:14px}
+.dinfo{font-size:12.5px}
+.stats{gap:6px}.stat{padding:4px 10px;border-color:#b9c6d6}.stat span{font-size:11px}.stat b{font-size:18px}
+.gridbox{max-height:calc(100vh - 230px);min-height:340px;border:1.5px solid #8ea1b8;border-radius:10px}
+th,td{border-right-color:#c3cedb;border-bottom-color:#c3cedb}
+thead th{font-size:12px}
+.h-task{font-size:11.5px;width:108px;max-width:108px;min-width:104px}
+.h-sub input{font-size:12.5px;width:50px}
+.h-cnt,.h-amb2,.hlt{font-size:11.5px}
+td input{font-size:13.5px;height:28px;width:58px}
+td.calc,.ro{font-size:13.5px}
+td.pct{font-size:13.5px!important}
+td.name input.nm,.nmt{font-size:14px}
+td.name input.tm,.tmt{font-size:11px}
+td.name{min-width:225px}
+.shiftbar{margin-top:2px}
+/* date calendar */
+.dpk{position:relative}
+.dpb{display:flex;align-items:center;gap:8px;min-width:190px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font:600 14px var(--f-body);color:var(--ink);cursor:pointer;white-space:nowrap}
+.dpb i{font-style:normal;font-size:10px;opacity:.7;margin-left:auto}
+.dpp{position:absolute;top:calc(100% + 4px);left:0;z-index:40;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0003;padding:10px;width:270px}
+.dph{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:14px}
+.dpn{border:1px solid var(--line);background:var(--bg);border-radius:8px;width:30px;height:28px;cursor:pointer;color:var(--ink)}
+.dpg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}.dpg i{font-style:normal;font-size:10.5px;color:var(--muted);padding:2px 0}
+.dpd{border:1px solid transparent;background:var(--bg);border-radius:7px;height:31px;font:600 12.5px var(--f-num);cursor:pointer;color:var(--ink);padding:0}
+.dpd:hover{border-color:var(--amber)}
+.dpd.has{background:var(--teal-soft);color:var(--teal);border-color:var(--teal)}
+.dpd.cur{outline:2px solid var(--amber);outline-offset:1px}.dpd.tod{box-shadow:inset 0 -3px 0 var(--amber)}
+.dpf{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.dpf .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--teal);margin-right:4px}
+
+/* Master Save lamp: light green glow once saved */
+.cap.saved,.cap.saved:disabled{opacity:1;background:#dff7e8;color:#137a3f;box-shadow:0 0 0 1px #6fd39a,0 0 12px 2px #6fd39a99,inset 0 1px 0 #ffffffa0;cursor:default}
+/* ===== build 20: one-line rows, full-height frame, Downtime screen, save lamp ===== */
+#app{height:100vh;min-height:0}
+.wrap{flex:1;min-height:0;overflow:auto}
+.gridbox{flex:1 1 auto;max-height:none;min-height:260px}
+td input{font-size:15px;height:26px;width:60px}
+td.name{height:28px;min-width:200px}
+td.name input.nm,.nmt{font-size:14.5px}
+.nmw{gap:6px}
+.dtbtn{background:#ffffff1c;color:#fff;box-shadow:inset 0 0 0 1px #ffffff40}
+.dtbtn.on{background:var(--amber);color:#2a1a02;box-shadow:none}
+.svlamp{background:#fde4e4;color:#b42318;box-shadow:0 0 0 1px #f2b8b5}
+.svlamp.bad{background:#fde4e4;color:#b42318;animation:pulse 1.4s ease-in-out infinite}
+.svlamp.ok{background:#dff7e8;color:#137a3f;box-shadow:0 0 0 1px #6fd39a,0 0 12px 2px #6fd39a99}
+.top .svlamp{min-width:44px}
+.dtpanel{position:fixed;left:0;right:0;top:0;z-index:44;max-height:78vh;background:var(--panel);border-bottom:3px solid var(--amber);box-shadow:0 18px 40px #0005;transform:translateY(-102%);transition:transform .18s ease-out;display:flex;flex-direction:column}
+.dtpanel.show{transform:none}
+.dtin{display:flex;flex-direction:column;min-height:0;padding:8px 14px 6px;height:100%}
+.dthead{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.dttitle{font-family:var(--f-disp);font-size:17px;align-self:center}
+.dthead .muted{align-self:center}
+.dthead .msb{min-width:120px;max-width:170px}
+.shrow{display:flex;align-items:center;gap:5px;font-size:13px}
+.shrow input{width:56px;padding:4px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);text-align:center;font-family:var(--f-num)}
+.dtgrid{flex:1;min-height:0;overflow:auto;margin-top:8px;border:1.5px solid #8ea1b8;border-radius:10px;max-height:calc(78vh - 120px)}
+.dtgrid thead tr:nth-child(1) th{top:0;height:30px}
+.dtgrid thead tr:nth-child(2) th{top:30px;height:40px}
+.dtgrid .h-hrs{background:#f2a33a;color:#2a1a02}
+.dtgrid td.dtn{min-width:210px;padding:0 8px;background:var(--panel);text-align:left;font-size:14px;white-space:nowrap}
+.dtgrid td input{width:68px}
+.dtgrid td input.cm{width:140px}
+.dthint{margin:6px 0 0;font-size:11.5px;color:var(--muted)}
+/* keep the top bar and the tool bar on one line */
+.top{flex-wrap:nowrap}.who{flex-wrap:nowrap;gap:6px;min-width:0}
+#btnFolder{max-width:170px;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:1700px){#expTxt{display:none}}
+.datebar{flex-wrap:nowrap}.datebar .grow{display:none}
+.datebar .dinfo{flex:1 1 auto;min-width:60px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.datebar .cap,.datebar .fld,.datebar .dpk{flex:none}
+@media (max-width:1100px){.datebar{flex-wrap:wrap}.top{flex-wrap:wrap}}
+
+/* ===== build 21: smooth grid, compact headings, Downtime screen tidy ===== */
+#gb tbody tr.dr{height:30px}
+#gb tbody tr.sp td{padding:0;border:0;background:transparent}
+thead tr:nth-child(2) th{top:52px;height:26px}
+thead tr:nth-child(3) th{top:78px;height:22px}
+.h-sub{padding:1px 3px}.h-sub input{height:20px;width:46px;font-size:11.5px;padding:0 2px}
+.h-cnt{padding:1px 3px}
+.h-cnt .hl,.h-cnt .hl.ht2{height:17px;min-width:0;font-size:9.5px;line-height:15px;padding:0 2px;border-style:dotted;overflow:hidden}
+.h-cnt .hlt{font-size:10px}
+.nfo{flex:none;border:0;background:transparent;color:var(--amber);cursor:pointer;font-size:14px;width:18px;padding:0;line-height:1}
+.nfo:hover{color:var(--teal)}
+#hcard{pointer-events:auto}
+.dtin{position:relative}
+.dtx{position:absolute;top:8px;right:12px;z-index:3;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:16px;cursor:pointer;color:var(--ink)}
+.dtx:hover{background:#fde4e4;color:#b42318}
+.dthead{display:flex;flex-direction:column;align-items:center;gap:6px;padding:2px 46px 8px;text-align:center}
+.dtt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;justify-content:center}
+.dtc{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;justify-content:center}
+.dtgrid thead th{white-space:normal;font-size:10.5px;line-height:1.15;text-transform:none;letter-spacing:0;padding:3px 4px}
+.dtgrid thead tr:nth-child(1) th{height:24px}.dtgrid thead tr:nth-child(2) th{top:24px;height:34px}
+.dtgrid td input{width:58px;height:26px}
+.dtgrid td.dtn{min-width:190px;font-weight:600;font-size:13.5px}
+.dthint{text-align:center}
+.svlamp.ico{min-width:38px;font-size:15px}
+
+
+/* ===== build 22 · side panel layout · Graphite + Amber ===== */
+#side{--sd-bg:linear-gradient(180deg,#25272c,#17181c);--sd-ink:#f1eee7;--sd-mut:#a8a296;--sd-line:rgba(255,255,255,.09);--sd-card:rgba(255,255,255,.05);--sd-in:rgba(255,255,255,.07);--sd-inl:rgba(255,255,255,.15);--sd-acc:#f0c46b;--sd-good:#8be0a8}
+#app:not([hidden]){display:grid!important;grid-template-columns:276px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);height:100vh;height:100dvh;overflow:hidden;background:#f3f2ee}
+:root[data-theme="dark"] #app:not([hidden]){background:var(--bg)}
+#app>.top{display:none!important}
+#app>#notice,#app>#updBar,#app>#main{grid-column:2}
+#app>#rail{display:none!important}
+#side{grid-column:1;grid-row:1/-1;background:var(--sd-bg);color:var(--sd-ink);display:flex;flex-direction:column;min-height:0;border-right:1px solid #0006;font-size:12px}
+#side .sc{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 6px;display:flex;flex-direction:column;gap:3px}
+#side .sc::-webkit-scrollbar{width:6px}#side .sc::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:6px}
+#side .sh{font-size:9.5px;letter-spacing:.22em;font-weight:800;color:var(--sd-acc);margin:7px 2px 3px;display:flex;justify-content:space-between}
+#side .sh i{font-style:normal;letter-spacing:0;font-weight:600;color:var(--sd-mut)}
+#side .ssec[hidden]{display:none}
+#side .sbrand{padding:2px 2px 10px;border-bottom:1px solid var(--sd-line);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#side .sbrand .brand{width:100%;color:#fff;font-size:18px;cursor:default;user-select:none}
+#side .sbrand .brand span{color:var(--sd-acc)}
+#side .sbrand .ver{background:var(--sd-card);color:var(--sd-mut);border:1px solid var(--sd-line)}
+#side .sbrand .dtbtn{width:100%;justify-content:center}
+#side #sRail .rail,#side #sRail{display:flex;flex-wrap:wrap;gap:5px;background:none;padding:0;overflow:visible}
+#side #sRail .cap{flex:1 1 calc(50% - 5px);justify-content:center;padding:5px 8px;font-size:11.5px}
+#side .bar{display:flex;flex-wrap:wrap;gap:6px;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;align-items:center;border-radius:0}
+#side .datebar .dpk{flex:1;min-width:0;position:relative}
+#side .datebar .dpk>span{display:none}
+#side .datebar .dpb{width:100%;justify-content:space-between}
+#side .datebar .dpp{width:248px;left:-34px}
+#side .datebar .dinfo{width:100%;order:2;color:var(--sd-mut);font-size:11px;white-space:normal}
+#side .datebar .dinfo b{color:var(--sd-ink)}
+#side .datebar .grow{display:none}
+#side .datebar #dPrev,#side .datebar #dNext{order:0;flex:none;width:30px;padding:0;justify-content:center}
+#side .datebar .cap.sm:not(#dPrev):not(#dNext){order:3;flex:1 1 calc(50% - 6px);justify-content:center;padding:6px 8px;font-size:11.5px}
+#side .fbar{display:grid!important;grid-template-columns:1fr 1fr;gap:5px 6px!important}
+#side .fbar .fld,#side .fbar label.fld{width:auto;min-width:0}
+#side .fbar .fld>span{color:var(--sd-mut);font-size:9px}
+#side .fbar label.fld:has(#fQ){grid-column:1/-1}
+#side .fbar .chk{grid-column:1/-1;display:flex;align-items:center;gap:6px;justify-content:flex-start;color:var(--sd-ink);font-size:11.5px}
+#side .fbar .ms,#side .fbar .msb,#side .fbar input,#side .fbar .deflock{width:100%;min-width:0!important;max-width:100%!important;box-sizing:border-box}
+#side .fbar .msb{overflow:hidden;text-overflow:ellipsis}
+#side .fbar input[type=checkbox]{width:auto!important;flex:none;margin:0}
+#side .fbar .chk{flex-direction:row!important;text-align:left!important;justify-content:flex-start!important}
+#side .fbar .chk>*{text-align:left}
+#side .fbar .msp{min-width:0;width:240px;max-width:240px}
+#side .fbar .fld:nth-child(even) .msp{left:auto;right:0}
+#side .stats{display:grid!important;grid-template-columns:1fr 1fr;gap:5px;margin:0!important}
+#side .stat{background:var(--sd-card)!important;border:1px solid var(--sd-line)!important;padding:5px 9px!important;min-height:0!important;box-shadow:none!important;border-radius:10px}
+#side .stat span{color:var(--sd-mut)!important;font-size:8.5px!important;letter-spacing:.08em}
+#side .stat b{color:var(--sd-ink);font-size:14px!important}
+#side .stat.hi b{color:var(--sd-good)!important}#side .stat.lo b{color:#ff7b72!important}
+#side .cap:not(.amber):not(.teal):not(.on){background:var(--sd-in)!important;color:var(--sd-ink)!important;border:1px solid var(--sd-inl)!important;box-shadow:none!important}
+#side .cap.teal,#side .cap.on{background:linear-gradient(180deg,#f5cf7f,#e3a83c)!important;color:#22190a!important;border:0!important;box-shadow:none!important}
+#side .cap.amber{box-shadow:none!important}
+#side .cap.rose{color:#ffb4ab!important}
+#side .msb,#side input#fQ,#side .dpb,#side .deflock{background:var(--sd-in)!important;color:var(--sd-ink)!important;border:1px solid var(--sd-inl)!important}
+#side .dpp,#side .msp{color:var(--ink)}
+#side .sfoot{padding:8px 12px 12px;border-top:1px solid var(--sd-line);display:flex;flex-wrap:wrap;gap:5px}
+#side .sfoot .cap{flex:1 1 auto;justify-content:center}
+#side .swho{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:3px;font-size:11px;color:var(--sd-mut)}
+#side .swho .chip{background:var(--sd-card);color:var(--sd-ink);border:1px solid var(--sd-line)}
+#side .swho .sdot{margin:0}
+
+/* ===== build 24: smooth scroll + Admin link at the bottom ===== */
+#main #gb{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#gb tbody tr.sp td{height:0!important;max-height:0;line-height:0;font-size:0;padding:0;border:0}
+#gb td.csp{padding:0;border:0;background:transparent}
+.sticky2{box-shadow:none!important;border-right:1px solid #8ea1b8}
+#pg{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#pg .pgadm{font:inherit;font-size:11px;font-weight:700;padding:1px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;line-height:18px}
+#pg .pgadm:hover{background:var(--amber-soft)}
+/* main: grid from the very top */
+#main{padding:8px 10px 4px!important;max-width:none!important;margin:0!important;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px!important}
+#main #gb{flex:1 1 auto;min-height:120px;max-height:none!important}
+#main #pg{font-size:11px;margin:0}
+#main .dump{flex:none}
+/* compact rows: 25px */
+tbody tr.dr{height:25px!important;max-height:25px}
+tbody tr.dr>td{height:24px!important;max-height:25px}
+tbody tr.dr>td input{height:21px!important;line-height:21px}
+tbody tr.dr>td .rm{width:18px!important;height:18px!important;min-width:0!important;line-height:18px!important;padding:0!important}
+tbody tr.dr>td .nmw{height:22px;overflow:hidden}
+td.name input.nm{height:14px!important;font-size:11.5px!important}
+td.name input.tm{height:10px!important;font-size:8.5px!important}
+/* compact Admin */
+.adminpg{font-size:12.5px}
+.apin{max-width:1500px!important}
+.ahead{padding:8px 0 8px!important;gap:8px!important}
+.abody{gap:10px!important;padding-top:10px!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))!important}
+.acard{padding:10px 12px!important;border-radius:12px!important}
+.acard h4{font-size:13px!important;margin-bottom:4px!important}
+.ahelp{font-size:12px!important;margin:2px 0 6px!important}
+.utable td{padding:2px 6px!important}
+.utable td input,.utable td select{height:24px!important;font-size:12px!important}
+.adminpg table th,.adminpg table td{height:26px!important;padding-top:2px!important;padding-bottom:2px!important}
+.adminpg thead th{height:30px!important;font-size:11px!important}
+.adminpg table input[type=checkbox]{width:15px!important;height:15px!important}
+.adminpg .stat{padding:5px 10px!important}.adminpg .stat b{font-size:14px!important}
+.adminpg .cap{padding:5px 12px!important;font-size:12px!important}
+.adminpg select,.adminpg input:not([type=checkbox]){height:28px!important;font-size:12px!important;padding-top:2px!important;padding-bottom:2px!important}
+/* small screens: side panel on top */
+@media (max-width:900px){#app:not([hidden]){grid-template-columns:1fr;grid-template-rows:auto;height:auto;overflow:visible}#side{grid-row:auto}#side .sc{overflow:visible}#app>#notice,#app>#updBar,#app>#main{grid-column:1}#main{overflow:visible}#main #gb{max-height:75vh!important}}
 </style>
 
 <section id="app" hidden>
+  <aside id="side" aria-label="Controls">
+    <div class="sc">
+      <div class="sbrand" id="sBrand"></div>
+      <div class="ssec" id="secRail"><div class="sh">PROCESS</div><div id="sRail"></div></div>
+      <div class="ssec" id="secDate"><div class="sh">DATE <i>dump · save</i></div><div id="sDate"></div></div>
+      <div class="ssec" id="secFil"><div class="sh">FILTERS</div><div id="sFil"></div></div>
+      <div class="ssec" id="secSum"><div class="sh">SUMMARY</div><div id="sSum"></div></div>
+    </div>
+    <div class="sfoot" id="sFoot"><div class="swho" id="sWho"></div></div>
+  </aside>
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v4.0.7 · build 18</span><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v4.0.7 · build 24</span><span class="ptag"><b id="procTag">PCIS</b><i>LIVE</i></span><button class="cap sm dtbtn" id="btnDT" hidden>⏱ Downtime</button><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -448,6 +665,7 @@ td.name{min-width:215px}
 
 <div class="adminpg" id="adminPg" hidden></div>
 <div class="adminpg" id="qvcPg" hidden></div>
+<div class="dtpanel" id="dtPanel" hidden></div>
 <div class="modal" id="modal" hidden><div class="mcard" id="mcard"></div></div>
 <div id="hcard" hidden></div><div id="pwm"></div>
 
@@ -467,6 +685,19 @@ td.name{min-width:215px}
 </div></div>
 
 <script>
+/* build 22: date bar, filters and summary live in the side panel (moved after every render; their buttons keep working) */
+function sideMove(){
+  const m=document.getElementById("main");if(!m)return;
+  const put=(sel,box,sec)=>{const b=document.getElementById(box);if(!b)return;b.innerHTML="";const e=m.querySelector(sel);if(e)b.appendChild(e);const s=document.getElementById(sec);if(s)s.hidden=!e};
+  put(".datebar","sDate","secDate");put(".fbar","sFil","secFil");put("#stats","sSum","secSum");
+}
+{const _rm=renderMain;renderMain=function(){
+  ["sDate","sFil","sSum"].forEach(id=>{const b=document.getElementById(id);if(b)b.innerHTML=""});   /* old copies out first, so every id is found in the new render */
+  const r=_rm.apply(this,arguments);sideMove();
+  requestAnimationFrame(()=>{if(typeof paintRows==="function")paintRows()});return r}}
+let _rzp=0;window.addEventListener("resize",()=>{clearTimeout(_rzp);_rzp=setTimeout(()=>{if(typeof paintRows==="function")paintRows(true)},150)});
+if(window.ResizeObserver){let t=0;const ro=new ResizeObserver(()=>{clearTimeout(t);t=setTimeout(()=>{if(typeof paintRows==="function")paintRows()},120)});const watch=()=>{const g=document.getElementById("gb");if(g&&!g._ro){g._ro=1;ro.observe(g)}};setInterval(watch,1500)}
+
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_EXPIRY  = "2027-03-31";            // tool stops after this date; master password can extend it per PC
 const ALLOWED_PCS = [                        // add up to 100+ PC names, one per line, in quotes
@@ -532,39 +763,31 @@ const expiry=()=>S.cfg.exp||APP_EXPIRY;
 const allowedPCs=()=>[...new Set([...ALLOWED_PCS.map(p=>p.toUpperCase()),...(S.cfg.pcsAdd||[])])].filter(p=>!(S.cfg.pcsDel||[]).includes(p));
 const defFull=()=>S.cfg.hpd*S.cfg.wd;
 /* ---------- build ---------- */
-const BUILD="18";
+const BUILD="22";
 
 /* ---------- feature catalog: every button and screen part, with defaults per role [Data Entry, Manager, Employee] ---------- */
-const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager / SME"],["employee","Employee"]];
-const ROLE3=["entry","manager","employee"];
+const ROLES=[["admin","Admin"],["entry","Data Entry"],["manager","Manager"],["sme","SME"],["employee","Employee"]];
+const ROLE3=["entry","manager","sme","employee"];
 const FEAT=[
  ["dump","Dump / paste a new date","Dump","Actions",[1,0,0]],
- ["replace","Replace a saved date","Replace","Actions",[1,0,0]],
  ["edit","Edit cells (counts, downtime, names)","Edit","Actions",[1,0,0]],
- ["save","Save changes","Save","Actions",[1,0,0]],
- ["reset","Reset (clear the screen)","Reset","Actions",[1,1,1]],
+ ["save","Master Save (save the date for everyone)","M.Save","Actions",[1,0,0]],
  ["remove","Remove a person (✕)","Remove","Actions",[1,0,0]],
  ["heads","Edit headings and AHT","Heads","Actions",[0,0,0]],
  ["del","Delete a date","Delete","Actions",[0,0,0]],
  ["share","Share / Excel","Share","Actions",[1,1,1]],
  ["mini","Quick Excel (Process, Name, Productivity %)","Quick","Actions",[1,1,1]],
  ["refresh","Refresh from data folder","Refresh","Actions",[1,1,1]],
- ["shift","Change shift hours (100%)","Shift","Actions",[0,1,0]],
+ ["shift","Shift hours / 100% (in the Downtime screen)","Shift","Actions",[1,1,0]],
  ["trial","Trial dump (nothing saved)","Trial","Actions",[1,1,1]],
- ["leave","Quick leave buttons (L, ½)","Leave","Actions",[1,0,0]],
- ["dayclose","Master Save (day complete, locks the date)","M.Save","Actions",[1,0,0]],
  ["unlock","Change locked or old dates","Unlock","Actions",[0,0,0]],
- ["undo","Recycle bin (undo)","Bin","Actions",[1,0,0]],
- ["rail","Process buttons (DBM, CPA…)","Procs","Screen",[1,1,1]],
  ["stats","Summary cards","Cards","Screen",[1,1,1]],
  ["search","Search box","Search","Screen",[1,1,1]],
  ["active","“Only baskets with data” switch","Active","Screen",[1,1,1]],
  ["notice","Notice strip","Notice","Screen",[1,1,1]],
- ["cmp","Compare with last date (▲ ▼)","▲▼","Screen",[1,1,1]],
  ["flag","Suspicious data flags","Flags","Screen",[1,1,0]],
  ["hover","Hover card on names","Hover","Screen",[1,1,1]],
  ["hist","Employee history popup","History","Screen",[1,1,1]],
- ["pin","Pin employees","Pin","Screen",[1,1,0]],
  ["datejump","Date jump ‹ › and Today","Jump","Screen",[1,1,1]],
  ["sync","Sync status light","Sync","Screen",[1,1,1]],
  ["folder","📁 Connect / folder button","Folder","Screen",[1,1,1]],
@@ -575,36 +798,24 @@ const FEAT=[
  ["mobile","Phone card view","Phone","Screen",[1,1,1]],
  ["mydash","My dashboard card","My card","Screen",[0,0,1]],
  ["badge","Streak badges","Badges","Screen",[1,1,1]],
+ ["dtscreen","⏱ Downtime & hours screen","Downtime","Screen",[1,1,0]],
  ["qvc","$ QVC sheet (hidden icon)","QVC $","Screen",[0,1,0]],
- ["tray","Tools tray (▼)","Tray","Tools",[1,1,1]],
- ["cal","Calendar strip","Calendar","Tools",[1,1,1]],
- ["month","Month summary + consistency","Month","Tools",[1,1,0]],
- ["week","Week view","Week","Tools",[1,1,0]],
- ["top5","Top / bottom 5","Top 5","Tools",[1,1,0]],
- ["teams","Team summary","Teams","Tools",[1,1,0]],
- ["heat","Heatmap","Heatmap","Tools",[1,1,0]],
- ["basket","Basket-wise view","Baskets","Tools",[1,1,0]],
- ["attend","Attendance summary","Attend.","Tools",[1,1,0]],
- ["goal","Goal tracker","Goal","Tools",[1,1,1]],
- ["dtchart","Downtime breakdown","Downtime","Tools",[1,1,0]],
- ["selfcalc","Self-check calculator","Calc","Tools",[1,1,1]],
- ["log","History log","Log","Tools",[0,0,0]],
  ["missing","Missing employee alert (dump)","Missing","Tools",[1,0,0]],
 ];
 const FK=Object.fromEntries(FEAT.map(f=>[f[0],f]));
 /* defaults: Data Entry gets every option; Manager / SME and Employees get view access */
-const VIEW_ACT=["reset","share","mini","refresh"],VIEW_OFF=["log","missing","qvc","mydash","trial","selfcalc"];
+const VIEW_ACT=["share","mini","refresh"],VIEW_OFF=["log","missing","qvc","mydash","trial","selfcalc"];
 const viewPerm=f=>{const d=FK[f];return d[3]==="Actions"?(VIEW_ACT.includes(f)?1:0):(VIEW_OFF.includes(f)?0:1)};
-const DEFPERM={entry:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?0:1])),manager:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?1:viewPerm(f[0])])),employee:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="mydash"?1:viewPerm(f[0])]))};
-const DEFSCOPE={entry:"all",manager:"all",employee:"all"};
+const DEFPERM={entry:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?0:1])),manager:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?1:viewPerm(f[0])])),sme:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="qvc"?1:viewPerm(f[0])])),employee:Object.fromEntries(FEAT.map(f=>[f[0],f[0]==="mydash"?1:viewPerm(f[0])]))};
+const DEFSCOPE={entry:"all",manager:"all",sme:"all",employee:"all"};
 /* PCIS team: built into the file, so every PC and browser knows them (Admin changes are saved on top) */
 const SEED_USERS=[["ap21","PA5","LHTU05CG5321MJ9","manager","Ashwini P"],["atony","ATO","LHTU05CG5331DN2","employee","Abimelak Tony"],["rrume","RRU","LHTU05CG5331DPF","employee","RAKOKHRULU RUME"],["shariva2","SHA","LHTU05CG5243YCC","employee","Harivardhan S"],["snagapp1","4TV","LHTU05CG2322FC8","employee","Nagappa Naidu, Sivasankar"],["se31","X4M","LHTU05CG230322X","employee","Sindhu E"],["kudayku","KUD","LHTU05CG5321MK6","employee","Karthik Kumar"],["ksb1","KSB","LHTU05CG4244J31","employee","KAVYA SB"],["hv5","X3K","LHTU05CG6264WJZ","employee","HEMAVATHI V"],["ahp","AHP","LHTU05CG5321MKJ","employee","Anusha H P"],["rsiddara","AS6","LHTU05CG2122SJB","employee","Ramya S"],["shs6","SHS","LHTU05CG230322S","employee","SWAROOP HS"],["pto20","PTO","LHTU05CG5331DPT","employee","POOJA.T"],["ps119","PSO","LHTU05CG4244J5K","employee","Poorvika S"],["nv25","NVA","LHTU05CG5331DK5","employee","V Nandini"],["npongene","WJC","LHTU05CG5331DPZ","employee","Nukshimenla Pongener"],["skambl19","HK5","LHTU05CG2122T52","entry","Shreyash k"],["bsanabam","ZIO","LHTU05CG2122TCV","employee","Bonney Sanabam"],["nsubra10","NS5","LHTU05CG2122WHK","employee","Naresh Kumar S"],["mr53","KXN","LHTU05CG5331DPG","employee","Madhura R"],["jbommasa","JAB","LHTU05CG2122T58","employee","Jayashri B"],["mmagendr","MMA","LHTU05CG5321MK7","employee","ManojKumar M"],["tester","TST","DESKTOP","manager","Tester"]].map(([msid,opid,pc,role,name])=>({msid,opid,pc,role,name,team:msid==="tester"?"TEST":"PCIS"}));
 /* settings files in the data folder are stored scrambled, so they can't be read or edited by hand */
 const EKEY="Dwarkadesh14#ar·Eclipse";
 function encJ(o){const s=unescape(encodeURIComponent(JSON.stringify(o)));let x="";for(let i=0;i<s.length;i++)x+=String.fromCharCode(s.charCodeAt(i)^EKEY.charCodeAt(i%EKEY.length));return "ECLIPSE1:"+btoa(x)}
 function decJ(t){if(t==null||t==="")return null;t=String(t);if(!t.startsWith("ECLIPSE1:"))return JSON.parse(t);const x=atob(t.slice(9));let s="";for(let i=0;i<x.length;i++)s+=String.fromCharCode(x.charCodeAt(i)^EKEY.charCodeAt(i%EKEY.length));return JSON.parse(decodeURIComponent(escape(s)))}
-const MSGS=[["save","Save"],["reset","Reset"],["replace","Replace"],["del","Delete date"],["remove","Remove a person"],["shift","Shift hours"],["dayclose","Day complete"],["restore","Restore from bin"]];
-const PROC0=[["DBM","live"],["CPA","soon"],["CPQ","soon"],["Outreach","soon"],["Pend52","soon"],["PCRL","soon"],["Onbase","soon"],["NonPar","soon"]].map(([k,s])=>({k,label:k,status:s,roles:{entry:1,manager:1,employee:1}}));
+const MSGS=[["save","Master Save"],["replace","Replace (in Dump)"],["del","Delete date"],["remove","Remove a person"],["shift","Shift hours"]];
+const PROC0=[{k:"DBM",label:"PCIS",status:"live",roles:{entry:1,manager:1,sme:1,employee:1}}];   /* one process: PCIS (data key stays DBM) */
 
 let me={pc:"",role:"admin",name:"",team:""};
 const role=()=>view.as?view.as.role:me.role;
@@ -730,7 +941,7 @@ async function fsScan(){
     FS.index=idx;FS.err=false;await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
-const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV","folder"];
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV","folder","deff"];
 const QVC_KEYS=["grades","teamGrade","slabs","heads","metric"];
 async function fsReadConfig(){
   if(!FS.dir)return;
@@ -811,7 +1022,7 @@ const clone=o=>o?JSON.parse(JSON.stringify(o)):null;
 const cur=()=>view.work;
 const dates=(p=view.proc)=>[...new Set([...Object.keys(S.days),...Object.keys(FS.index)])].map(unkey).filter(x=>x.p===p).map(x=>x.d).sort().reverse();
 async function openDate(d){
-  view.trial=false;view.cleared=false;view.date=d||null;view.saved=await loadDay(view.date);view.work=clone(view.saved);view.dirty=false;view.prev=null;view.draft=null;
+  view.trial=false;view.cleared=false;view.date=d||null;if(typeof UNDO!=="undefined")UNDO.length=0;view.saved=await loadDay(view.date);view.work=clone(view.saved);view.dirty=false;view.prev=null;view.draft=null;
   if(view.date){const ds=dates(),older=ds.filter(x=>x<view.date)[0];if(older)view.prev=await loadDay(older);
     try{const dr=await IDB.get("draft:"+dkey(view.date));if(dr&&dr.work&&dr.at>((view.saved&&view.saved.at)||0))view.draft=dr}catch(e){}}
   renderAll();preloadRecent();
@@ -827,9 +1038,11 @@ function guardDirty(fn){
 }
 window.addEventListener("beforeunload",e=>{if(view.dirty&&!view.trial){e.preventDefault();e.returnValue=""}});
 let draftT=null;
-function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}clearTimeout(draftT);draftT=setTimeout(()=>{if(view.dirty&&view.date)IDB.put("draft:"+dkey(view.date),{at:Date.now(),work:view.work})},1200)}
+function markDirty(){if(view.trial)return;if(!view.dirty){view.dirty=true;paintDirty()}}
 function dropDraft(){if(view.date)IDB.put("draft:"+dkey(view.date),null);view.draft=null}
-function paintDirty(){const b=$("#dirtyTag");if(b)b.hidden=!view.dirty;const s=$("#bSave");if(s){s.disabled=!view.dirty;s.classList.toggle("pulse",view.dirty)}}
+function paintDirty(){const b=$("#dirtyTag");if(b)b.hidden=!view.dirty;paintSv();const s=$("#bSave");
+  if(s){const ok=!view.dirty&&!!view.saved;s.disabled=!view.dirty;s.classList.toggle("pulse",view.dirty);s.classList.toggle("saved",ok);
+    s.textContent=ok?"✓ Master Saved":"Master Save";s.title=ok?"This date is saved for everyone":"Save this date for everyone (Ctrl+S). Nothing is saved until you press it"}}
 
 /* ---------- formulas (same as the Excel sheet) ---------- */
 function calc(r,T){
@@ -879,7 +1092,7 @@ function applyTheme(){const t=LS.get("theme","");if(t)document.documentElement.d
 function renderRail(){
   const vis=procs().filter(procVisible);
   if(!vis.some(p=>p.k===view.proc)&&vis.length)view.proc=(vis.find(p=>p.status==="live")||vis[0]).k;
-  $("#rail").hidden=!can("rail");
+  $("#rail").hidden=true;$("#procTag").textContent=(procOf(view.proc)||{}).label||"PCIS";
   $("#rail").innerHTML=vis.map(p=>`<button class="cap ${p.status==="live"?"teal":"soon"} ${view.proc===p.k?"on":""}" data-p="${esc(p.k)}">${esc(p.label||p.k)}<span class="tag">${p.status==="live"?"LIVE":p.status==="hidden"?"HIDDEN":"SOON"}</span></button>`).join("");
   $("#rail").querySelectorAll("button").forEach(b=>b.onclick=()=>guardDirty(async()=>{view.proc=b.dataset.p;resetFilters();view.tool=null;renderRail();await openDate(dates()[0]||null)}));
 }
@@ -910,7 +1123,7 @@ function setTop(){
   $("#pcChip").textContent=view.as?"VIEWING AS "+(view.as.pc&&view.as.pc!=="—"?view.as.pc+" · ":"")+((ROLES.find(r=>r[0]===view.as.role)||[])[1]||"").toUpperCase():(me.msid||me.pc||"")+" · "+((ROLES.find(r=>r[0]===me.role)||[])[1]||"");
   $("#pcChip").className="chip "+(view.as?"mgr":"view");
   $("#expTxt").textContent="Valid till "+expiry();
-  $("#btnAdmin").hidden=!(me.role==="admin"&&!view.as&&adminBtnOK());
+  $("#btnAdmin").hidden=!(me.role==="admin"&&!view.as&&(isBuiltInAdmin(me.msid)||isBuiltInAdmin(me.pc)||view.masterLogin));
   $("#btnBack").hidden=!view.as;
   $("#btnPw").hidden=!(LOCK_ON&&me.msid&&!view.as&&!isBuiltInAdmin(me.msid)&&!view.masterLogin);$("#btnHelp").hidden=!can("help");$("#btnQvc").hidden=!can("qvc");$("#btnTheme").hidden=!can("theme");
   const fb=$("#btnFolder");
@@ -918,7 +1131,7 @@ function setTop(){
   else if(FS.dir){fb.hidden=false;fb.textContent="📁 "+FS.dir.name;fb.title="Connected to the data folder"+(can("refresh")?" · click to refresh":"");fb.classList.add("on")}
   else if(FS.handle){fb.hidden=false;fb.textContent="📁 Allow folder";fb.title="Click to give this browser access to the team data folder";fb.classList.remove("on")}
   else{fb.hidden=false;fb.textContent="📁 Connect";fb.title="Pick the team's synced data folder (one time)";fb.classList.remove("on")}
-  paintSync();renderNotice();
+  paintSync();renderNotice();paintDTBtn();paintSv();
 }
 $("#btnFolder").onclick=()=>{if(FS.dir){if(can("refresh"))refreshFolder();return}FS.handle?fsAllow():fsConnect()};
 $("#btnBack").onclick=()=>guardDirty(()=>{view.as=null;resetFilters();renderAll();toast("Back to Admin view")});
@@ -940,62 +1153,57 @@ function inScope(r){
 }
 function scopedRows(){const D=cur();if(!D)return[];return D.rows.map((r,i)=>({r,i})).filter(({r})=>inScope(r))}
 const pfOK=r=>!view.pf.length||view.pf.includes(r.proc||""),tmOK=r=>!view.team.length||view.team.includes(r.team||""),emOK=r=>!view.emp.length||view.emp.includes(r.name);
-const pinned=r=>can("pin")&&PINS.includes(nameKey(r.name));
+const pinned=r=>false;
 function rowsFiltered(){
   const l=scopedRows().filter(({r})=>pfOK(r)&&tmOK(r)&&emOK(r)&&(!view.q||norm(r.name).includes(norm(view.q))));
   return can("pin")?l.sort((a,b)=>(pinned(b.r)?1:0)-(pinned(a.r)?1:0)):l;
 }
 function visTasks(){const D=cur();if(!D)return[];if(!(view.active&&can("active")))return D.tasks;const rs=rowsFiltered().map(x=>x.r);const on=D.tasks.filter(t=>rs.some(r=>+r.c[t.k]>0));return on.length?on:D.tasks}
 const B=(id,label,feat,cls,tip)=>canD(feat)?`<button class="cap sm ${cls||""}" id="${id}" title="${esc(tip)}">${label}</button>`:"";
-function renderAll(){setTop();renderRail();renderMain()}
+function renderAll(){setTop();renderRail();renderMain();if(DTV.open)renderDT()}
 function renderMain(){
   const p=procOf(view.proc)||procs()[0];
   if(!p||p.status!=="live"){$("#main").innerHTML=`<div class="soonbox"><span class="ver" style="background:var(--amber-soft);color:#a86f1c">MODULE ${procs().indexOf(p)+1} OF ${procs().length}</span><h2>${esc(p?p.label:"")} is coming soon</h2><p>This process opens here once its work baskets and formulas are set.</p>${procs().some(x=>x.status==="live"&&procVisible(x))?`<div style="margin-top:16px"><button class="cap teal sm" id="goLive">Go to ${esc((procs().find(x=>x.status==="live"&&procVisible(x))||{}).label||"")}</button></div>`:""}</div>`;
     const gl=$("#goLive");if(gl)gl.onclick=async()=>{view.proc=procs().find(x=>x.status==="live"&&procVisible(x)).k;renderRail();await openDate(dates()[0]||null)};return}
-  const D=cur(),sc=scopedRows(),locked=isLocked(view.date,view.saved);if(view.cleared)view.tray=false;
+  const D=cur(),sc=scopedRows(),locked=isLocked(view.date,view.saved);
   const pfs=[...new Set(sc.map(x=>x.r.proc).filter(Boolean))].sort();
-  view.pf=view.pf.filter(x=>pfs.includes(x));
+  const DF=getDef()||{},inD=(k,x)=>(DF[k]||[]).includes(x);
+  view.pf=view.pf.filter(x=>pfs.includes(x)||inD("pf",x));
   const teams=[...new Set(sc.filter(({r})=>pfOK(r)).map(x=>x.r.team).filter(Boolean))].sort();
-  view.team=view.team.filter(x=>teams.includes(x));
+  view.team=view.team.filter(x=>teams.includes(x)||inD("team",x));
   const empList=sc.filter(({r})=>pfOK(r)&&tmOK(r)).map(x=>x.r.name).sort();
-  view.emp=view.emp.filter(x=>empList.includes(x));
-  const needLink=D&&scope()!=="all"&&!sc.length,ds=dates(),di=ds.indexOf(view.date);
-  const closed=view.saved&&view.saved.closed;
+  view.emp=view.emp.filter(x=>empList.includes(x)||inD("emp",x));
+  const needLink=D&&scope()!=="all"&&!sc.length,hasSaved=!!view.saved;
+  const dumpOpen=view.dumpOpen||(!D&&can("dump")&&!view.trial&&!!view.date);
   $("#main").innerHTML=`
   ${FS.handle&&!FS.dir?`<div class="banner">📁 The team data folder needs your permission on this PC. <button class="cap teal sm" id="bnAllow">Allow access</button></div>`:""}
   ${view.trial?`<div class="banner trial"><b>TRIAL MODE</b> · this data is only on your screen and is not saved anywhere. <button class="cap sm" id="trExit">Exit trial</button></div>`:""}
   ${view.draft&&!view.trial?`<div class="banner">Unsaved work for this date from ${new Date(view.draft.at).toLocaleString("en-IN")} was found. <button class="cap teal sm" id="drRes">Restore it</button><button class="cap sm" id="drDrop">Discard</button></div>`:""}
   <div class="bar datebar">
-    ${can("datejump")&&!view.trial?`<button class="cap sm ico" id="dPrev" title="Older date" ${di<ds.length-1&&di>=0?"":"disabled"}>‹</button>`:""}
-    <label class="fld"><span>${view.trial?"Trial":"Saved date"}</span><select id="fDate" ${ds.length&&!view.trial?"":"disabled"}>${view.trial?`<option>Trial · not saved</option>`:dateOptions()}</select></label>
-    ${can("datejump")&&!view.trial?`<button class="cap sm ico" id="dNext" title="Newer date" ${di>0?"":"disabled"}>›</button><button class="cap sm" id="dToday" title="Go to today">Today</button>`:""}
-    <div class="dinfo">${D?`${view.trial?"Trial":esc(D.src||"manual")} · ${D.rows.length} emp · ${D.tasks.length} baskets${closed?` · <span class="okb">✓ Day complete</span>`:""}${locked?` · <span class="lkb">🔒 Locked</span>`:""}`:view.cleared?"Screen cleared":"Nothing saved yet"}<span class="dirty" id="dirtyTag" ${view.dirty?"":"hidden"}>● Unsaved</span></div>
+    ${view.trial?`<div class="fld"><span>Trial</span><b class="dpb">Not saved</b></div>`:`${can("datejump")?`<button class="cap sm ico" id="dPrev" title="Day before">‹</button>`:""}
+    <div class="fld dpk"><span>Date</span><button type="button" class="dpb" id="dpBtn">📅 ${view.date?fmtDate(view.date):"Pick a date"} <i>▾</i></button><div class="dpp" id="dpPop" hidden></div></div>
+    ${can("datejump")?`<button class="cap sm ico" id="dNext" title="Next day">›</button>`:""}`}
+    <div class="dinfo">${D?`${view.trial?"Trial":esc(D.src||"manual")} · ${D.rows.length} emp · ${D.tasks.length} baskets${hasSaved?` · <span class="okb">✓ saved</span>`:` · <span class="lkb">not saved yet</span>`}${locked?` · <span class="lkb">🔒 Locked</span>`:""}`:view.date?"No data on this date":"Pick a date"}<span class="dirty" id="dirtyTag" ${view.dirty?"":"hidden"}>● Unsaved — press Master Save</span></div>
     <div class="grow"></div>
-    ${view.trial?"":B("bDump","Dump","dump","teal"+(view.dumpOpen&&!view.forceReplace&&!view.trialDump?" on":""),"Load a new date from the portal report or the productivity sheet")}
+    ${view.trial?"":B("bDump","Dump","dump","teal"+(view.dumpOpen&&!view.trialDump?" on":""),"Load the portal report or the productivity sheet into this date")}
     ${can("trial")?`<button class="cap sm ${view.dumpOpen&&view.trialDump?"on":""}" id="bTrial" title="Try your own file. Nothing is saved">Trial</button>`:""}
-    ${D&&!view.trial?B("bReplace","Replace","replace",view.forceReplace?"on":"","Clear this date's saved data and load a new file in its place"):""}
-    ${D?B("bSave","Save","save","amber","Make the changes on screen permanent (Ctrl+S)"):""}
-    ${D?B("bReset","Reset","reset","","Clear the screen. Saved data stays safe — pick the date again to see it"):""}
-    ${D&&!closed?B("bClose","Master Save","dayclose","","Master Save: mark this date complete. It locks for everyone except Admin"):""}
-    ${D&&closed&&(role()==="admin"||can("unlock"))&&!view.trial?`<button class="cap sm" id="bReopen" title="Unlock this date again">Reopen</button>`:""}
-    ${D&&!view.trial?B("bDel","Delete","del","danger","Delete this date (kept 30 days in the recycle bin)"):""}
+    ${D&&!view.trial?B("bSave","Master Save","save","amber","Save this date for everyone (Ctrl+S). Nothing is saved until you press it"):""}
+    ${D&&!view.trial&&canD("save")?`<button class="cap sm" id="bErase" title="Remove what you loaded or changed on this date and not saved yet">Erase</button>`:""}
+    ${hasSaved&&!view.trial?B("bDel","Delete","del","danger","Delete this date's saved data"):""}
     ${D?B("bShare","Share / Excel","share","teal","Share or download this view as an Excel file with formulas"):""}
     ${D?B("bMini","Quick Excel","mini","rose","Small Excel: Process, User Name, Productivity % only"):""}
-    ${can("tray")&&D?`<button class="cap sm ico ${view.tray?"on":""}" id="bTray" title="Tools: calendar, summaries, charts">${view.tray?"▲":"▼"} Tools</button>`:""}
   </div>
-  ${view.tray&&can("tray")&&D?trayHTML():""}
-  ${(can("dump")||can("replace")||can("trial"))?`<div class="dump" id="dz" ${view.dumpOpen||(!D&&can("dump")&&!view.trial&&!view.cleared)?"":"hidden"}>
+  ${(can("dump")||can("trial"))?`<div class="dump" id="dz" ${dumpOpen?"":"hidden"}>
     <div class="dhead">
-      ${view.trialDump?"":`<label class="fld"><span>${view.forceReplace?"Replace date":"Save into date"}</span><input type="date" id="dDate" value="${view.forceReplace?view.date:(view.dumpDate||todayISO())}" ${view.forceReplace?"disabled":""}></label>`}
-      <p>${view.trialDump?`<b>Trial:</b> drop or paste your own file to see the result. <b>Nothing is saved.</b>`:view.forceReplace?`<b>Replace ${fmtDate(view.date)}:</b> the saved data is moved to the recycle bin and the new file takes its place.`:`<b>Drop the portal report (.xls) or an Excel file here</b>, or paste rows below. You'll see a preview and confirm with <b>Yes, insert</b>.`}</p>
+      ${view.trialDump?"":`<label class="fld"><span>Load into date</span><input type="date" id="dDate" value="${view.dumpDate||view.date||todayISO()}"></label>`}
+      <p>${view.trialDump?`<b>Trial:</b> drop or paste your own file to see the result. <b>Nothing is saved.</b>`:`<b>Drop the portal report (.xls) or an Excel file here</b>, or paste rows below. Check the preview, press <b>Yes, insert</b>, then <b>Master Save</b> to keep it.`}</p>
     </div>
     <label class="cap teal sm" style="cursor:pointer">Choose file<input type="file" id="dFile" accept=".xlsx,.xls,.xlsm,.xlsb,.csv,.htm,.html" hidden></label>
     <textarea id="dTxt" placeholder="Or copy from Excel and paste here (Ctrl+V), including the heading rows"></textarea>
     <button class="cap amber sm" id="dGo">Use pasted data</button>
-    ${view.forceReplace||view.trialDump?`<button class="cap sm" id="dCancel">Cancel</button>`:""}
+    ${view.trialDump||view.dumpOpen?`<button class="cap sm" id="dCancel">Close</button>`:""}
   </div>`:""}
   ${D?(needLink?`<div class="empty"><h2>Nothing to show yet</h2><p>This PC isn't linked to ${scope()==="own"?"an employee name":"a team"}. Ask the Admin to link it in Access control.</p></div>`:`
-  ${can("shift")&&!view.trial?shiftBar():""}
   ${myCardHTML()}
   <div class="bar fbar">
     ${pfs.length>1||scope()==="all"?msel("pf","Process",pfs):""}
@@ -1007,34 +1215,44 @@ function renderMain(){
   <div class="stats" id="stats" ${can("stats")?"":"hidden"}></div>
   <div class="gridbox" id="gb"></div>
   <div class="pager" id="pg"></div>`):`
-  ${view.cleared?`<div class="empty"><h2>Screen cleared</h2><p>Saved data is safe. Pick a date above${can("dump")?" or use Dump":""} to load it again.</p></div>`:`<div class="empty"><h2>No data yet</h2><p>${can("dump")?"Pick a date, then drop the portal report or the productivity sheet, or paste the rows.":"No date has been saved yet. Data appears here once it's loaded by the data entry team."}${fsSupported()&&!FS.dir?" If your team keeps data in a shared folder, click <b>📁 Connect</b> at the top.":""}</p></div>`}`}`;
+  <div class="empty"><h2>${view.date?"No data on "+fmtDate(view.date):"Pick a date"}</h2><p>${view.date?(can("dump")?"Drop the portal report or the productivity sheet above, then press <b>Master Save</b>.":"Data appears here once the data entry team saves this date."):"Click the date box and choose any day. Green days have saved data."}</p></div>`}`;
   const on=(id,ev,fn)=>{const el=$(id);if(el)el[ev]=fn};
   on("#bnAllow","onclick",fsAllow);
-  on("#trExit","onclick",()=>{view.trial=false;view.trialDump=false;view.dumpOpen=false;openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null)});
-  on("#drRes","onclick",()=>{view.work=clone(view.draft.work);view.draft=null;view.dirty=true;renderMain();toast("Unsaved work restored. Click Save to keep it.")});
+  on("#trExit","onclick",()=>{view.trial=false;view.trialDump=false;view.dumpOpen=false;openDate(view.date)});
+  on("#drRes","onclick",()=>{view.work=clone(view.draft.work);view.draft=null;view.dirty=true;renderMain();toast("Unsaved work restored. Press Master Save to keep it.")});
   on("#drDrop","onclick",()=>{dropDraft();renderMain()});
-  on("#fDate","onchange",e=>{const d=e.target.value;if(!d)return;e.target.value=view.cleared?"":view.date||"";guardDirty(()=>{resetFilters();view.forceReplace=false;openDate(d)})});
-  on("#dPrev","onclick",()=>jumpDate(1));on("#dNext","onclick",()=>jumpDate(-1));
-  on("#dToday","onclick",()=>{const t=todayISO();if(ds.includes(t))guardDirty(()=>openDate(t));else{toast("Today ("+fmtDate(t)+") has no data yet"+(can("dump")?". Use Dump to add it.":""));if(can("dump")){view.dumpDate=t;view.dumpOpen=true;view.forceReplace=false;view.trialDump=false;renderMain()}}});
-  on("#bDump","onclick",()=>{const was=view.dumpOpen&&!view.forceReplace&&!view.trialDump;view.forceReplace=false;view.trialDump=false;view.dumpOpen=!was;renderMain()});
-  on("#bTrial","onclick",()=>{const was=view.dumpOpen&&view.trialDump;view.forceReplace=false;view.trialDump=!was;view.dumpOpen=!was;renderMain()});
-  on("#bReplace","onclick",()=>{view.trialDump=false;view.forceReplace=!view.forceReplace;view.dumpOpen=view.forceReplace;renderMain()});
-  on("#dCancel","onclick",()=>{view.forceReplace=false;view.trialDump=false;view.dumpOpen=false;renderMain()});
+  on("#dPrev","onclick",()=>jumpDay(-1));on("#dNext","onclick",()=>jumpDay(1));
+  on("#dToday","onclick",()=>goDate(todayISO()));
+  on("#dpBtn","onclick",e=>{e.stopPropagation();const pp=$("#dpPop");if(!pp.hidden){pp.hidden=true;return}view.calYM=(view.date||todayISO()).slice(0,7);paintCal();pp.hidden=false});
+  on("#bDump","onclick",()=>{const was=view.dumpOpen&&!view.trialDump;view.trialDump=false;view.dumpOpen=!was;renderMain()});
+  on("#bTrial","onclick",()=>{const was=view.dumpOpen&&view.trialDump;view.trialDump=!was;view.dumpOpen=!was;renderMain()});
+  on("#dCancel","onclick",()=>{view.trialDump=false;view.dumpOpen=false;renderMain()});
   on("#dDate","onchange",e=>{view.dumpDate=e.target.value});
-  on("#bSave","onclick",()=>doSave());on("#bReset","onclick",resetDay);on("#bDel","onclick",deleteDate);
-  on("#bClose","onclick",closeDay);on("#bReopen","onclick",reopenDay);
+  on("#bSave","onclick",()=>doSave());on("#bErase","onclick",eraseUnsaved);on("#bDel","onclick",deleteDate);
   on("#bShare","onclick",()=>styledExport(view.trial?"Trial":view.date,true));
   on("#bMini","onclick",quickExcel);
-  on("#bTray","onclick",()=>{view.tray=!view.tray;renderMain()});
-  wireDump();wireTray();
+  wireDump();
   if(!D||needLink)return;
-  wireShift();
   wireMsel();wireDefBtn();
   on("#fQ","oninput",e=>{view.q=e.target.value;renderGrid()});
   on("#fAct","onchange",e=>{view.active=e.target.checked;LS.set("active",view.active);renderGrid()});
   renderGrid();paintDirty();
 }
-function jumpDate(step){const ds=dates(),i=ds.indexOf(view.date),n=ds[i+step];if(n)guardDirty(()=>openDate(n))}
+/* any day can be opened: blank when it has no data */
+const addDay=(d,n)=>{const x=new Date(d+"T12:00:00");x.setDate(x.getDate()+n);return new Date(x-x.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+function goDate(d){if(!d)return;guardDirty(()=>{view.dumpDate=d;view.dumpOpen=false;openDate(d)})}
+function jumpDay(n){goDate(addDay(view.date||todayISO(),n))}
+function jumpDate(step){jumpDay(-step)}
+function paintCal(){
+  const pp=$("#dpPop");if(!pp)return;const ym=view.calYM,[y,m]=ym.split("-").map(Number),first=new Date(y,m-1,1).getDay(),n=new Date(y,m,0).getDate(),have=new Set(dates()),td=todayISO();
+  let h=`<div class="dph"><button type="button" class="dpn" data-cm="-1">‹</button><b>${fmtMonth(ym)}</b><button type="button" class="dpn" data-cm="1">›</button></div><div class="dpg">${["S","M","T","W","T","F","S"].map(x=>`<i>${x}</i>`).join("")}`;
+  for(let i=0;i<first;i++)h+="<span></span>";
+  for(let i=1;i<=n;i++){const d=`${ym}-${String(i).padStart(2,"0")}`;h+=`<button type="button" class="dpd ${have.has(d)?"has":""} ${d===view.date?"cur":""} ${d===td?"tod":""}" data-d="${d}" title="${fmtDate(d)}${have.has(d)?" · saved":""}">${i}</button>`}
+  pp.innerHTML=h+`</div><div class="dpf"><span><i class="dot"></i> data saved</span><button type="button" class="cap sm" data-d="${td}">Today</button></div>`;
+  pp.onclick=e=>{e.stopPropagation();const c=e.target.closest("[data-cm]");if(c){const [yy,mm]=view.calYM.split("-").map(Number),x=new Date(yy,mm-1+(+c.dataset.cm),1);view.calYM=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0");return paintCal()}
+    const b=e.target.closest("[data-d]");if(b){pp.hidden=true;goDate(b.dataset.d)}};
+}
+document.addEventListener("click",()=>{const pp=$("#dpPop");if(pp&&!pp.hidden)pp.hidden=true});
 
 /* ---------- shift bar: hours × days = 100% ---------- */
 function shiftBar(){
@@ -1084,7 +1302,7 @@ function renderStats(list){
   const T=cur().tasks;let tot=0,prod=0,dt=0,low=0,fl=0;const t=tg(view.proc);
   list.forEach(({r})=>{const c=calc(r,T);tot+=c.total;prod+=c.prod;dt+=c.dtHr;if(c.pct<t.a)low++;if(flagOf(r,c))fl++});
   const tp=prod>0?tot/prod*100:0;
-  let delta="";if(can("cmp")&&view.prev){const pr=sumUp(view.prev.rows.filter(inScope),view.prev.tasks).pct;if(pr>0){const df=tp-pr;delta=`<em class="${df>=0?"up":"dn"}">${df>=0?"▲":"▼"} ${f2(Math.abs(df))}</em>`}}
+  let delta="";if(false){const pr=sumUp(view.prev.rows.filter(inScope),view.prev.tasks).pct;if(pr>0){const df=tp-pr;delta=`<em class="${df>=0?"up":"dn"}">${df>=0?"▲":"▼"} ${f2(Math.abs(df))}</em>`}}
   $("#stats").innerHTML=`<div class="stat"><span>Employees</span><b>${list.length}</b></div>
    <div class="stat"><span>Earned hrs</span><b>${f2(tot)}</b></div>
    <div class="stat"><span>Downtime hrs</span><b>${f2(dt)}</b></div>
@@ -1092,7 +1310,7 @@ function renderStats(list){
    <div class="stat ${low?"lo":""}"><span>Below ${t.a}%</span><b>${low}</b></div>
    ${can("flag")?`<div class="stat ${fl?"wa":""}"><span>To check</span><b>${fl}</b></div>`:""}`;
 }
-function prevPct(r){if(!can("cmp")||!view.prev)return null;const p=findPerson(view.prev.rows,r.name);if(!p)return null;const c=calc(p,view.prev.tasks);return c.prod>0?c.pct:null}
+function prevPct(r){return null;const p=findPerson(view.prev.rows,r.name);if(!p)return null;const c=calc(p,view.prev.tasks);return c.prod>0?c.pct:null}
 const mobileMode=()=>can("mobile")&&window.innerWidth<700;
 function renderGrid(){
   const D=cur(),list=rowsFiltered();renderStats(list);
@@ -1112,29 +1330,94 @@ function renderGrid(){
     ${sD?DT.map(d=>`<th class="h-amb2" rowspan="2">${L("dt_"+d[0])}</th>`).join(""):""}<th class="h-amb2" rowspan="2">${L("tdt")}</th>
     ${sH?`<th class="h-amb2" rowspan="2">${L("full")}</th><th class="h-amb2" rowspan="2">${L("lv")}</th><th class="h-amb2" rowspan="2">${L("noh")}</th>`:""}</tr><tr>
     ${T.map(()=>`<th class="h-cnt">${L("cnt")}</th>${sT?`<th class="h-cnt">${L("time")}</th>`:""}`).join("")}</tr></thead><tbody>`;
-  list.forEach(({r,i})=>{
-    const c=calc(r,D.tasks),fl=flagOf(r,c),pp=prevPct(r),pin=pinned(r);
+  if(!list.length){}
+  const STEP=sT?2:1;
+  /* only the baskets on screen (plus a few each side) get cells; a spacer cell stands for the rest */
+  const cellsC=(r,c)=>{const ca=VG.ca,cb=VG.cb;let o=ca>0?`<td class="csp" colspan="${ca*STEP}"></td>`:"";
+    for(let k=ca;k<cb;k++){const t=T[k];o+=`<td>${inp(`data-c="${t.k}"`,r.c[t.k])}</td>${sT?`<td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`:""}`}
+    return o+(cb<T.length?`<td class="csp" colspan="${(T.length-cb)*STEP}"></td>`:"")};
+  const rowFn=({r,i})=>{
+    const c=calc(r,D.tasks),fl=flagOf(r,c);
     const lvFull=+r.lv>0&&+r.lv>=+r.full,lvHalf=+r.lv>0&&!lvFull;
-    h+=`<tr data-i="${i}" class="${fl?"flag":""}"><td class="proc sticky1">${E?`<input class="pc" data-nm="proc" value="${esc(r.proc)}" aria-label="Process">`:esc(r.proc)}</td>
-    <td class="name sticky2" data-hv="${i}"><div class="nmw">${PN?`<button class="pin ${pin?"on":""}" data-pin="${i}" title="${pin?"Unpin":"Pin to top"}" aria-label="Pin">${pin?"★":"☆"}</button>`:""}${E?`<input class="nm" data-nm="name" value="${esc(r.name)}" aria-label="Employee name">`:`<span class="nmt">${esc(r.name)}</span>`}${can("hist")?`<button class="hi" data-hist="${i}" title="History" aria-label="History">⌁</button>`:""}${RM?`<button class="rm" data-rm="${i}" title="Remove from this date" aria-label="Remove ${esc(r.name)}">✕</button>`:""}</div>
-    <div class="nmw">${E?`<input class="tm" data-nm="team" value="${esc(r.team)}" placeholder="team" aria-label="Team">`:`<span class="tmt">${esc(r.team||"")}</span>`}${LV?`<button class="lvb ${lvFull?"on":""}" data-lv="full" title="Full day leave">L</button><button class="lvb ${lvHalf?"on":""}" data-lv="half" title="Half day">½</button>`:(lvFull?`<span class="lvt">Leave</span>`:lvHalf?`<span class="lvt">½ day</span>`:"")}</div></td>
-    ${T.map(t=>`<td>${inp(`data-c="${t.k}"`,r.c[t.k])}</td>${sT?`<td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`:""}`).join("")}
+    return `<tr data-i="${i}" class="dr ${fl?"flag":""}"><td class="proc sticky1">${E?`<input class="pc" data-nm="proc" value="${esc(r.proc)}" aria-label="Process">`:esc(r.proc)}</td>
+    <td class="name sticky2"><div class="nmw">${can("hover")?`<button class="nfo" data-nfo="${i}" title="Details" aria-label="Details">☆</button>`:""}${E?`<input class="nm" data-nm="name" value="${esc(r.name)}" aria-label="Employee name">`:`<span class="nmt">${esc(r.name)}</span>`}${lvFull?`<span class="lvt">Leave</span>`:lvHalf?`<span class="lvt">½</span>`:""}${RM?`<button class="rm" data-rm="${i}" title="Remove from this date" aria-label="Remove ${esc(r.name)}">✕</button>`:""}</div></td>
+    ${cellsC(r,c)}
     <td class="calc tot" data-o="total">${f2(c.total)}</td>
     ${sD?DT.map(([k])=>`<td>${inp(`data-d="${k}"`,r.dt[k])}</td>`).join(""):""}
     <td class="calc" data-o="dt">${f2(c.dtHr)}</td><td class="calc" data-o="prod">${f2(c.prod)}</td>
-    <td class="pct" data-o="pct">${pctCell(c,r,pp,fl)}</td>
+    <td class="pct" data-o="pct">${pctCell(c,r,null,fl)}</td>
     ${sC?`<td>${E?`<input class="cm" data-cm="1" value="${esc(r.cm)}" placeholder="—">`:`<span class="ro cm">${esc(r.cm||"")}</span>`}</td>`:""}
     ${sH?`<td>${inp(`data-f="full"`,r.full)}</td><td>${inp(`data-f="lv"`,r.lv)}</td><td class="calc" data-o="hrs">${f2(c.hours)}</td>`:""}</tr>`;
-  });
-  if(!list.length)h+=`<tr><td colspan="99" style="padding:24px;text-align:center;color:var(--muted)">No employees match these filters.</td></tr>`;
-  $("#gb").innerHTML=h+"</tbody></table>";
+  };
+  /* only the rows in view are drawn (fast with 150 people × 150 baskets) */
+  const gb=$("#gb"),keep=gb.scrollTop,keepL=gb.scrollLeft;
+  gb.innerHTML=h+`</tbody></table>`;
+  let lg=0;list.forEach(({r},k)=>{if(String(r.name||"").length>String(list[lg].r.name||"").length)lg=k});
+  VG={list,rowFn,a:-1,b:-1,ca:0,cb:T.length,nT:T.length,step:STEP,longest:lg,tries:0,fx:0,
+    keys:T.map(t=>({c:t.k})).concat(sD?DT.map(([k])=>({d:k})):[],sC?[{cm:"1"}]:[],sH?[{f:"full"},{f:"lv"}]:[]),
+    cols:2+T.length*(sT?2:1)+1+(sD?8:1)+2+(sC?1:0)+(sH?3:0)};
+  gb._lt=-1;gb._ll=-1;
+  paintRows(true);gb.scrollTop=keep;gb.scrollLeft=keepL;paintRows(true);
   pagerLine(list,T);
-  $("#gb").oninput=onCell;
-  $("#gb").onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph)renderGrid()};
-  $("#gb").onclick=gridClick;
-  $("#gb").onkeydown=gridKey;
-  $("#gb").onpaste=gridPaste;
-  wireHover($("#gb"));
+  gb.oninput=onCell;
+  gb.onchange=e=>{const d=e.target.dataset;if(d.aht||d.tn||d.lab||d.ph)renderGrid()};
+  gb.onclick=gridClick;
+  gb.onkeydown=gridKey;
+  gb.onpaste=gridPaste;
+  gb.onscroll=()=>{if(gb.scrollTop===gb._lt&&gb.scrollLeft===gb._ll)return;gb._lt=gb.scrollTop;gb._ll=gb.scrollLeft;const hc=$("#hcard");if(hc&&!hc.hidden)hc.hidden=true;if(!paintRows.q){paintRows.q=1;requestAnimationFrame(()=>{paintRows.q=0;paintRows()})}};
+}
+const ROWH=25,OVR=7,NEAR=2;let VG=null;
+/* column widths are measured once and then fixed: the browser no longer re-measures the whole table when rows come and go */
+function lockCols(gb){
+  const tbl=gb.querySelector("table"),tr=tbl&&tbl.querySelector("tr.dr");if(!tr)return;
+  const tds=[...tr.children];if(tds.length!==VG.cols)return;
+  const w=tds.map(td=>td.getBoundingClientRect().width),sum=w.reduce((a,x)=>a+x,0);if(!(sum>0))return;
+  const cg=document.createElement("colgroup");cg.innerHTML=w.map(x=>`<col style="width:${x.toFixed(2)}px">`).join("");
+  tbl.insertBefore(cg,tbl.firstChild);tbl.style.width=sum.toFixed(2)+"px";tbl.style.tableLayout="fixed";
+  const bl=[];let x=w[0]+w[1];for(let k=0;k<=VG.nT;k++){bl.push(x);x+=k<VG.nT?VG.step===2?w[2+k*2]+w[3+k*2]:w[2+k]:0}
+  VG.bl=bl;VG.sw=w[0]+w[1];VG.fx=1;
+}
+/* which baskets are on screen right now: [first, last+1) */
+function hRange(gb){
+  const n=VG.nT,lo=gb.scrollLeft+VG.sw,hi=gb.scrollLeft+(gb.clientWidth||1200),bl=VG.bl;
+  let k0=0;while(k0<n-1&&bl[k0+1]<=lo)k0++;let k1=k0;while(k1<n&&bl[k1]<hi)k1++;return[k0,Math.max(k1,k0+1)];
+}
+/* build 24: rows are added / removed only at the edge while scrolling, and only the baskets on screen are drawn */
+const HOV=4;
+function paintRows(force){
+  const gb=$("#gb"),tb=gb&&gb.querySelector("tbody");if(!VG||!tb)return;
+  const n=VG.list.length;
+  if(!n){tb.innerHTML=`<tr><td colspan="99" style="padding:24px;text-align:center;color:var(--muted)">No employees match these filters.</td></tr>`;VG.a=VG.b=-1;return}
+  if(force||!VG.head)VG.head=gb.querySelector("thead").offsetHeight;
+  const st=Math.max(0,gb.scrollTop-VG.head),vh=gb.clientHeight||700;
+  const vs=Math.floor(st/ROWH),ve=Math.ceil((st+vh)/ROWH);
+  const a=Math.max(0,vs-OVR),b=Math.min(n,ve+OVR);
+  let hNeed=false,h0=0,h1=VG.nT;
+  if(VG.fx){[h0,h1]=hRange(gb);hNeed=(VG.ca>0&&h0<VG.ca+1)||(VG.cb<VG.nT&&h1>VG.cb-1)}
+  const ok=VG.a>=0&&VG.b>VG.a&&tb.children.length===VG.b-VG.a+2;
+  if(!force&&ok&&!hNeed&&(VG.a===0||vs-NEAR>=VG.a)&&(VG.b===n||ve+NEAR<=VG.b))return;
+  const sp=(id,h)=>`<tr class="sp" data-sp="${id}" style="height:${h}px"><td colspan="${VG.cols}"></td></tr>`;
+  const ae=document.activeElement,keyI=ae&&tb.contains(ae)?ae.closest("tr").dataset.i:null,keyA=keyI&&[...ae.attributes].find(x=>x.name.startsWith("data-"));
+  if(force||!ok||hNeed||a>=VG.b||b<=VG.a){      /* first draw, sideways move or a big jump: draw the window once */
+    if(!VG.fx&&VG.tries<3){                     /* measure the real column widths once, using full rows */
+      VG.tries++;VG.ca=0;VG.cb=VG.nT;
+      tb.innerHTML=[...new Set([0,VG.longest])].map(k=>VG.rowFn(VG.list[k])).join("");
+      lockCols(gb);if(VG.fx)[h0,h1]=hRange(gb);
+    }
+    if(VG.fx){VG.ca=Math.max(0,h0-HOV);VG.cb=Math.min(VG.nT,h1+HOV)}else{VG.ca=0;VG.cb=VG.nT}
+    VG.a=a;VG.b=b;
+    tb.innerHTML=sp("t",a*ROWH)+VG.list.slice(a,b).map(VG.rowFn).join("")+sp("b",(n-b)*ROWH);
+    if(keyA){const el=tb.querySelector(`tr[data-i="${keyI}"] [${keyA.name}="${CSS.escape(keyA.value)}"]`);if(el){el.focus({preventScroll:true});try{el.setSelectionRange(el.value.length,el.value.length)}catch(e){}}}
+    return;
+  }
+  const top=tb.firstElementChild,bot=tb.lastElementChild;
+  /* drop rows that left the window (never the row being typed in) */
+  while(VG.a<a){const r=top.nextElementSibling;if(r===bot||r.contains(ae))break;r.remove();VG.a++}
+  while(VG.b>b){const r=bot.previousElementSibling;if(r===top||r.contains(ae))break;r.remove();VG.b--}
+  /* add the new rows at the edge */
+  if(a<VG.a){top.insertAdjacentHTML("afterend",VG.list.slice(a,VG.a).map(VG.rowFn).join(""));VG.a=a}
+  if(b>VG.b){bot.insertAdjacentHTML("beforebegin",VG.list.slice(VG.b,b).map(VG.rowFn).join(""));VG.b=b}
+  top.style.height=VG.a*ROWH+"px";bot.style.height=(n-VG.b)*ROWH+"px";
 }
 function pctCell(c,r,pp,fl){
   const ar=pp!=null&&c.prod>0?`<em class="${c.pct>=pp?"up":"dn"}" title="Last date ${f2(pp)}%">${c.pct>=pp?"▲":"▼"}${f2(Math.abs(c.pct-pp))}</em>`:"";
@@ -1158,6 +1441,7 @@ function renderCards(list){
 let rzT=null,lastMob=null;window.addEventListener("resize",()=>{clearTimeout(rzT);rzT=setTimeout(()=>{const m=mobileMode();if(m!==lastMob&&cur()&&$("#gb")){lastMob=m;renderGrid()}},250)});
 function gridClick(e){
   const D=cur();const t=e.target;
+  const nf=t.closest("[data-nfo]");if(nf){const c=$("#hcard");if(!c.hidden&&c.dataset.i===nf.dataset.nfo){c.hidden=true;return}showHover(nf);c.dataset.i=nf.dataset.nfo;return}
   const rm=t.closest("[data-rm]");if(rm)return removeEmp(+rm.dataset.rm);
   const hs=t.closest("[data-hist]");if(hs)return showHistory(D.rows[+hs.dataset.hist]);
   const pn=t.closest("[data-pin]");if(pn){const k=nameKey(D.rows[+pn.dataset.pin].name);PINS=PINS.includes(k)?PINS.filter(x=>x!==k):PINS.concat(k);LS.set("pins",PINS);return renderGrid()}
@@ -1175,6 +1459,7 @@ function gridKey(e){
 }
 function onCell(e){
   const el=e.target,D=cur();if(!D)return;
+  if(!el._u&&!e._paste){pushUndo();el._u=1}
   if(el.dataset.lab){if(!canD("heads"))return;S.cfg.lab=S.cfg.lab||{};const v=el.value.trim();if(v)S.cfg.lab[el.dataset.lab]=v;else delete S.cfg.lab[el.dataset.lab];save();fsWriteConfig();return}
   if(el.dataset.aht||el.dataset.ph||el.dataset.tn){if(!canD("heads"))return;
     const t=D.tasks.find(x=>x.k===(el.dataset.aht||el.dataset.ph||el.dataset.tn));if(!t)return;const v=el.value.trim();
@@ -1193,7 +1478,7 @@ function onCell(e){
   q('[data-o="total"]').textContent=f2(c.total);q('[data-o="dt"]').textContent=f2(c.dtHr);
   q('[data-o="prod"]').textContent=f2(c.prod);const hr=q('[data-o="hrs"]');if(hr)hr.textContent=f2(c.hours);
   const fl=flagOf(r,c);q('[data-o="pct"]').innerHTML=pctCell(c,r,prevPct(r),fl);tr.classList.toggle("flag",!!fl);
-  renderStats(rowsFiltered());
+  clearTimeout(onCell.t);onCell.t=setTimeout(()=>renderStats(rowsFiltered()),350);
 }
 
 /* ---------- hover card ---------- */
@@ -1204,7 +1489,7 @@ function wireHover(box){
   box.onmouseout=e=>{const td=e.target.closest("[data-hv]");if(td&&!td.contains(e.relatedTarget)){clearTimeout(hvT);hvT=setTimeout(()=>card.hidden=true,200)}};
 }
 function showHover(td){
-  const D=cur(),r=D&&D.rows[+td.dataset.hv];if(!r)return;const card=$("#hcard");
+  const D=cur(),r=D&&D.rows[+(td.dataset.hv??td.dataset.nfo)];if(!r)return;const card=$("#hcard");
   const c=calc(r,D.tasks),days=personDays(r.name,10),wk=days.slice(0,7),wt=wk.reduce((a,x)=>a+x.c.total,0),wp=wk.reduce((a,x)=>a+x.c.prod,0),st=can("badge")?streakOf(personDays(r.name,31)):0;
   card.innerHTML=`<div class="hh"><div class="av">${esc(initials(r.name))}</div><div><b>${esc(r.name)}</b><small>${esc(r.team||"")} · ${esc(r.proc||"")}</small></div></div>
     <div class="hk"><span>Today<b class="${band(c.pct,r.proc)}">${f2(c.pct)}%</b></span><span>Last ${wk.length} days<b>${f2(wp>0?wt/wp*100:0)}%</b></span><span>Earned<b>${f2(c.total)}</b></span></div>
@@ -1257,7 +1542,7 @@ function copyReport(){
 }
 function printView(){$("#pwm").textContent=S.cfg.wm!==false?"Confidential · "+(me.pc||"")+" · "+new Date().toLocaleString("en-IN"):"";window.print()}
 function showHelp(){
-  const H=[["Dump","Load a new date from the portal report (.xls) or the productivity sheet."],["Trial","Try any file. You see the result, nothing is saved."],["Replace","Swap a saved date for a new file. The old one goes to the recycle bin."],["Save","Keep the changes on screen (Ctrl+S)."],["Reset","Clear the screen and any unsaved changes. Saved data is safe; pick the date again to see it."],["Master Save","Mark the date complete. It locks for everyone except Admin."],["Quick Excel","Small Excel with Process, User Name and Productivity % only, for mail."],["Paste","Copy many cells from Excel and paste (Ctrl+V) into a grid box: it fills the boxes to the right and below."],["Delete","Remove a date. It stays 30 days in the recycle bin."],["Share / Excel","Excel file with borders and live formulas."],["▼ Tools","Calendar, month and week views, top 5, team summary, heatmap, baskets, attendance, goal, downtime, calculator, bin and log."],["‹ › Today","Jump to the older or newer date, or today."],["Only baskets with data","Tick it to hide work baskets with no count (remembered on your PC)."],["☆ / ⌁","Pin a person to the top / open their history."],["L / ½","Full day leave / half day for that row."],["⚠","Something looks wrong in that row (hover to see why)."],["Keys","Enter = next row, Shift+Enter = row above, Ctrl+S = save, Ctrl+F = search, Alt+‹ › = date, Esc = close."]];
+  const H=[["Dump","Load a new date from the portal report (.xls) or the productivity sheet."],["Trial","Try any file. You see the result, nothing is saved."],["Replace","Swap a saved date for a new file. The old one goes to the recycle bin."],["Save","Keep the changes on screen (Ctrl+S)."],["Master Save","Saves the date for everyone. Dump and edits stay on your screen only until you press it."],["Erase","Removes what you loaded or changed and did not Master Save yet."],["Quick Excel","Small Excel with Process, User Name and Productivity % only, for mail."],["Ctrl+V / Ctrl+Z","Paste many cells from Excel into a box (fills right and down) / undo the last change."],["Delete","Remove a date. It stays 30 days in the recycle bin."],["Share / Excel","Excel file with borders and live formulas."],["Date 📅","Pick any day. Green days have saved data; other days open blank so you can Dump into them. ‹ › = day before / after."],["Only baskets with data","Tick it to hide work baskets with no count (remembered on your PC)."],["☆ / ⌁","Pin a person to the top / open their history."],["L / ½","Full day leave / half day for that row."],["⚠","Something looks wrong in that row (hover to see why)."],["Keys","Enter = next row, Shift+Enter = row above, Ctrl+S = save, Ctrl+F = search, Alt+‹ › = date, Esc = close."]];
   modal(`<h3>Help</h3><div class="pvw" style="max-height:60vh"><table><tbody>${H.map(([a,b])=>`<tr><td style="font-family:var(--f-body);font-weight:600;white-space:nowrap">${a}</td><td style="text-align:left;font-family:var(--f-body)">${b}</td></tr>`).join("")}</tbody></table></div><div class="mrow"><button class="cap teal" data-close>Got it</button></div>`);
 }
 
@@ -1287,6 +1572,7 @@ function closeMs(apply){
   if(JSON.stringify(v)===JSON.stringify(view[key]))return;
   view[key]=v;if(key==="pf"){view.team=view.team.filter(()=>true)}renderMain();
   if(!$("#qvcPg").hidden)renderQvc();
+  if(DTV.open)renderDT();
 }
 function wireMsel(){
   document.querySelectorAll(".ms").forEach(box=>{
@@ -1303,47 +1589,51 @@ function wireMsel(){
 document.addEventListener("click",()=>closeMs(true));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&msOpen)closeMs(false)},true);
 
-/* default filters per PC and process: 🔒 next to Team / Manager */
+/* default filters (🔒): saved per login and process in the shared settings, so Erase, Delete, a new dump or a reload never remove them */
 const defKey=()=>"deff_"+view.proc;
-function applyDefFilters(){const d=LS.get(defKey(),null);if(d){view.pf=(d.pf||[]).slice();view.team=(d.team||[]).slice();view.emp=(d.emp||[]).slice()}}
+const defWho=()=>String(me.msid||me.pc||"x").toLowerCase()+"|"+view.proc;
+function getDef(){const m=S.cfg.deff||{},k=defWho();if(k in m)return m[k];return LS.get(defKey(),null)}
+function setDef(v){S.cfg.deff=S.cfg.deff||{};S.cfg.deff[defWho()]=v;LS.set(defKey(),v);save();Promise.resolve(fsWriteConfig()).catch(()=>{})}
+function applyDefFilters(){const d=getDef();if(d){view.pf=(d.pf||[]).slice();view.team=(d.team||[]).slice();view.emp=(d.emp||[]).slice()}}
 function resetFilters(){view.team=[];view.pf=[];view.emp=[];applyDefFilters()}
-function defBtn(){const d=LS.get(defKey(),null);return `<div class="fld"><span>Default</span><button type="button" class="cap sm ico deflock ${d?"on":""}" id="bDefF" title="${d?"Default filters saved. Click to clear":"Save these filters as my default"}">${d?"🔒":"🔓"}</button></div>`}
-function wireDefBtn(){const b=$("#bDefF");if(!b)return;b.onclick=()=>{const d=LS.get(defKey(),null),now={pf:view.pf,team:view.team,emp:view.emp},empty=!view.pf.length&&!view.team.length&&!view.emp.length;
-  if(d&&(empty||JSON.stringify(d)===JSON.stringify(now))){LS.set(defKey(),null);toast("Default filters cleared");}
-  else{if(empty){toast("Pick a process, team or name first, then press 🔓");return}LS.set(defKey(),now);toast("Saved as your default · opens like this every time")}renderMain()}}
+function defBtn(){const d=getDef();return `<div class="fld"><span>Default</span><button type="button" class="cap sm ico deflock ${d?"on":""}" data-deff="1" title="${d?"Default filters saved. Click to clear":"Save these filters as my default"}">${d?"🔒":"🔓"}</button></div>`}
+function wireDefBtn(){document.querySelectorAll("[data-deff]").forEach(b=>b.onclick=()=>{const d=getDef(),now={pf:view.pf.slice(),team:view.team.slice(),emp:view.emp.slice()},empty=!view.pf.length&&!view.team.length&&!view.emp.length;
+  if(d&&(empty||JSON.stringify(d)===JSON.stringify(now))){setDef(null);toast("Default filters cleared")}
+  else{if(empty){toast("Pick a process, team or name first, then press 🔓");return}setDef(now);toast("Locked · opens like this every time, even after Erase or Delete")}
+  renderMain();if(DTV.open)renderDT()})}
 
 /* paste a block from Excel (many columns / rows) into the grid: fills to the right and down from the box you click */
 function gridPaste(e){
   const el=e.target;if(el.tagName!=="INPUT"||!canD("edit"))return;
   if(!(el.dataset.c||el.dataset.d||el.dataset.f||el.dataset.cm))return;
   const txt=(e.clipboardData||window.clipboardData).getData("text");if(!/[\t\n]/.test(txt.replace(/\r?\n$/,"")))return;
-  e.preventDefault();
+  e.preventDefault();pushUndo();
   const rows=txt.replace(/\r/g,"").replace(/\n$/,"").split("\n").map(l=>l.split("\t"));
-  const cells=tr=>[...tr.querySelectorAll("input[data-c],input[data-d],input[data-f],input[data-cm]")];
-  let tr=el.closest("tr");const start=cells(tr).indexOf(el);let n=0;
-  for(const r of rows){if(!tr)break;const ins=cells(tr);
-    r.forEach((v,j)=>{const inp=ins[start+j];if(!inp)return;v=String(v).trim();if(!inp.dataset.cm)v=v.replace(/[,%\s]/g,"");inp.value=v;onCell({target:inp});n++});
-    tr=tr.nextElementSibling;}
-  toast(n+" cells pasted");
+  const tr=el.closest("tr"),keys=VG&&VG.keys?VG.keys:[...tr.querySelectorAll("input[data-c],input[data-d],input[data-f],input[data-cm]")].map(x=>({...x.dataset})),start=keys.findIndex(k=>JSON.stringify(k)===JSON.stringify({...el.dataset}));
+  const list=rowsFiltered(),pos=list.findIndex(x=>String(x.i)===tr.dataset.i),num=v=>v===""||isNaN(+v)?undefined:+v;let n=0;
+  rows.forEach((cells,k)=>{const R=list[pos+k];if(!R)return;const r=R.r;
+    cells.forEach((v,j)=>{const key=keys[start+j];if(!key)return;v=String(v).trim();
+      if(key.cm){r.cm=v}else{v=num(v.replace(/[,%\s]/g,""));if(key.c)r.c[key.c]=v;else if(key.d)r.dt[key.d]=v;else if(key.f){if(key.f==="full"&&!canD("shift")&&!canD("edit"))return;r[key.f]=v}}n++})});
+  markDirty();renderGrid();if(DTV.open)renderDT();toast(n+" cells pasted");
 }
 /* Quick Excel: only Process, User Name, Productivity % (rows on screen) */
 async function quickExcel(){
-  const D=cur();if(!D)return;const list=rowsFiltered().map(x=>x.r).map(r=>({r,c:calc(r,D.tasks)}));
+  const D=cur();if(!D)return;if(!canD("mini")){toast("Quick Excel is not allowed for this login");return}const list=rowsFiltered().map(x=>x.r).map(r=>({r,c:calc(r,D.tasks)}));
   const nm=view.trial?"Trial":view.date,fname=`Productivity_${view.proc}_${nm}.xlsx`;
   const data=list.map(x=>[x.r.proc||"",x.r.name,+(x.c.pct/100).toFixed(4)]);
   try{
     if(!window.ExcelJS)throw 0;const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet(String(nm).slice(0,28));
-    const th={style:"thin",color:{argb:"FF5F6B7A"}},B={top:th,left:th,bottom:th,right:th},F=c=>({type:"pattern",pattern:"solid",fgColor:{argb:"FF"+c}});
+    const th={style:"thin",color:{argb:"FFB4BCC8"}},B={top:th,left:th,bottom:th,right:th},F=c=>({type:"pattern",pattern:"solid",fgColor:{argb:"FF"+c}});
     ws.columns=[{width:14},{width:34},{width:16}];
-    const h=ws.addRow(["Process","User Name","Productivity%"]);h.height=24;h.eachCell(c=>{c.fill=F("F47B20");c.font={bold:true,size:12,color:{argb:"FF14243A"}};c.border=B;c.alignment={horizontal:"center",vertical:"middle"}});
-    data.forEach(r=>{const x=ws.addRow(r);x.height=20;
+    const h=ws.addRow(["Process","User Name","Productivity%"]);h.height=16;h.eachCell(c=>{c.fill=F("F8CBAD");c.font={bold:true,size:10,color:{argb:"FF4A2A10"}};c.border=B;c.alignment={horizontal:"center",vertical:"middle"}});
+    data.forEach(r=>{const x=ws.addRow(r);x.height=14;
       const a=x.getCell(1),b=x.getCell(2),c=x.getCell(3);
-      a.fill=F("D9D9D9");a.font={size:11};b.fill=F("1F5FBF");b.font={bold:true,size:11,color:{argb:"FFFFFFFF"}};c.numFmt="0.00%";c.font={size:11};
+      a.fill=F("F2F2F2");a.font={size:10};b.fill=F("DDEBF7");b.font={bold:true,size:10,color:{argb:"FF1F3864"}};c.numFmt="0.00%";c.font={size:10};
       [a,b,c].forEach(z=>{z.border=B;z.alignment={horizontal:"center",vertical:"middle"}})});
     const blob=new Blob([await wb.xlsx.writeBuffer()],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
     const file=new File([blob],fname,{type:blob.type});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:fname});return}catch(e){if(e&&e.name==="AbortError")return}}
-    saveBlob(blob,fname);toast("Quick Excel downloaded");
+    if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:fname});return}catch(e){if(e&&e.name==="AbortError")return}}
+    saveBlob(blob,fname);toast("Quick Excel downloaded · "+data.length+" names");
   }catch(e){
     const out=[["Process","User Name","Productivity%"],...data.map(r=>[r[0],r[1],(r[2]*100).toFixed(2)+"%"])];
     try{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(out),"Productivity");XLSX.writeFile(wb,fname)}
@@ -1352,12 +1642,31 @@ async function quickExcel(){
   }
 }
 
+/* Ctrl+Z: undo the last change on screen (typing, paste, shift) — up to 40 steps */
+const UNDO=[];
+function pushUndo(){if(!view.work)return;UNDO.push(JSON.stringify(view.work));if(UNDO.length>40)UNDO.shift()}
+function doUndo(){
+  if(!UNDO.length){toast("Nothing to undo");return}
+  view.work=JSON.parse(UNDO.pop());markDirty();renderGrid();if(DTV.open)renderDT();paintDirty();toast("Undone");
+}
+document.addEventListener("keydown",e=>{
+  if($("#app").hidden||!$("#adminPg").hidden||!$("#qvcPg").hidden||!$("#modal").hidden)return;
+  if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key||"").toLowerCase()==="z"){e.preventDefault();doUndo()}
+},true);
+
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-nfo],#hcard"))return;const c=$("#hcard");if(c&&!c.hidden)c.hidden=true});
+
 /* ---------- actions: Save / Erase / Reset / Delete / Remove / Day complete ---------- */
 async function doSave(silent){
   if(!canD("save")||!view.work)return;
-  const go=async()=>{const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();paintDirty();logAct("save",view.date);renderGrid();toast("Saved "+fmtDate(view.date)+(FS.dir?" to the data folder ✓":" on this PC ✓"))};
+  const go=async()=>{const D=view.work;D.at=Date.now();D.pc=me.pc;const keep=clone(D);await persistDay(view.date,keep);view.saved=keep;view.dirty=false;dropDraft();paintDirty();logAct("save",view.date);renderAll();toast("Master saved "+fmtDate(view.date)+(FS.dir?" to the data folder ✓":" on this PC ✓"))};
   if(silent)return go();
-  ask("save","Save "+fmtDate(view.date)+"?","The changes on screen become the saved data for this date"+(FS.dir?" and are written to the team data folder, so everyone sees them.":" on this PC."),"Save",go);
+  ask("save","Master Save "+fmtDate(view.date)+"?","What is on screen becomes the saved data for this date"+(FS.dir?" and are written to the team data folder, so everyone sees them.":" on this PC."),"Master Save",go);
+}
+/* Erase: throw away what was loaded or changed on this date and not saved yet */
+function eraseUnsaved(){
+  ask(null,"Erase "+fmtDate(view.date)+"?",view.saved?"What you loaded or changed and didn't Master Save is removed. The saved data of this date comes back.":"The data you loaded on this date is removed from the screen. Nothing was saved.","Erase",()=>{
+    view.work=clone(view.saved);view.dirty=false;dropDraft();view.dumpOpen=false;renderAll();toast(view.saved?"Back to the saved data":"Cleared")},true);
 }
 function resetDay(){
   ask("reset","Reset the screen?",(view.dirty?"Changes you haven't saved are thrown away. ":"")+(view.trial?"The trial data is cleared.":"The screen is cleared. Saved data for "+fmtDate(view.date)+" is <b>safe</b> — pick the date again to see it."),"Reset",()=>{
@@ -1366,7 +1675,7 @@ function resetDay(){
 function deleteDate(){
   const d=view.date;if(!d)return;
   ask("del","Delete "+fmtDate(d)+"?","Everything saved for this date is deleted"+(FS.dir?" from this PC and from the team data folder":"")+", headings included. A copy stays in the <b>recycle bin</b> for 30 days.","Delete",async()=>{
-    await binPut(d,view.saved,"Deleted");delete S.days[dkey(d)];await save(true);await fsDeleteKey(dkey(d));logAct("del",d);view.forceReplace=false;await openDate(dates()[0]||null);toast(fmtDate(d)+" deleted · in the recycle bin for 30 days")},true);
+    await binPut(d,view.saved,"Deleted");delete S.days[dkey(d)];await save(true);await fsDeleteKey(dkey(d));logAct("del",d);view.forceReplace=false;resetFilters();await openDate(dates()[0]||null);toast(fmtDate(d)+" deleted · in the recycle bin for 30 days")},true);
 }
 function removeEmp(i){
   const D=cur(),r=D&&D.rows[i];if(!r||!canD("remove"))return;
@@ -1433,11 +1742,11 @@ async function dumpRows(rows,src,dt,meta){
   const d=trial?"trial":view.forceReplace?view.date:(dt||targetDate());
   const old=trial?null:await loadDay(d);
   if(!trial){
-    if(old&&!can("dump")&&!can("replace")){toast("You don't have permission to change saved dates.");return}
+    if(old&&!can("dump")){toast("You don't have permission to change saved dates.");return}
     if(!old&&!can("dump")){toast("You don't have permission to add new dates.");return}
     if(old&&isLocked(d,old)){toast(fmtDate(d)+" is locked. Ask the Admin.");return}
   }
-  const canMerge=!!old&&can("dump")&&!view.forceReplace,canRep=!!old&&can("replace");
+  const canMerge=!!old&&can("dump")&&!view.forceReplace,canRep=!!old&&can("dump");
   const matched=old?P.rows.filter(r=>findPerson(old.rows,r.name)).length:0;
   /* same file loaded before? */
   let dup="";if(meta&&meta.fh&&!trial){const hit=Object.entries(S.days).find(([kk,o])=>o&&o.fh===meta.fh&&unkey(kk).p===view.proc);if(hit)dup=`<li class="bad">This same file was already loaded into <b>${fmtDate(unkey(hit[0]).d)}</b>.</li>`}
@@ -1471,12 +1780,14 @@ async function dumpRows(rows,src,dt,meta){
           if(k==="summary"){e.dt=r.dt;e.full=r.full;e.lv=r.lv;if(r.cm)e.cm=r.cm;if(r.proc)e.proc=r.proc}
           if(!e.team&&r.team)e.team=r.team});
         obj.src=(obj.src?obj.src+" + ":"")+src;
-      }else{if(mode==="replace")await binPut(d,old,"Replaced");obj={tasks:P.tasks,rows:P.rows,src}}
-      obj.at=Date.now();obj.pc=me.pc;if(meta&&meta.fh)obj.fh=meta.fh;
-      closeModal();await persistDay(d,obj);logAct(mode==="new"?"dump":mode,d,src.slice(0,60));view.forceReplace=false;view.dumpOpen=false;resetFilters();view.q="";await openDate(d);
-      toast(mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`Saved ${P.rows.length} employees into ${fmtDate(d)}${FS.dir?" and the data folder":""}`);
+      }else obj={tasks:P.tasks,rows:P.rows,src};
+      if(meta&&meta.fh)obj.fh=meta.fh;
+      closeModal();view.forceReplace=false;view.dumpOpen=false;view.q="";
+      if(d!==view.date)await openDate(d);
+      view.work=obj;view.dirty=false;markDirty();logAct(mode==="new"?"dump":mode,d,src.slice(0,60));renderAll();
+      toast((mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`${P.rows.length} employees loaded into ${fmtDate(d)}`)+" · press Master Save to keep it");
     };
-    if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) moves to the recycle bin and this file takes its place, headings included.","Replace",commit,true);
+    if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) is replaced by this file, headings included, once you press Master Save.","Replace",commit,true);
     else commit();
   };
 }
@@ -2015,8 +2326,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#qvcPg").hidden
    Sheet "Users"  (visible): MSID | Code | Device name | Role | Name | Team | Valid till  — edit it in Excel, the tool reads it by itself
    Sheet "Access" (very hidden, protected with the Admin password): who may do what — written by the tool */
 const UXF="Eclipse_Users.xlsx",UXPW="Dwarkadesh14#ara";FS.uxLM=0;
-const ROLEX={admin:"Admin",entry:"Data Entry",manager:"SME",employee:"Employee"};
-function roleFrom(v){v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("man")||v.startsWith("sme")||v.startsWith("tl")?"manager":"employee"}
+const ROLEX={admin:"Admin",entry:"Data Entry",manager:"Manager",sme:"SME",employee:"Employee"};
+function roleFrom(v){v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("sme")?"sme":v.startsWith("man")||v.startsWith("tl")?"manager":"employee"}
 function dateFrom(v){
   if(v instanceof Date&&!isNaN(v))return v.getFullYear()>=9000?"":new Date(v-v.getTimezoneOffset()*6e4).toISOString().slice(0,10);
   v=String(v||"").trim();if(!v)return "";let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return +m[1]>=9000?"":`${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
@@ -2060,7 +2371,7 @@ async function usersXlsxBuffer(){
   ws.getRow(1).eachCell(c=>{c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF1F4E79"}};c.border=B;c.alignment={horizontal:"center"}});
   const md=d=>{const [y,m,dd]=d.split("-");return `${+m}/${+dd}/${y}`};
   (S.cfg.users||[]).forEach(u=>ws.addRow([u.msid||"",u.opid||"",u.pc||"",ROLEX[u.role]||"Employee",u.name||"",u.team||"",u.until?md(u.until):"12/31/9999"]).eachCell({includeEmpty:true},c=>c.border=B));
-  for(let r=2;r<=Math.max(200,(S.cfg.users||[]).length+50);r++)ws.getCell(r,4).dataValidation={type:"list",allowBlank:true,formulae:['"Admin,Data Entry,SME,Employee"']};
+  for(let r=2;r<=Math.max(200,(S.cfg.users||[]).length+50);r++)ws.getCell(r,4).dataValidation={type:"list",allowBlank:true,formulae:['"Admin,Data Entry,Manager,SME,Employee"']};
   const ac=wb.addWorksheet("Access");ac.state="veryHidden";
   ac.addRow(["Key","Data"]);ac.addRow(["roles",JSON.stringify(S.cfg.perms)]);ac.addRow(["scope",JSON.stringify(S.cfg.scope)]);ac.addRow(["fon",JSON.stringify(S.cfg.fon||{})]);
   (S.cfg.users||[]).forEach(u=>{const a={};["ov","scope","procs"].forEach(k=>{if(u[k]!=null)a[k]=u[k]});if(Object.keys(a).length)ac.addRow(["u:"+(u.msid||u.pc),JSON.stringify(a)])});
@@ -2072,6 +2383,68 @@ async function usersWriteXlsx(){
   try{const fh=await FS.dir.getFileHandle(UXF,{create:true});const w=await fh.createWritable();await w.write(buf);await w.close();FS.uxLM=(await fh.getFile()).lastModified;return true}
   catch(e){toast("Couldn't write "+UXF+" (is it open in Excel on this PC?)");return false}
 }
+
+/* ---------- ⏱ Downtime & hours screen: slides down from the top, edits feed the main grid ---------- */
+const DTV={open:false};
+function paintSv(){
+  const ok=!view.dirty&&!!view.saved;
+  const p=$("#dtSv");if(p){p.className="cap sm ico svlamp "+(ok?"ok":view.dirty?"bad":"");p.title=ok?"Saved":"Not saved — click to save"}
+}
+function paintDTBtn(){const b=$("#btnDT");if(!b)return;b.hidden=!(can("dtscreen")&&cur()&&$("#gate").hidden);b.classList.toggle("on",DTV.open)}
+function openDT(){if(!cur()||!can("dtscreen"))return;DTV.open=true;$("#dtPanel").hidden=false;renderDT();paintDTBtn();requestAnimationFrame(()=>$("#dtPanel").classList.add("show"))}
+function closeDT(){DTV.open=false;const p=$("#dtPanel");p.classList.remove("show");setTimeout(()=>{if(!DTV.open)p.hidden=true},180);paintDTBtn();if(cur()&&$("#gb"))renderGrid()}
+function renderDT(){
+  if(!DTV.open)return;const D=cur();if(!D)return closeDT();
+  const list=rowsFiltered(),E=canD("edit"),SH=canD("shift"),du=S.cfg.dtUnit==="min"?"min":"hrs";
+  const sc=scopedRows(),pfs=[...new Set(sc.map(x=>x.r.proc).filter(Boolean))].sort(),teams=[...new Set(sc.filter(({r})=>pfOK(r)).map(x=>x.r.team).filter(Boolean))].sort(),emps=[...new Set(sc.filter(({r})=>pfOK(r)&&tmOK(r)).map(x=>x.r.name))].sort();
+  const inp=(attr,val,cls)=>E?`<input ${attr} ${cls?`class="${cls}"`:""} inputmode="decimal" value="${esc(val??"")}">`:`<span class="ro">${esc(val??"")}</span>`;
+  const fullE=v=>SH?`<input data-f="full" inputmode="decimal" value="${esc(v??"")}">`:`<span class="ro">${esc(v??"")}</span>`;
+  const sum=sumUp(list.map(x=>x.r),D.tasks);
+  $("#dtPanel").innerHTML=`<div class="dtin"><button class="dtx" id="dtClose" title="Close (Esc)" aria-label="Close">✕</button>
+    <div class="dthead"><div class="dtt"><b class="dttitle">⏱ Downtime & hours</b><span class="muted">${fmtDate(view.date)} · ${list.length} people · team <b id="dtTp">${f2(sum.pct)}%</b></span></div>
+      <div class="dtc">${msel("pf","Process",pfs)}${msel("team","Team / Manager",teams)}${msel("emp","User Name",emps)}${defBtn()}
+      ${SH?`<div class="fld"><span>Shift (people shown)</span><div class="shrow"><input type="number" id="dtH" value="${S.cfg.hpd}" step="0.5" min="0">h × <input type="number" id="dtW" value="${S.cfg.wd}" min="0">d = <b id="dtT">${f2(S.cfg.hpd*S.cfg.wd)}</b><button class="cap sm amber" id="dtApply">Apply</button></div></div>`:""}
+      <div class="fld"><span>&nbsp;</span><div class="shrow"><button class="cap sm" id="dtXls">Excel</button>${canD("save")&&!view.trial?`<button class="cap sm ico svlamp" id="dtSv">💾</button>`:""}</div></div></div></div>
+    <div class="dtgrid" id="dtg"><table><thead><tr>
+      <th class="h-fix sticky1" rowspan="2">User Name</th><th class="h-amb" rowspan="2">Earned</th>
+      <th class="h-amb" colspan="8">Downtime (${du})</th><th class="h-amb" rowspan="2">Production<br>Hours</th><th class="h-amb" rowspan="2">Productivity<br>%</th><th class="h-amb" rowspan="2">Comments</th><th class="h-hrs" colspan="3">Hours</th></tr><tr>
+      ${DT.map(([k])=>`<th class="h-amb2">${esc(lab("dt_"+k))}</th>`).join("")}<th class="h-amb2">Total<br>Downtime</th><th class="h-amb2">100%</th><th class="h-amb2">Leaves</th><th class="h-amb2">No. of<br>Hours</th></tr></thead><tbody>
+      ${list.map(({r,i})=>{const c=calc(r,D.tasks);return `<tr data-i="${i}"><td class="sticky1 dtn">${esc(r.name)}</td><td class="calc tot" data-o="total">${f2(c.total)}</td>
+        ${DT.map(([k])=>`<td>${inp(`data-d="${k}"`,r.dt[k])}</td>`).join("")}
+        <td class="calc" data-o="dt">${f2(c.dtHr)}</td><td class="calc" data-o="prod">${f2(c.prod)}</td><td class="pct" data-o="pct">${pctCell(c,r,null,flagOf(r,c))}</td>
+        <td>${E?`<input class="cm" data-cm="1" value="${esc(r.cm||"")}" placeholder="—">`:`<span class="ro cm">${esc(r.cm||"")}</span>`}</td>
+        <td>${fullE(r.full)}</td><td>${inp(`data-f="lv"`,r.lv)}</td><td class="calc" data-o="hrs">${f2(c.hours)}</td></tr>`}).join("")||`<tr><td colspan="16" style="padding:20px;color:var(--muted)">No one matches these filters.</td></tr>`}
+    </tbody></table></div>
+    <p class="dthint">Ctrl+V pastes from Excel · Ctrl+Z undo · Enter next row · 💾 red = not saved, green = saved</p></div>`;
+  const P=$("#dtPanel"),g=$("#dtg");
+  g.oninput=e=>{onCell(e);paintSv();clearTimeout(DTV.t);DTV.t=setTimeout(()=>{const t=$("#dtTp");if(t)t.textContent=f2(sumUp(rowsFiltered().map(x=>x.r),D.tasks).pct)+"%"},400)};
+  g.onkeydown=gridKey;g.onpaste=e=>{gridPaste(e);paintSv()};
+  wireMsel();wireDefBtn();
+  $("#dtClose").onclick=closeDT;
+  $("#dtXls").onclick=dtExcel;
+  const sv=$("#dtSv");if(sv)sv.onclick=()=>{if(view.dirty)doSave()};
+  const h=$("#dtH");if(h){const w=$("#dtW"),t=$("#dtT"),up=()=>t.textContent=f2((+h.value||0)*(+w.value||0));h.oninput=up;w.oninput=up;
+    $("#dtApply").onclick=()=>{const tot=+f2((+h.value||0)*(+w.value||0)),vis=rowsFiltered();if(!(tot>0)){toast("Enter hours and days first");return}
+      ask("shift","Set 100% to "+tot+" hrs?",`For the <b>${vis.length}</b> people in this list. Press <b>Master Save</b> after to keep it.`,"Apply",()=>{pushUndo();vis.forEach(({r})=>r.full=tot);markDirty();renderDT();toast("100% set to "+tot+" for "+vis.length+" people")})}}
+  paintSv();
+}
+async function dtExcel(){
+  const D=cur(),list=rowsFiltered().map(x=>x.r),head=["User Name","Team","Earned",...DT.map(([k])=>lab("dt_"+k)),"Total Downtime","Production Hours","Productivity %","Comments","100%","Leaves","No. of Hours"];
+  const rows=list.map(r=>{const c=calc(r,D.tasks);return [r.name,r.team||"",+f2(c.total),...DT.map(([k])=>r.dt[k]??""),+f2(c.dtHr),+f2(c.prod),+(c.pct/100).toFixed(4),r.cm||"",r.full??"",r.lv??"",+f2(c.hours)]});
+  const fname=`Downtime_${view.proc}_${view.date}.xlsx`;
+  try{if(!window.ExcelJS)throw 0;const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet("Downtime",{views:[{state:"frozen",xSplit:1,ySplit:1}]});
+    const th={style:"thin",color:{argb:"FFB4BCC8"}},B={top:th,left:th,bottom:th,right:th};
+    ws.addRow(head).eachCell(c=>{c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF8CBAD"}};c.font={bold:true,size:10};c.border=B;c.alignment={horizontal:"center",vertical:"middle",wrapText:true}});
+    rows.forEach(r=>{const x=ws.addRow(r);x.height=15;x.eachCell({includeEmpty:true},c=>{c.border=B;c.font={size:10}});x.getCell(head.indexOf("Productivity %")+1).numFmt="0.00%"});
+    ws.columns.forEach((c,i)=>c.width=i===0?28:i===1?18:11);
+    saveBlob(new Blob([await wb.xlsx.writeBuffer()],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),fname)}
+  catch(e){const out=[head,...rows.map(r=>r.map((v,i)=>i===head.indexOf("Productivity %")?(v*100).toFixed(2)+"%":v))];
+    try{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(out),"Downtime");XLSX.writeFile(wb,fname)}
+    catch(x){saveBlob(new Blob(["﻿"+out.map(r=>r.map(v=>/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(",")).join("\r\n")],{type:"text/csv"}),fname.replace(/xlsx$/,"csv"))}}
+  toast("Downtime Excel downloaded");
+}
+$("#btnDT").onclick=()=>DTV.open?closeDT():openDT();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&DTV.open&&$("#modal").hidden&&!msOpen)closeDT()});
 
 const fmtD=d=>d==="Trial"?"Trial":fmtDate(d);
 /* ---------- styled Excel (borders, colours, live formulas) for Export and Share ---------- */
@@ -2172,7 +2545,7 @@ function openAdminLogin(){
   if(me.role==="admin"&&!view.as&&(view.masterLogin||isBuiltInAdmin(dev.get()))){LS.set("adminpc",true);setTop();return openAdmin(1)}   /* Admin is already logged in: no second password */
   modal(`<h3>Admin</h3><p style="color:var(--muted);margin:0">Enter the master password.</p>
    <div class="mrow"><input id="adPw" type="password" placeholder="Master password" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"></div>
-   <label class="chk" style="padding:8px 0 0"><input type="checkbox" id="adRem" ${LS.get("adminpc",false)?"checked":""}> Remember this PC as the Admin PC (Admin button shows here)</label><div class="err" id="adErr"></div>
+   <label class="chk" style="padding:8px 0 0"><input type="checkbox" id="adRem" ${LS.get("adminpc",false)?"checked":""}> Remember this PC as the Admin PC (no password next time on this PC)</label><div class="err" id="adErr"></div>
    <div class="mrow"><button class="cap amber" id="adGo">Open</button><button class="cap" data-close>Cancel</button></div>`);
   $("#adPw").focus();const go=()=>{if(!isMaster($("#adPw").value)){$("#adErr").textContent="Master password is wrong.";return}LS.set("adminpc",$("#adRem").checked);closeModal();setTop();openAdmin(1)};
   $("#adGo").onclick=go;$("#adPw").onkeydown=e=>{if(e.key==="Enter")go()};
@@ -2209,7 +2582,7 @@ function adminPage1(){
   const users=AD.users||[],cnt=r=>users.filter(u=>u.role===r).length,ds=dates(),last=ds[0]&&S.days[dkey(ds[0])];
   return `
   <section class="acard wide"><h4>📊 Quick look</h4><div class="kp">
-    <span>PCs registered<b>${users.length+ALLOWED_PCS.length}</b></span><span>Data Entry<b>${cnt("entry")}</b></span><span>Managers<b>${cnt("manager")}</b></span><span>Employees<b>${cnt("employee")}</b></span>
+    <span>PCs registered<b>${users.length+ALLOWED_PCS.length}</b></span><span>Data Entry<b>${cnt("entry")}</b></span><span>Managers<b>${cnt("manager")}</b></span><span>SME<b>${cnt("sme")}</b></span><span>Employees<b>${cnt("employee")}</b></span>
     <span>Dates saved (${esc(view.proc)})<b>${ds.length}</b></span><span>Last date<b style="font-size:13px">${ds[0]?fmtDate(ds[0]).slice(0,11):"—"}</b></span><span>Last saved by<b style="font-size:13px">${last&&last.pc?esc(last.pc):"—"}</b></span><span>Login<b style="font-size:13px">${LOCK_ON?"ON":"OFF (testing)"}</b></span></div></section>
 
   <section class="acard wide"><h4>🧪 Test the screen</h4>
@@ -2222,7 +2595,7 @@ function adminPage1(){
   <section class="acard wide"><h4>🔐 Role defaults</h4>
     <p class="ahelp"><b>On</b> switches a feature off for everyone (you too) when unticked. The role columns are the default for every PC of that role. A PC can be changed one by one in the big table below. The <span class="stag">green tag</span> is the short name used as the column heading in that table.</p>
     <div class="utable" style="max-height:420px"><table class="perm"><thead><tr><th>Feature</th><th>On</th><th>Admin</th>${ROLE3.map(r=>`<th>${ROLEN(r)}</th>`).join("")}</tr></thead><tbody>
-      ${GROUPS.map(g=>`<tr class="grp"><td colspan="6">${g==="Actions"?"Buttons and actions":g==="Screen"?"Screen parts":"▼ Tools tray"}</td></tr>`+FEAT.filter(f=>f[3]===g).map(([f,n,sh])=>`<tr><td>${n} <span class="stag" title="Short name in the PC table below">${esc(sh)}</span></td><td><input type="checkbox" data-fon="${f}" ${(AD.fon||{})[f]!==false?"checked":""}></td><td><input type="checkbox" checked disabled></td>${ROLE3.map(r=>`<td><input type="checkbox" data-pf="${r}:${f}" ${AD.perms[r][f]?"checked":""}></td>`).join("")}</tr>`).join("")).join("")}
+      ${GROUPS.map(g=>`<tr class="grp"><td colspan="7">${g==="Actions"?"Buttons and actions":g==="Screen"?"Screen parts":"Dump extras"}</td></tr>`+FEAT.filter(f=>f[3]===g).map(([f,n,sh])=>`<tr><td>${n} <span class="stag" title="Short name in the PC table below">${esc(sh)}</span></td><td><input type="checkbox" data-fon="${f}" ${(AD.fon||{})[f]!==false?"checked":""}></td><td><input type="checkbox" checked disabled></td>${ROLE3.map(r=>`<td><input type="checkbox" data-pf="${r}:${f}" ${AD.perms[r][f]?"checked":""}></td>`).join("")}</tr>`).join("")).join("")}
       <tr class="scope"><td><b>What they can see</b></td><td></td><td>Everything</td>${ROLE3.map(r=>`<td><select data-sc="${r}">${[["all","Everyone"],["team","Own team"],["own","Own row"]].map(([v,n])=>`<option value="${v}" ${AD.scope[r]===v?"selected":""}>${n}</option>`).join("")}</select></td>`).join("")}</tr>
     </tbody></table></div></section>
 
@@ -2240,7 +2613,7 @@ function adminPage1(){
     </div>
     <div class="utable big" id="uTable"></div>
     <div class="mrow" style="align-items:center"><label class="cap teal sm" style="cursor:pointer;flex:none;min-width:0">📥 Import users from Excel<input type="file" id="uXls" accept=".xlsx,.xls,.xlsm,.csv" hidden></label><span class="ahelp" style="margin:0">Columns: <b>MSID, Code (OPID), Device name, Role, Name, Team, Valid till</b> — same as your Excel. Or copy the rows from Excel and paste them in the box below.</span></div>
-    <div class="mrow"><label>Add people (one per line: <code>MSID, PC number, role, name, team</code> — role = entry / manager / employee / admin)<textarea id="uBulk" rows="3" placeholder="rahuls12, LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;sankem04, LHTU05CG2122XYZ, manager, SANKETH M S, TM-SANKETH M S&#10;abimet07, LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
+    <div class="mrow"><label>Add people (one per line: <code>MSID, PC number, role, name, team</code> — role = entry / manager / sme / employee / admin)<textarea id="uBulk" rows="3" placeholder="rahuls12, LHTU05CG2122ABC, entry, RAHUL S, TM-VINESH KUMAR&#10;sankem04, LHTU05CG2122XYZ, manager, SANKETH M S, TM-SANKETH M S&#10;abimet07, LHTU05CG2122PQR, employee, ABIMELAK TONY, TM-VINESH KUMAR"></textarea></label><button class="cap teal sm" id="uAdd">Add</button></div>
     <div class="err" id="uErr"></div></section>`;
 }
 function effPerm(u,f){if(u.role==="admin")return 1;if(u.ov&&u.ov[f]!=null)return u.ov[f];return (AD.perms[u.role]||{})[f]?1:0}
@@ -2316,7 +2689,7 @@ function wireAdmin1(){
     const isRole=x=>/^(adm|ent|data|man|sme|emp)/i.test(x||"");
     lines.forEach(a=>{let msid="",pc="",r,name,team;
       if(isRole(a[1])){const f=a[0];if(/^lhtu|^[a-z]{2,}\d{2,}[a-z0-9]*$/i.test(f)&&f.length>=10)pc=f;else msid=f;[,r,name,team]=a}else[msid,pc,r,name,team]=a;
-      msid=(msid||"").trim().toLowerCase();pc=(pc||"").trim().toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("man")||r.startsWith("sme")?"manager":"employee";
+      msid=(msid||"").trim().toLowerCase();pc=(pc||"").trim().toUpperCase().replace(/\..*$/,"");r=(r||"employee").toLowerCase();r=r.startsWith("adm")?"admin":r.startsWith("ent")||r.startsWith("data")?"entry":r.startsWith("sme")?"sme":r.startsWith("man")?"manager":"employee";
       if(msid.length<3&&pc.length<4){bad.push(a.join(" ")||"(blank)");return}
       const old=AD.users.find(u=>(msid&&u.msid===msid)||(pc&&u.pc===pc));
       if(old)Object.assign(old,{msid:msid||old.msid||"",pc:pc||old.pc||"",role:r,name:name||old.name||"",team:team||old.team||""});else AD.users.push({msid,pc,role:r,name:name||"",team:team||""});n++});
@@ -2328,17 +2701,6 @@ function closeAdminForTest(){$("#adminPg").hidden=true;document.body.style.overf
 function adminPage2(){
   const PR=AD.procs&&AD.procs.length?AD.procs:(AD.procs=clone(PROC0)),n=AD.notice||(AD.notice={on:false,text:"",type:"info",speed:25});
   return `
-  <section class="acard wide"><h4>🔘 Process buttons</h4>
-    <p class="ahelp"><b>Live</b> = opens the console (each process keeps its own dates). <b>Soon</b> = shows “coming soon”. <b>Hidden</b> = only you see it. Tick which roles see the button. A PC can be changed one by one on page ①.</p>
-    <div class="utable"><table class="perm"><thead><tr><th>Key</th><th>Button name</th><th>Status</th>${ROLE3.map(r=>`<th>${ROLEN(r)}</th>`).join("")}<th>Order</th><th></th></tr></thead><tbody>
-    ${PR.map((p,i)=>`<tr><td class="mono">${esc(p.k)}</td><td><input data-k="procs.${i}.label" value="${esc(p.label||p.k)}"></td>
-      <td><select data-k="procs.${i}.status">${[["live","Live"],["soon","Soon"],["hidden","Hidden"]].map(([v,t])=>`<option value="${v}" ${p.status===v?"selected":""}>${t}</option>`).join("")}</select></td>
-      ${ROLE3.map(r=>`<td><input type="checkbox" data-pr="${i}:${r}" ${(p.roles||{})[r]!==0?"checked":""}></td>`).join("")}
-      <td><button class="x" data-mv="${i}:-1" ${i?"":"disabled"} aria-label="Move up">↑</button><button class="x" data-mv="${i}:1" ${i<PR.length-1?"":"disabled"} aria-label="Move down">↓</button></td>
-      <td>${p.k==="DBM"?"🔒":`<button class="x" data-pdel="${i}" aria-label="Remove ${esc(p.k)}">✕</button>`}</td></tr>`).join("")}
-    </tbody></table></div>
-    <div class="mrow"><label>New process name<input id="npN" placeholder="e.g. Claims"></label><button class="cap teal sm" id="npAdd">Add process</button></div></section>
-
   <section class="acard wide"><h4>📢 Notice strip</h4>
     <p class="ahelp">A thin strip at the top that scrolls from left to right on every PC that can see it.</p>
     <div class="mrow"><label style="flex:3">Message<input data-k="notice.text" data-live="1" value="${esc(n.text||"")}" placeholder="Today: please finish data entry by 6 PM"></label>
@@ -2371,11 +2733,11 @@ function renderNoticePreview(){const n=AD.notice||{},el=$("#npv");if(!el)return;
   el.innerHTML=String(n.text||"").trim()?`<div class="notice ${n.type==="urgent"?"urgent":""}" style="position:static;border-radius:10px"><span class="ntag">${n.type==="urgent"?"URGENT":"NOTICE"}</span><div class="ntrack"><span class="nmove" style="animation-duration:${sp}s">${esc(n.text)}</span></div></div><p class="ahelp">Preview${n.on?"":" · switched off"}</p>`:""}
 function wireAdmin2(){
   const P=$("#adminPg");renderNoticePreview();
-  P.querySelectorAll("[data-pr]").forEach(c=>c.onchange=()=>{const [i,r]=c.dataset.pr.split(":");const p=AD.procs[+i];p.roles=p.roles||{};p.roles[r]=c.checked?1:0;adChanged()});
+  if(false)P.querySelectorAll("[data-pr]").forEach(c=>c.onchange=()=>{const [i,r]=c.dataset.pr.split(":");const p=AD.procs[+i];p.roles=p.roles||{};p.roles[r]=c.checked?1:0;adChanged()});
   P.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{const [i,d]=b.dataset.mv.split(":").map(Number),a=AD.procs;[a[i],a[i+d]]=[a[i+d],a[i]];adChanged();openAdmin(2)});
   P.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{const p=AD.procs[+b.dataset.pdel];ask(null,"Remove "+esc(p.label)+"?","The button goes away. Saved dates of this process stay in the data folder.","Remove",()=>{AD.procs.splice(+b.dataset.pdel,1);adChanged();openAdmin(2)},true)});
-  $("#npAdd").onclick=()=>{const n=$("#npN").value.trim(),k=n.replace(/[^A-Za-z0-9]/g,"");if(!k){toast("Type a name");return}if(AD.procs.some(p=>p.k.toLowerCase()===k.toLowerCase())){toast("That process already exists");return}
-    AD.procs.push({k,label:n,status:"soon",roles:{entry:1,manager:1,employee:1}});adChanged();openAdmin(2);toast(n+" added as Soon")};
+  if($("#npAdd"))$("#npAdd").onclick=()=>{const n=$("#npN").value.trim(),k=n.replace(/[^A-Za-z0-9]/g,"");if(!k){toast("Type a name");return}if(AD.procs.some(p=>p.k.toLowerCase()===k.toLowerCase())){toast("That process already exists");return}
+    AD.procs.push({k,label:n,status:"soon",roles:{entry:1,manager:1,sme:1,employee:1}});adChanged();openAdmin(2);toast(n+" added as Soon")};
 }
 
 /* ===== page 3: data & system ===== */
@@ -2476,12 +2838,15 @@ function fixCfg(){
     SEED_USERS.forEach(s=>{const o=c.users.find(u=>(u.msid&&u.msid===s.msid)||(u.pc&&u.pc===s.pc));if(o)Object.assign(o,{msid:s.msid,opid:s.opid,pc:s.pc,role:s.role,name:s.name,team:s.team});else c.users.push(clone(s))});
     c.perms=clone(DEFPERM);c.scope=clone(DEFSCOPE);c.users.forEach(u=>{delete u.ov;delete u.scope});c.seedV=2;
   }
-  c.perms=c.perms||{};ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
+  c.perms=c.perms||{};if(c.perms.manager&&!c.perms.sme)c.perms.sme=clone(c.perms.manager);
+  if(c.scope&&c.scope.manager&&!c.scope.sme)c.scope.sme=c.scope.manager;
+  c.deff=c.deff||{};
+  ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
   c.scope=Object.assign({},DEFSCOPE,c.scope||{});c.msg=Object.assign({},c.msg||{});c.lab=c.lab||{};c.fon=c.fon||{};
   /* older "screen parts" switches become global feature switches */
   if(c.ui){Object.entries(c.ui).forEach(([k,v])=>{if(v===false)c.fon[k]=false});delete c.ui}
-  if(!Array.isArray(c.procs)||!c.procs.length)c.procs=clone(PROC0);
-  c.procs.forEach(p=>{p.roles=Object.assign({entry:1,manager:1,employee:1},p.roles||{});p.label=p.label||p.k;p.status=p.status||"soon"});
+  c.procs=clone(PROC0);   /* only PCIS */
+  c.procs.forEach(p=>{p.roles=Object.assign({entry:1,manager:1,sme:1,employee:1},p.roles||{});p.label=p.label||p.k;p.status=p.status||"soon"});
   if(c.exp&&c.exp<"2027-03-31")c.exp=null;
   c.notice=c.notice||{on:false,text:"",type:"info",speed:25};c.tgt=c.tgt||{};c.aht=c.aht||{};
   (c.pcsAdd||[]).forEach(p=>{if(!c.users.some(u=>u.pc===p)&&!isBuiltInAdmin(p))c.users.push({pc:p,role:"employee",name:"",team:""})});c.pcsAdd=[];
@@ -2499,7 +2864,7 @@ async function checkUpdate(){
 let idleT=null,idleLast=0;
 function idleReset(){clearTimeout(idleT);const m=+S.cfg.idleMin||0;if(!LOCK_ON||!m||$("#app").hidden)return;idleT=setTimeout(()=>{if(view.dirty)return idleReset();view.as=null;$("#app").hidden=true;gate();toast("Locked after "+m+" minutes idle")},m*6e4)}
 ["mousemove","keydown","pointerdown","scroll"].forEach(ev=>document.addEventListener(ev,()=>{if(Date.now()-idleLast>3000){idleLast=Date.now();idleReset()}},{passive:true}));
-async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||null);lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset();
+async function boot(){applyTheme();view.active=!!LS.get("active",false);resolveMe();await fsInit();resolveMe();setTop();await openDate(view.date&&dates().includes(view.date)?view.date:dates()[0]||todayISO());lastMob=mobileMode();autoBackup();checkUpdate();setInterval(checkUpdate,15*6e4);idleReset();
   /* pick up Admin changes from the data folder straight away (OneDrive sync can take a minute) */
   if(!window._cfgPoll)window._cfgPoll=setInterval(async()=>{if($("#app").hidden||!FS.dir)return;const ch=(await fsReadConfig())|(await usersSync());if(ch){resolveMe();if(!view.dirty&&$("#adminPg").hidden&&$("#qvcPg").hidden&&!msOpen)renderAll()}sessionCheck()},40000);}
 function start(){if(expired())return;if(LOCK_ON)tryAuto();else enter()}
@@ -2518,7 +2883,7 @@ function userImport(rows){
   let c={msid:col("msid","userid","user"),opid:col("opid","code"),pc:col("devicename","device","pc","pcnumber","computer"),role:col("role"),name:col("name","employeename","username"),team:col("team","manager"),till:col("validtill","valid","expiry")};
   let body=rows.slice(1);
   if(c.msid<0){c={msid:0,opid:1,pc:2,role:3,name:4,team:5,till:6};body=rows}   /* no header: use your Excel's column order */
-  const roleOf=v=>{v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("man")||v.startsWith("sme")||v.startsWith("tl")?"manager":"employee"};
+  const roleOf=v=>{v=norm(v);return v.startsWith("adm")?"admin":v.startsWith("data")||v.startsWith("ent")?"entry":v.startsWith("sme")?"sme":v.startsWith("man")||v.startsWith("tl")?"manager":"employee"};
   const dateOf=v=>{v=String(v||"").trim();if(!v)return "";let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return +m[1]>=9000?"":`${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
     m=v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;if(y>=9000)return "";const a=+m[1],b=+m[2],mo=a>12?b:a,d=a>12?a:b;return `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
     const t=Date.parse(v);if(!isNaN(t)){const dt=new Date(t);return dt.getFullYear()>=9000?"":new Date(t-dt.getTimezoneOffset()*6e4).toISOString().slice(0,10)}return ""};
@@ -2534,3 +2899,18 @@ function userImport(rows){
 }
 
 </script>
+<script>
+(function(){
+  const top=document.querySelector("#app>.top");if(!top)return;
+  const b=document.getElementById("sBrand"),w=document.getElementById("sWho"),f=document.getElementById("sFoot");
+  b.append(...top.querySelectorAll(".brand,.ver,.ptag,#btnDT"));
+  w.append(...top.querySelectorAll("#syncDot,#pcChip,#expTxt"));
+  [...top.querySelectorAll(".who .cap")].forEach(x=>f.appendChild(x));
+  const fo=document.getElementById("btnFolder"),ad=document.getElementById("btnAdmin");if(fo&&ad)fo.after(ad);   /* Admin sits between the folder button and $ / ? */
+  const rail=document.getElementById("rail");document.getElementById("sRail").appendChild(rail);rail.style.display="flex";
+  const paintRail=()=>{document.getElementById("secRail").hidden=rail.querySelectorAll(".cap").length<2};paintRail();
+  new MutationObserver(paintRail).observe(rail,{childList:true});
+  if(typeof sideMove==="function")sideMove();
+})();
+</script>
+
