@@ -506,6 +506,11 @@ td.name input.nm,.nmt{font-size:14.5px}
 
 /* ===== build 21: smooth grid, compact headings, Downtime screen tidy ===== */
 #gb tbody tr.dr{height:30px}
+.dtgrid thead tr:nth-child(1) th{height:24px}.dtgrid thead tr:nth-child(2) th{top:24px;height:30px}
+.dtgrid thead tr:nth-child(3) th{top:54px;height:30px;font-size:9.5px;background:#fbe3cf;color:#3a2410}
+.dtgrid thead tr:nth-child(3) th.h-till{background:#d5d9df}
+.dtgrid td.till{background:#eceff3}
+.dtgrid td input[data-fp],.dtgrid td input[data-ft]{width:52px}
 #gb tbody tr.sp td{padding:0;border:0;background:transparent}
 thead tr:nth-child(2) th{top:52px;height:26px}
 thead tr:nth-child(3) th{top:78px;height:22px}
@@ -589,7 +594,7 @@ thead tr:nth-child(3) th{top:78px;height:22px}
 #side .swho .chip{background:var(--sd-card);color:var(--sd-ink);border:1px solid var(--sd-line)}
 #side .swho .sdot{margin:0}
 
-/* ===== build 24: smooth scroll + Admin link at the bottom ===== */
+/* ===== build 26: smooth scroll + Admin link at the bottom ===== */
 #main #gb{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 #gb tbody tr.sp td{height:0!important;max-height:0;line-height:0;font-size:0;padding:0;border:0}
 #gb td.csp{padding:0;border:0;background:transparent}
@@ -644,7 +649,7 @@ td.name input.tm{height:10px!important;font-size:8.5px!important}
   <div id="notice" class="notice" hidden></div>
   <header class="top">
     <div class="brand">Alpha NextGen <span>Eclipse</span></div>
-    <span class="ver">v4.0.7 · build 24</span><span class="ptag"><b id="procTag">PCIS</b><i>LIVE</i></span><button class="cap sm dtbtn" id="btnDT" hidden>⏱ Downtime</button><span id="syncDot" class="sdot grey" hidden></span>
+    <span class="ver">v4.0.7 · build 26</span><span class="ptag"><b id="procTag">PCIS</b><i>LIVE</i></span><button class="cap sm dtbtn" id="btnDT" hidden>⏱ Downtime</button><span id="syncDot" class="sdot grey" hidden></span>
     <div class="who">
       <span id="pcChip" class="chip view"></span>
       <span id="expTxt" class="exp"></span>
@@ -941,7 +946,7 @@ async function fsScan(){
     FS.index=idx;FS.err=false;await fsReadConfig();
   }catch(e){FS.err=true;toast("Couldn't read the data folder")}
 }
-const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV","folder","deff"];
+const SHARED=["users","perms","scope","msg","fon","hpd","wd","dtUnit","g","a","exp","lab","procs","notice","tgt","goal","flagHi","lockDays","alias","aht","autoBk","bkAt","idleMin","wm","adminMine","seedV","folder","deff","carry"];
 const QVC_KEYS=["grades","teamGrade","slabs","heads","metric"];
 async function fsReadConfig(){
   if(!FS.dir)return;
@@ -1333,9 +1338,10 @@ function renderGrid(){
   if(!list.length){}
   const STEP=sT?2:1;
   /* only the baskets on screen (plus a few each side) get cells; a spacer cell stands for the rest */
-  const cellsC=(r,c)=>{const ca=VG.ca,cb=VG.cb;let o=ca>0?`<td class="csp" colspan="${ca*STEP}"></td>`:"";
-    for(let k=ca;k<cb;k++){const t=T[k];o+=`<td>${inp(`data-c="${t.k}"`,r.c[t.k])}</td>${sT?`<td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`:""}`}
-    return o+(cb<T.length?`<td class="csp" colspan="${(T.length-cb)*STEP}"></td>`:"")};
+  const cellsRange=(r,c,k0,k1)=>{let o="";
+    for(let k=k0;k<k1;k++){const t=T[k];o+=`<td>${inp(`data-c="${t.k}"`,r.c[t.k])}</td>${sT?`<td class="calc ${c.times[t.k]?"nz":""}" data-tm="${t.k}">${f2(c.times[t.k])}</td>`:""}`}return o};
+  const cellsC=(r,c)=>{const ca=VG.ca,cb=VG.cb;
+    return (ca>0?`<td class="csp" data-sp="l" colspan="${ca*STEP}"></td>`:"")+cellsRange(r,c,ca,cb)+(cb<T.length?`<td class="csp" data-sp="r" colspan="${(T.length-cb)*STEP}"></td>`:"")};
   const rowFn=({r,i})=>{
     const c=calc(r,D.tasks),fl=flagOf(r,c);
     const lvFull=+r.lv>0&&+r.lv>=+r.full,lvHalf=+r.lv>0&&!lvFull;
@@ -1353,7 +1359,7 @@ function renderGrid(){
   const gb=$("#gb"),keep=gb.scrollTop,keepL=gb.scrollLeft;
   gb.innerHTML=h+`</tbody></table>`;
   let lg=0;list.forEach(({r},k)=>{if(String(r.name||"").length>String(list[lg].r.name||"").length)lg=k});
-  VG={list,rowFn,a:-1,b:-1,ca:0,cb:T.length,nT:T.length,step:STEP,longest:lg,tries:0,fx:0,
+  VG={list,rowFn,cellsRange,idx:new Map(list.map(x=>[x.i,x])),a:-1,b:-1,ca:0,cb:T.length,nT:T.length,step:STEP,longest:lg,tries:0,fx:0,
     keys:T.map(t=>({c:t.k})).concat(sD?DT.map(([k])=>({d:k})):[],sC?[{cm:"1"}]:[],sH?[{f:"full"},{f:"lv"}]:[]),
     cols:2+T.length*(sT?2:1)+1+(sD?8:1)+2+(sC?1:0)+(sH?3:0)};
   gb._lt=-1;gb._ll=-1;
@@ -1382,8 +1388,28 @@ function hRange(gb){
   const n=VG.nT,lo=gb.scrollLeft+VG.sw,hi=gb.scrollLeft+(gb.clientWidth||1200),bl=VG.bl;
   let k0=0;while(k0<n-1&&bl[k0+1]<=lo)k0++;let k1=k0;while(k1<n&&bl[k1]<hi)k1++;return[k0,Math.max(k1,k0+1)];
 }
-/* build 24: rows are added / removed only at the edge while scrolling, and only the baskets on screen are drawn */
-const HOV=4;
+/* build 26: rows are added / removed only at the edge while scrolling, and only the baskets on screen are drawn */
+const HOV=6,HNEAR=2;
+/* sideways scroll: only the few baskets that came into view are added to each row and the ones that left are removed */
+function hUpdate(tb,ca2,cb2){
+  const ca=VG.ca,cb=VG.cb,ST=VG.step,nT=VG.nT,T=cur().tasks,vt=visTasks();
+  for(const tr of tb.querySelectorAll("tr.dr")){
+    const x=VG.idx.get(+tr.dataset.i);if(!x)continue;const c=calc(x.r,T),name=tr.children[1],tot=tr.querySelector("td[data-o=total]");
+    let lsp=tr.querySelector(":scope>td[data-sp=l]"),rsp=tr.querySelector(":scope>td[data-sp=r]");
+    const mkSp=(id,n)=>`<td class="csp" data-sp="${id}" colspan="${n}"></td>`;
+    /* left edge */
+    if(ca2>ca){let e=(lsp||name).nextElementSibling;for(let n=(ca2-ca)*ST;n>0&&e&&e!==rsp&&e!==tot;n--){const nx=e.nextElementSibling;e.remove();e=nx}}
+    if(ca2!==ca){const span=ca2*ST;
+      if(span>0){if(lsp)lsp.colSpan=span;else{name.insertAdjacentHTML("afterend",mkSp("l",span));lsp=name.nextElementSibling}}else if(lsp){lsp.remove();lsp=null}
+      if(ca2<ca)(lsp||name).insertAdjacentHTML("afterend",VG.cellsRange(x.r,c,ca2,ca))}
+    /* right edge */
+    if(cb2<cb){let e=(rsp||tot).previousElementSibling;for(let n=(cb-cb2)*ST;n>0&&e&&e!==lsp&&e!==name;n--){const pv=e.previousElementSibling;e.remove();e=pv}}
+    if(cb2>cb)(rsp||tot).insertAdjacentHTML("beforebegin",VG.cellsRange(x.r,c,cb,cb2));
+    if(cb2!==cb){const span=(nT-cb2)*ST;
+      if(span>0){if(rsp)rsp.colSpan=span;else tot.insertAdjacentHTML("beforebegin",mkSp("r",span))}else if(rsp)rsp.remove()}
+  }
+  VG.ca=ca2;VG.cb=cb2;
+}
 function paintRows(force){
   const gb=$("#gb"),tb=gb&&gb.querySelector("tbody");if(!VG||!tb)return;
   const n=VG.list.length;
@@ -1393,12 +1419,13 @@ function paintRows(force){
   const vs=Math.floor(st/ROWH),ve=Math.ceil((st+vh)/ROWH);
   const a=Math.max(0,vs-OVR),b=Math.min(n,ve+OVR);
   let hNeed=false,h0=0,h1=VG.nT;
-  if(VG.fx){[h0,h1]=hRange(gb);hNeed=(VG.ca>0&&h0<VG.ca+1)||(VG.cb<VG.nT&&h1>VG.cb-1)}
+  if(VG.fx){[h0,h1]=hRange(gb);hNeed=(VG.ca>0&&h0<VG.ca+HNEAR)||(VG.cb<VG.nT&&h1>VG.cb-HNEAR)}
   const ok=VG.a>=0&&VG.b>VG.a&&tb.children.length===VG.b-VG.a+2;
   if(!force&&ok&&!hNeed&&(VG.a===0||vs-NEAR>=VG.a)&&(VG.b===n||ve+NEAR<=VG.b))return;
   const sp=(id,h)=>`<tr class="sp" data-sp="${id}" style="height:${h}px"><td colspan="${VG.cols}"></td></tr>`;
   const ae=document.activeElement,keyI=ae&&tb.contains(ae)?ae.closest("tr").dataset.i:null,keyA=keyI&&[...ae.attributes].find(x=>x.name.startsWith("data-"));
-  if(force||!ok||hNeed||a>=VG.b||b<=VG.a){      /* first draw, sideways move or a big jump: draw the window once */
+  const ca2=Math.max(0,h0-HOV),cb2=Math.min(VG.nT,h1+HOV);
+  if(force||!ok||(hNeed&&!(ca2<VG.cb&&cb2>VG.ca))||a>=VG.b||b<=VG.a){      /* first draw or a big jump: draw the window once */
     if(!VG.fx&&VG.tries<3){                     /* measure the real column widths once, using full rows */
       VG.tries++;VG.ca=0;VG.cb=VG.nT;
       tb.innerHTML=[...new Set([0,VG.longest])].map(k=>VG.rowFn(VG.list[k])).join("");
@@ -1410,6 +1437,7 @@ function paintRows(force){
     if(keyA){const el=tb.querySelector(`tr[data-i="${keyI}"] [${keyA.name}="${CSS.escape(keyA.value)}"]`);if(el){el.focus({preventScroll:true});try{el.setSelectionRange(el.value.length,el.value.length)}catch(e){}}}
     return;
   }
+  if(hNeed)hUpdate(tb,ca2,cb2);
   const top=tb.firstElementChild,bot=tb.lastElementChild;
   /* drop rows that left the window (never the row being typed in) */
   while(VG.a<a){const r=top.nextElementSibling;if(r===bot||r.contains(ae))break;r.remove();VG.a++}
@@ -1471,10 +1499,13 @@ function onCell(e){
   const tr=el.closest("tr");if(!tr)return;const r=D.rows[+tr.dataset.i];if(!r)return;
   if(el.dataset.nm){const v=el.value.trim();if(v||el.dataset.nm==="team"){r[el.dataset.nm]=v;markDirty()}return}
   const num=v=>v===""||isNaN(+v)?undefined:+v;
-  if(el.dataset.c)r.c[el.dataset.c]=num(el.value);else if(el.dataset.d)r.dt[el.dataset.d]=num(el.value);
+  if(el.dataset.ft||el.dataset.fp){const f=el.dataset.ft||el.dataset.fp,v=num(el.value)||0;let pv=cfPv(r,f),today=(+cfGet(r,f)||0)-pv;
+    if(el.dataset.ft)today=v;else pv=v;cfSetPv(r,f,pv);cfSet(r,f,pv+today)}
+  else if(el.dataset.c)r.c[el.dataset.c]=num(el.value);else if(el.dataset.d)r.dt[el.dataset.d]=num(el.value);
   else if(el.dataset.f)r[el.dataset.f]=num(el.value);else if(el.dataset.cm)r.cm=el.value;
   markDirty();const c=calc(r,D.tasks);const q=s=>tr.querySelector(s);
   if(el.dataset.c){const td=q(`[data-tm="${el.dataset.c}"]`);if(td){td.textContent=f2(c.times[el.dataset.c]);td.classList.toggle("nz",!!c.times[el.dataset.c])}}
+  tr.querySelectorAll("[data-fo]").forEach(td=>{const t=+cfGet(r,td.dataset.fo)||0;td.textContent=t?+t.toFixed(2):""});
   q('[data-o="total"]').textContent=f2(c.total);q('[data-o="dt"]').textContent=f2(c.dtHr);
   q('[data-o="prod"]').textContent=f2(c.prod);const hr=q('[data-o="hrs"]');if(hr)hr.textContent=f2(c.hours);
   const fl=flagOf(r,c);q('[data-o="pct"]').innerHTML=pctCell(c,r,prevPct(r),fl);tr.classList.toggle("flag",!!fl);
@@ -1605,15 +1636,15 @@ function wireDefBtn(){document.querySelectorAll("[data-deff]").forEach(b=>b.oncl
 /* paste a block from Excel (many columns / rows) into the grid: fills to the right and down from the box you click */
 function gridPaste(e){
   const el=e.target;if(el.tagName!=="INPUT"||!canD("edit"))return;
-  if(!(el.dataset.c||el.dataset.d||el.dataset.f||el.dataset.cm))return;
+  if(!(el.dataset.c||el.dataset.d||el.dataset.f||el.dataset.cm||el.dataset.ft||el.dataset.fp))return;
   const txt=(e.clipboardData||window.clipboardData).getData("text");if(!/[\t\n]/.test(txt.replace(/\r?\n$/,"")))return;
   e.preventDefault();pushUndo();
   const rows=txt.replace(/\r/g,"").replace(/\n$/,"").split("\n").map(l=>l.split("\t"));
-  const tr=el.closest("tr"),keys=VG&&VG.keys?VG.keys:[...tr.querySelectorAll("input[data-c],input[data-d],input[data-f],input[data-cm]")].map(x=>({...x.dataset})),start=keys.findIndex(k=>JSON.stringify(k)===JSON.stringify({...el.dataset}));
+  const tr=el.closest("tr"),keys=el.closest("#gb")&&VG&&VG.keys?VG.keys:[...tr.querySelectorAll("input[data-c],input[data-d],input[data-f],input[data-cm],input[data-ft],input[data-fp]")].map(x=>({...x.dataset})),start=keys.findIndex(k=>JSON.stringify(k)===JSON.stringify({...el.dataset}));
   const list=rowsFiltered(),pos=list.findIndex(x=>String(x.i)===tr.dataset.i),num=v=>v===""||isNaN(+v)?undefined:+v;let n=0;
   rows.forEach((cells,k)=>{const R=list[pos+k];if(!R)return;const r=R.r;
     cells.forEach((v,j)=>{const key=keys[start+j];if(!key)return;v=String(v).trim();
-      if(key.cm){r.cm=v}else{v=num(v.replace(/[,%\s]/g,""));if(key.c)r.c[key.c]=v;else if(key.d)r.dt[key.d]=v;else if(key.f){if(key.f==="full"&&!canD("shift")&&!canD("edit"))return;r[key.f]=v}}n++})});
+      if(key.cm){r.cm=v}else{v=num(v.replace(/[,%\s]/g,""));if(key.ft||key.fp){const f=key.ft||key.fp;let pv=cfPv(r,f),today=(+cfGet(r,f)||0)-pv;if(key.ft)today=v||0;else pv=v||0;cfSetPv(r,f,pv);cfSet(r,f,pv+today)}else if(key.c)r.c[key.c]=v;else if(key.d)r.dt[key.d]=v;else if(key.f){if(key.f==="full"&&!canD("shift")&&!canD("edit"))return;r[key.f]=v}}n++})});
   markDirty();renderGrid();if(DTV.open)renderDT();toast(n+" cells pasted");
 }
 /* Quick Excel: only Process, User Name, Productivity % (rows on screen) */
@@ -1782,10 +1813,13 @@ async function dumpRows(rows,src,dt,meta){
         obj.src=(obj.src?obj.src+" + ":"")+src;
       }else obj={tasks:P.tasks,rows:P.rows,src};
       if(meta&&meta.fh)obj.fh=meta.fh;
+      let carryMsg="";
+      if(mode!=="merge"&&S.cfg.carry&&S.cfg.carry.on!==false){try{const prev=await prevDayOf(d);
+        carryRows(obj.rows,prev,old?(r=>findPerson(old.rows,r.name)):null,old&&old.cv);obj.cv=1;if(prev)carryMsg=" · carried from "+fmtDate(prev.d)}catch(x){}}
       closeModal();view.forceReplace=false;view.dumpOpen=false;view.q="";
       if(d!==view.date)await openDate(d);
       view.work=obj;view.dirty=false;markDirty();logAct(mode==="new"?"dump":mode,d,src.slice(0,60));renderAll();
-      toast((mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`${P.rows.length} employees loaded into ${fmtDate(d)}`)+" · press Master Save to keep it");
+      toast((mode==="merge"?`Merged into ${fmtDate(d)}: ${upd} updated, ${added} new`:`${P.rows.length} employees loaded into ${fmtDate(d)}`)+carryMsg+" · press Master Save to keep it");
     };
     if(mode==="replace")ask("replace","Replace "+fmtDate(d)+"?","The saved data for this date ("+old.rows.length+" employees) is replaced by this file, headings included, once you press Master Save.","Replace",commit,true);
     else commit();
@@ -2385,6 +2419,37 @@ async function usersWriteXlsx(){
 }
 
 /* ---------- ⏱ Downtime & hours screen: slides down from the top, edits feed the main grid ---------- */
+/* ---------- carry forward (month to date) ---------- */
+const CF=()=>DT.map(([k])=>"dt_"+k).concat(["lv","cm","full"]);
+const cfLab=f=>lab(f);
+const cfAdd=f=>f.startsWith("dt_")||f==="lv";
+const cfOn=f=>!!(S.cfg.carry&&S.cfg.carry.on!==false&&S.cfg.carry.f&&S.cfg.carry.f[f]);
+const cfGet=(r,f)=>f.startsWith("dt_")?r.dt[f.slice(3)]:r[f];
+const cfPv=(r,f)=>+((r.pv||{})[f])||0;
+function cfSetPv(r,f,v){v=+(+v).toFixed(4);r.pv=r.pv||{};if(v)r.pv[f]=v;else delete r.pv[f];if(!Object.keys(r.pv).length)delete r.pv}
+function cfSet(r,f,v){v=+(+v||0).toFixed(4);if(f.startsWith("dt_")){if(v)r.dt[f.slice(3)]=v;else delete r.dt[f.slice(3)]}else r[f]=v}
+async function prevDayOf(d){const p=dates().filter(x=>x<d&&x.slice(0,7)===d.slice(0,7))[0];if(!p)return null;const o=await loadDay(p);return o?{d:p,day:o}:null}
+/* rows: today's rows · prev: {d,day} · oldFor(r): the same person on the date being replaced · oldCv: that date already used carry forward */
+function carryRows(rows,prev,oldFor,oldCv){
+  let n=0;
+  rows.forEach(r=>{const p=prev&&findPerson(prev.day.rows,r.name),o=oldFor?oldFor(r):null;
+    CF().forEach(f=>{if(!cfOn(f))return;
+      if(cfAdd(f)){const prevT=p?(+cfGet(p,f)||0):0;let today;
+        if(o){const tot=+cfGet(o,f)||0;today=oldCv?tot-cfPv(o,f):Math.max(0,tot-prevT)}   /* an older date typed by hand keeps its total */
+        else today=+cfGet(r,f)||0;
+        cfSetPv(r,f,prevT);cfSet(r,f,prevT+today);if(prevT)n++}
+      else if(p){
+        if(f==="cm"){const own=o?o.cm:r.cm;if(!own&&p.cm){r.cm=p.cm;n++}}
+        else if(f==="full"&&+p.full>0){r.full=p.full;n++}}
+    })});
+  return n;
+}
+async function carryRefresh(){
+  const D=cur();if(!D||!canD("edit"))return;const prev=await prevDayOf(view.date);
+  if(!prev){toast("There is no earlier date in this month to carry from");return}
+  ask(null,"Carry from "+fmtDate(prev.d)+"?","Till yesterday is refreshed from <b>"+fmtDate(prev.d)+"</b>. What is typed in Today stays. Press <b>Master Save</b> after to keep it.","Carry",()=>{
+    pushUndo();const snap=new Map(D.rows.map(r=>[r,clone(r)])),n=carryRows(D.rows,prev,r=>snap.get(r),!!D.cv);D.cv=1;markDirty();renderDT();toast("Carried from "+fmtDate(prev.d)+" for "+n+" entries")});
+}
 const DTV={open:false};
 function paintSv(){
   const ok=!view.dirty&&!!view.saved;
@@ -2399,21 +2464,26 @@ function renderDT(){
   const sc=scopedRows(),pfs=[...new Set(sc.map(x=>x.r.proc).filter(Boolean))].sort(),teams=[...new Set(sc.filter(({r})=>pfOK(r)).map(x=>x.r.team).filter(Boolean))].sort(),emps=[...new Set(sc.filter(({r})=>pfOK(r)&&tmOK(r)).map(x=>x.r.name))].sort();
   const inp=(attr,val,cls)=>E?`<input ${attr} ${cls?`class="${cls}"`:""} inputmode="decimal" value="${esc(val??"")}">`:`<span class="ro">${esc(val??"")}</span>`;
   const fullE=v=>SH?`<input data-f="full" inputmode="decimal" value="${esc(v??"")}">`:`<span class="ro">${esc(v??"")}</span>`;
+  const CY=f=>cfOn(f),subH=()=>`<th class="h-till">Till<br>yesterday</th><th class="h-sub">Today</th><th class="h-sub">Total</th>`;
+  const num4=v=>{v=+(+v||0).toFixed(4);return v?v:""};
+  const cy3=(f,r)=>{const pv=cfPv(r,f),tot=+cfGet(r,f)||0,td=+(tot-pv).toFixed(4);
+    return `<td class="till">${inp(`data-fp="${f}"`,num4(pv))}</td><td>${inp(`data-ft="${f}"`,td?td:"")}</td><td class="calc" data-fo="${f}">${tot?+tot.toFixed(2):""}</td>`};
   const sum=sumUp(list.map(x=>x.r),D.tasks);
   $("#dtPanel").innerHTML=`<div class="dtin"><button class="dtx" id="dtClose" title="Close (Esc)" aria-label="Close">✕</button>
     <div class="dthead"><div class="dtt"><b class="dttitle">⏱ Downtime & hours</b><span class="muted">${fmtDate(view.date)} · ${list.length} people · team <b id="dtTp">${f2(sum.pct)}%</b></span></div>
       <div class="dtc">${msel("pf","Process",pfs)}${msel("team","Team / Manager",teams)}${msel("emp","User Name",emps)}${defBtn()}
       ${SH?`<div class="fld"><span>Shift (people shown)</span><div class="shrow"><input type="number" id="dtH" value="${S.cfg.hpd}" step="0.5" min="0">h × <input type="number" id="dtW" value="${S.cfg.wd}" min="0">d = <b id="dtT">${f2(S.cfg.hpd*S.cfg.wd)}</b><button class="cap sm amber" id="dtApply">Apply</button></div></div>`:""}
-      <div class="fld"><span>&nbsp;</span><div class="shrow"><button class="cap sm" id="dtXls">Excel</button>${canD("save")&&!view.trial?`<button class="cap sm ico svlamp" id="dtSv">💾</button>`:""}</div></div></div></div>
+      <div class="fld"><span>&nbsp;</span><div class="shrow"><button class="cap sm" id="dtXls">Excel</button>${E&&S.cfg.carry&&S.cfg.carry.on!==false?`<button class="cap sm" id="dtCarry" title="Bring Till yesterday from the last saved date of this month">↻ Carry</button>`:""}${canD("save")&&!view.trial?`<button class="cap sm ico svlamp" id="dtSv">💾</button>`:""}</div></div></div></div>
     <div class="dtgrid" id="dtg"><table><thead><tr>
-      <th class="h-fix sticky1" rowspan="2">User Name</th><th class="h-amb" rowspan="2">Earned</th>
-      <th class="h-amb" colspan="8">Downtime (${du})</th><th class="h-amb" rowspan="2">Production<br>Hours</th><th class="h-amb" rowspan="2">Productivity<br>%</th><th class="h-amb" rowspan="2">Comments</th><th class="h-hrs" colspan="3">Hours</th></tr><tr>
-      ${DT.map(([k])=>`<th class="h-amb2">${esc(lab("dt_"+k))}</th>`).join("")}<th class="h-amb2">Total<br>Downtime</th><th class="h-amb2">100%</th><th class="h-amb2">Leaves</th><th class="h-amb2">No. of<br>Hours</th></tr></thead><tbody>
+      <th class="h-fix sticky1" rowspan="3">User Name</th><th class="h-amb" rowspan="3">Earned</th>
+      <th class="h-amb" colspan="${DT.reduce((a,[k])=>a+(CY("dt_"+k)?3:1),1)}">Downtime (${du})</th><th class="h-amb" rowspan="3">Production<br>Hours</th><th class="h-amb" rowspan="3">Productivity<br>%</th><th class="h-amb" rowspan="3">Comments</th><th class="h-hrs" colspan="${CY("lv")?5:3}">Hours</th></tr><tr>
+      ${DT.map(([k])=>CY("dt_"+k)?`<th class="h-amb2" colspan="3">${esc(lab("dt_"+k))}</th>`:`<th class="h-amb2" rowspan="2">${esc(lab("dt_"+k))}</th>`).join("")}<th class="h-amb2" rowspan="2">Total<br>Downtime</th><th class="h-amb2" rowspan="2">100%</th>${CY("lv")?`<th class="h-amb2" colspan="3">Leaves</th>`:`<th class="h-amb2" rowspan="2">Leaves</th>`}<th class="h-amb2" rowspan="2">No. of<br>Hours</th></tr>
+      <tr>${DT.filter(([k])=>CY("dt_"+k)).map(subH).join("")}${CY("lv")?subH():""}</tr></thead><tbody>
       ${list.map(({r,i})=>{const c=calc(r,D.tasks);return `<tr data-i="${i}"><td class="sticky1 dtn">${esc(r.name)}</td><td class="calc tot" data-o="total">${f2(c.total)}</td>
-        ${DT.map(([k])=>`<td>${inp(`data-d="${k}"`,r.dt[k])}</td>`).join("")}
+        ${DT.map(([k])=>CY("dt_"+k)?cy3("dt_"+k,r):`<td>${inp(`data-d="${k}"`,r.dt[k])}</td>`).join("")}
         <td class="calc" data-o="dt">${f2(c.dtHr)}</td><td class="calc" data-o="prod">${f2(c.prod)}</td><td class="pct" data-o="pct">${pctCell(c,r,null,flagOf(r,c))}</td>
         <td>${E?`<input class="cm" data-cm="1" value="${esc(r.cm||"")}" placeholder="—">`:`<span class="ro cm">${esc(r.cm||"")}</span>`}</td>
-        <td>${fullE(r.full)}</td><td>${inp(`data-f="lv"`,r.lv)}</td><td class="calc" data-o="hrs">${f2(c.hours)}</td></tr>`}).join("")||`<tr><td colspan="16" style="padding:20px;color:var(--muted)">No one matches these filters.</td></tr>`}
+        <td>${fullE(r.full)}</td>${CY("lv")?cy3("lv",r):`<td>${inp(`data-f="lv"`,r.lv)}</td>`}<td class="calc" data-o="hrs">${f2(c.hours)}</td></tr>`}).join("")||`<tr><td colspan="40" style="padding:20px;color:var(--muted)">No one matches these filters.</td></tr>`}
     </tbody></table></div>
     <p class="dthint">Ctrl+V pastes from Excel · Ctrl+Z undo · Enter next row · 💾 red = not saved, green = saved</p></div>`;
   const P=$("#dtPanel"),g=$("#dtg");
@@ -2421,7 +2491,7 @@ function renderDT(){
   g.onkeydown=gridKey;g.onpaste=e=>{gridPaste(e);paintSv()};
   wireMsel();wireDefBtn();
   $("#dtClose").onclick=closeDT;
-  $("#dtXls").onclick=dtExcel;
+  $("#dtXls").onclick=dtExcel;const dc=$("#dtCarry");if(dc)dc.onclick=carryRefresh;
   const sv=$("#dtSv");if(sv)sv.onclick=()=>{if(view.dirty)doSave()};
   const h=$("#dtH");if(h){const w=$("#dtW"),t=$("#dtT"),up=()=>t.textContent=f2((+h.value||0)*(+w.value||0));h.oninput=up;w.oninput=up;
     $("#dtApply").onclick=()=>{const tot=+f2((+h.value||0)*(+w.value||0)),vis=rowsFiltered();if(!(tot>0)){toast("Enter hours and days first");return}
@@ -2725,6 +2795,13 @@ function adminPage2(){
     <div class="mrow"><label>Lock dates older than (days, 0 = off)<input type="number" data-k="lockDays" value="${+AD.lockDays||0}" min="0"></label></div>
     <p class="ahelp">Locked and “Day complete” dates can only be changed by you, or by PCs allowed “Change locked or old dates”.</p></section>
 
+  <section class="acard wide"><h4>↪ Carry forward (month to date)</h4>
+    <p class="ahelp">Every dump holds the month from the 1st to that date. When a new date is dumped, the ticked headings are brought from the <b>last saved date of the same month</b>, person by person. <b>Downtime and Leaves add up</b>: they show <i>Till yesterday</i> (comes by itself, still editable) + <i>Today</i> (you type) = <i>Total</i>. Comments and 100% are simply copied. Tick what is needed, untick what is not. On the Downtime screen, <b>↻ Carry</b> refreshes it for an existing date.</p>
+    <div class="toggles">${tgl("carry.on",(AD.carry||{}).on!==false,"Carry forward is ON")}</div>
+    <div class="utable" style="max-height:340px"><table class="perm"><thead><tr><th>Heading</th><th>How it is carried</th><th>Carry</th></tr></thead><tbody>
+    ${CF().map(f=>`<tr><td>${esc(cfLab(f))}</td><td>${cfAdd(f)?"Adds up: Till yesterday + Today = Total":f==="cm"?"Copied (only if still empty)":"Copied as it is"}</td><td><input type="checkbox" data-k="carry.f.${f}" ${((AD.carry||{}).f||{})[f]?"checked":""}></td></tr>`).join("")}
+    </tbody></table></div></section>
+
   <section class="acard"><h4>💬 Confirm messages</h4>
     <p class="ahelp">When on, the button asks “Are you sure?” first.</p>
     <div class="toggles">${MSGS.map(([k,n])=>tgl("msg."+k,AD.msg[k]!==false,n)).join("")}</div></section>`;
@@ -2841,6 +2918,10 @@ function fixCfg(){
   c.perms=c.perms||{};if(c.perms.manager&&!c.perms.sme)c.perms.sme=clone(c.perms.manager);
   if(c.scope&&c.scope.manager&&!c.scope.sme)c.scope.sme=c.scope.manager;
   c.deff=c.deff||{};
+  /* carry forward: which headings come from the last saved date of the month (Admin, page 2) */
+  if(!c.carry||typeof c.carry!=="object")c.carry={on:true,f:{}};
+  if(!c.carry.f||!Object.keys(c.carry.f).length){c.carry.f={};DT.forEach(([k])=>c.carry.f["dt_"+k]=1);c.carry.f.lv=1;c.carry.f.cm=0;c.carry.f.full=0}
+  if(c.carry.on===undefined)c.carry.on=true;
   ROLE3.forEach(r=>c.perms[r]=Object.assign({},DEFPERM[r],c.perms[r]||{}));
   c.scope=Object.assign({},DEFSCOPE,c.scope||{});c.msg=Object.assign({},c.msg||{});c.lab=c.lab||{};c.fon=c.fon||{};
   /* older "screen parts" switches become global feature switches */
